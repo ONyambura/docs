@@ -1,0 +1,120 @@
+
+import { Callout, FileTree } from 'nextra/components';
+
+## Versions
+
+### v1.6 (Current - Stable)
+- New configurable option for args.
+- Update Files: client/main.lua , ./core.lua, ./config.lua
+<FileTree>
+  <FileTree.Folder name="data" defaultOpen>
+    <FileTree.File name="server.cfg" />
+    <FileTree.Folder name="resources" defaultOpen>
+        <FileTree.Folder name="[nxbr]" defaultOpen>
+            <FileTree.Folder name="n_bridge" defaultOpen>
+            </FileTree.Folder>
+            <FileTree.Folder name="n_easysit" defaultOpen>
+                <FileTree.Folder name="client" defaultOpen>
+                    <FileTree.File name="main.lua <- (replace)" />
+                </FileTree.Folder>    
+                <FileTree.File name="config.lua <- (update with new features)" />
+                <FileTree.File name="core.lua <- (replace)" />
+                <FileTree.File name="fxmanifest.lua" />
+                <FileTree.File name="n_chairs.sql" />
+                <FileTree.File name="readme.md" />
+            </FileTree.Folder>
+        </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+- `args`
+  - can be `string 'scenario_name' or object
+- `extraZ`
+  - Option only for animations, it will adjust the animation height (z position) minus or non minus. Please read the configurable file
+
+```lua
+Config = {
+   command  = '~nchairs', -- register the command name you would like to use for the creator.
+   checkVersion = true, -- check if there's new version of the resource, you can disable it but you wont be informed if there's new version.
+   standup = "BACK", -- button to standup.
+   lang = "en", -- language, depends on your en.lua files.
+   target = "ox",      -- "qb", "q", "ox" | (ox supports both qbx-target/q-target)
+   animations = {
+      {label = "Sit on chair (Scenario)", args = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER"},
+      {label = "Sunbathe Back (Scenario)", args = "WORLD_HUMAN_SUNBATHE_BACK"},
+      {label = "Lay On Bed (Anim)", args = {dict = "anim@gangops@morgue@table@", anim = "body_search", opts = {8.0, -8.0, -1, 1, 1, false, false, false}}},
+      {label = "Sit thinking (Anim)", args = {dict = "missheist_jewelleadinout", anim = "jh_int_outro_loop_a", extraZ = -0.9 --[[Can be -1 or 1]], opts = {8.0, -8.0, -1, 1, 1, false, false, false}}},
+      -- extraZ , will adjust the height (z) position of the ped location (not target) , since some animations are glitchy and it appears on air.
+      -- if your animation/scenario works perfect by default, then you can use extraZ = 0 , or remove it from the object. like the others you'll see on the config
+   }
+}
+```
+<Callout type="info">
+`tip:` if you're facing issues with scenarios on beds , please use animation method. it's a game bug when you're using some scenarios an touching object(s) , it being canceled
+```lua
+opts = {} on anim object is the options for 
+    blendInSpeed --[[ number ]], 
+    blendOutSpeed --[[ number ]], 
+    duration --[[ integer ]], 
+    flag --[[ integer ]], 
+    playbackRate --[[ number ]], 
+    lockX --[[ boolean ]], 
+    lockY --[[ boolean ]], 
+    lockZ --[[ boolean ]]
+```
+</Callout>
+
+### v1.5
+- Updated Easy Sit to work with latest version of ox_target.
+- New Configurable option (target) accepts 'qb', 'ox', 'q' (use ox option instead of q or qbx).
+```lua
+Config = {
+   command  = '~nchairs', -- register the command name you would like to use for the creator.
+   checkVersion = true, -- check if there's new version of the resource, you can disable it but you wont be informed if there's new version.
+   standup = "BACK", -- button to standup.
+   lang = "en", -- language, depends on your en.lua files.
+   target = "qb",      -- "qb", "q", "ox" | (ox supports both qbx-target/q-target) <<<< New Option
+   animations = {
+      {label = "Sit on chair", args = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER"},
+      {label = "Sun Lounger", args = "PROP_HUMAN_SEAT_SUNLOUNGER"},
+
+      -- Get more scenarios at (https://wiki.rage.mp/index.php?title=Scenarios)
+   }
+}
+```
+
+### v1.4.1
+- Hotfix for the servers who already had chairs without a config list (id), all those chairs will continue to use ID 1 means the first configurable chair anim
+
+### v1.4
+- Added new configurable option to select the sit scenario (animation) you like to put while creation. Bellow you can see the new configurable option. "animations"
+```lua
+Config = {
+   command  = '~nchairs', -- register the command name you would like to use for the creator.
+   checkVersion = true, -- check if there's new version of the resource, you can disable it but you wont be informed if there's new version.
+   standup = "BACK", -- button to standup.
+   lang = "en", -- language, depends on your en.lua files.
+   animations = {
+      {label = "Sit on chair", args = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER"},
+      {label = "Sun Lounger", args = "PROP_HUMAN_SEAT_SUNLOUNGER"},
+
+      -- Get more scenarios at (https://wiki.rage.mp/index.php?title=Scenarios)
+   }
+}
+```
+
+### v1.3
+- Hotfix where sometimes getting error for (Invalud Lua type in __data > TaskGoStraightTooCoord).
+
+### v1.2
+- Reworked ace perms, now we bind it to group not to person (more cfg files)
+- Reworked client side, no more 'confirm' needed on the removal, just submit or cancel (test button from removal has been there by mistake, removed.)
+- Test button while creating a new location works now, it closes the menu and 2 seconds later it brings it back to continue.
+- Added Language options, now you can translate completly the resource on your preffered language. (n_easysit/translations/en.lua) . You can create your_language.lua , setting its name on the top and changing it at Config file (currently it is set 'en').
+- Added new option on the config, to change the Standup hotkey. Currently set to "BACK" means "BACKSPACE".
+- Animation list to select before sitting on the chair.
+- Option to add lie location.
+
+
+### v1.0.0
+- Initial release

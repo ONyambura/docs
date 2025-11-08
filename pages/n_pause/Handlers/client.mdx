@@ -1,0 +1,23 @@
+## Streamer Mode
+
+### n_pause:ToggleStreamerMode
+
+```lua
+---@alias active
+---|'true' # when streamer mode is enabled
+---|'false' # when streamer mode is disabled
+AddEventHandler("n_pause:ToggleStreamerMode", function(active)
+    print(active)
+
+    -- example:
+    -- exports.["jg-hud"]:ToggleHud(active)
+end)
+```
+
+**Parameters**
+
+- boolean
+
+**Receives**
+
+- `true / false`

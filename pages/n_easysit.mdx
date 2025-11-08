@@ -1,0 +1,82 @@
+import ResourceLinks from '@components/resource-links';
+import { Steps, Tabs, Tab } from 'nextra-theme-docs';
+import { Callout, FileTree } from 'nextra/components';
+
+# N Pause Menu - AAA Pause Menu
+
+<ResourceLinks tebex="https://store.nxbr.dev/product/5687559" youtube="https://www.youtube.com/watch?v=gy56mfoeKgk" cfx="https://forum.cfx.re/t/aaa-pause-menu/5362086" />
+
+<Callout type="warning">
+This resource supports by default ESX, QB & QBOX. For any other framework please contact me on [discord](https://discord.com/invite/mVUgnGjXQU).
+
+</Callout>
+
+## Installation
+<Steps>
+### Make sure you already have one of those targets
+- [ox_target](https://github.com/communityox/ox_target/releases)
+- [qtarget](https://github.com/overextended/qtarget)
+- [qb-target](https://github.com/qbcore-framework/qb-target)
+
+### Buy a [copy](https://store.nxbr.dev/product/5687559).
+
+### Download `N Developments - Easy Sit` from [CFX Portal](https://portal.cfx.re/)
+
+### Unpack the resource `n_easysit` into your resources folder
+<FileTree>
+  <FileTree.Folder name="data" defaultOpen>
+    <FileTree.File name="server.cfg" />
+        <FileTree.Folder name="resources" defaultOpen>
+            <FileTree.Folder name="[nxbr]" defaultOpen>
+                <FileTree.Folder name="n_bridge" defaultOpen>
+                </FileTree.Folder>
+                <FileTree.Folder name="n_easysit <-" defaultOpen>
+                </FileTree.Folder>
+            </FileTree.Folder>
+        </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+### Resource start order
+
+It's important for your resources to start in a logical order to prevent errors from missing dependencies.
+
+```bash
+start target # the name of your target (i.e. ox_target, qtarget, qb-target)
+start n_easysit
+```
+
+### Ace Permissions
+<Tabs items={['group', 'steam', 'license']}>
+  <Tabs.Tab>`add_ace group.admin n_easysit allow`</Tabs.Tab>
+  <Tabs.Tab>`add_ace identifier.steam:xxxxxxxxxxxxx "n_easysit" allow`</Tabs.Tab>
+  <Tabs.Tab>`add_ace identifier.license:xxxxxxxxxxxxx "n_easysit" allow`</Tabs.Tab>
+</Tabs>
+
+### SQL Schema
+- Execute the SQL Query you'll find inside the resource.
+- Without running the provided sql query, the resource wont work.
+<FileTree>
+  <FileTree.Folder name="data" defaultOpen>
+    <FileTree.File name="server.cfg" />
+    <FileTree.Folder name="resources" defaultOpen>
+        <FileTree.Folder name="[nxbr]" defaultOpen>
+            <FileTree.Folder name="n_bridge" defaultOpen>
+            </FileTree.Folder>
+            <FileTree.Folder name="n_easysit" defaultOpen>
+                <FileTree.File name="n_chairs.sql <-" />
+            </FileTree.Folder>
+        </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+```sql
+DROP TABLE IF EXISTS `n_easysit`;
+CREATE TABLE `n_easysit`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+
+SET FOREIGN_KEY_CHECKS = 1;
+```
+</Steps>

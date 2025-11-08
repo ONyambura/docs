@@ -1,0 +1,31 @@
+import { Callout } from 'nextra/components';
+
+## Versions
+
+### v3.0.0 (Current - Stable)
+
+<Callout type="warning">
+In this major V3 update, we’re bringing a fresh new UI and powerful features — including playlist support, enhanced controls, and seamless theme integration. Everything has been reimagined for a smoother, more immersive music experience within your phone.
+</Callout>
+
+### v2.0.0
+- v2.0 now works fine with lb-phone v2 (v2.0 of their).
+- Image Issue Fix, you can put your desired image at ui/app_ico.png Few styling Enhancements
+
+### v1.2
+- Updating Music position to closest players (20m) to not flood network on high activity servers New Configurable Options
+```lua
+VersionChecker = {
+    enabled = true,
+    timer = 60 -- minutes
+}
+
+App = {
+    name = "vMusic",
+    icon = "https://i.imgur.com/3QHwx7R.png", -- App Image
+    storeImages = {"https://i.imgur.com/3QHwx7R.png"} -- App Store images
+}
+```
+
+### v1.0.0
+- Initial release

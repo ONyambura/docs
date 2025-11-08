@@ -1,0 +1,76 @@
+import ResourceLinks from '@components/resource-links';
+import { Steps, Tabs, Tab } from 'nextra-theme-docs';
+import { Callout } from 'nextra/components';
+import { FileTree } from 'nextra/components';
+
+## Character Relog
+
+<Steps>
+### Enabling character relog feature
+- n_pause/config.lua
+  - find this property `changeCharacterEnabled` and make its `true`, default line `@10`
+
+<FileTree>
+  <FileTree.Folder name="n_pause" defaultOpen>
+    <FileTree.File name="config.lua" />
+  </FileTree.Folder>
+</FileTree>
+
+```lua
+Config = {}
+
+Config.PauseOptions = {
+    language = "en",
+    logo = {
+        url = "https://images-ext-1.discordapp.net/external/yiIw8CPKqw8l2CKiTRdkcWzIX0RKF28D_MzGKtv-hEY/https/i.ibb.co/Q3TLDbXR/logo5121.png?format=webp&quality=lossless",
+        position = "middle-high", -- top-left | top-right | bottom-left | bottom-right | middle-high | middle-low
+        size = 100 -- optional size in px
+    },
+    changeCharacterEnabled = true,
+    showServerInfo = true,
+    showCharacterInfo = true,
+    showBankMoney = true, -- showCharacterInfo should be true
+    showCashMoney = true, -- showCharacterInfo should be true
+    showPhoneNumber = true -- showCharacterInfo should be true
+}
+
+Config.ServerInfo = {
+    name = GetConvar('sv_hostname', 'Project N'),
+    maxPlayers = GetConvarInt('sv_maxclients', 32),
+    uptime = GetGameTimer(),
+}
+```
+
+
+### Setting your own character relog method
+- By default, it support ESX logout & QB/QBOX Logout
+  - If you use any other custom multicharacter , you have to check its resource intergrations/handlers/exports/ or documendation to impliment my character relog feature.
+- Edit the open source file at server/open.lua
+<FileTree>
+  <FileTree.Folder name="n_pause" defaultOpen>
+    <FileTree.Folder name="server" defaultOpen>
+      <FileTree.File name="open.lua"/>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+```lua
+-- Handle character change
+RegisterServerEvent('n_pause:changeCharacter', function()
+    local _source = source
+    
+    if Framework == 'ESX' then
+        -- Trigger ESX character selection
+        TriggerClientEvent('esx:showAdvancedNotification', _source, 'System', '~b~Character Selection', 'Returning to character selection...', 'CHAR_DEFAULT', 8)
+        Wait(2000)
+        TriggerEvent("esx:playerLogout", _source)
+    elseif Framework == 'QB' then
+        -- Trigger QB-Core character selection
+        TriggerClientEvent('QBCore:Notify', _source, 'Returning to character selection...', 'primary')
+        Wait(2000)
+        QBCore.Player.Logout(_source)
+        TriggerClientEvent('qb-multicharacter:client:chooseChar', _source)
+    end
+end)
+```
+
+</Steps>

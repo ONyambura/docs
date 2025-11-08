@@ -1,0 +1,86 @@
+import ResourceLinks from '@components/resource-links';
+import { Steps, Tabs, Tab } from 'nextra-theme-docs';
+import { Callout, FileTree } from 'nextra/components';
+
+# N Tune - Music Player
+
+## LB-Phone Music Player - N Tune
+
+<ResourceLinks tebex="https://store.nxbr.dev/product/5586818" youtube="https://www.youtube.com/watch?v=2viHIS0Dw3I" cfx="https://forum.cfx.re/t/lb-phone-unofficial-custom-app-youtube-music-player/5051906" />
+
+<Callout type="warning">
+This resource is an add-on for lb-phone and not a standalone resource.
+</Callout>
+
+<Callout type="error">
+Important Compatibility Note:
+
+N Tune (V3) is not compatible with older versions of LB Phone.
+It is designed exclusively for LB Phone version 2.3.1 and above.
+</Callout>
+
+## Installation
+<Steps>
+### Make sure you already have [lb-phone](lbphone)
+
+### Buy a [copy](https://store.nxbr.dev/product/5586818).
+
+### Download `[LB-Phone] Music App` from [CFX Portal](https://portal.cfx.re/)
+### Unpack the resource `lb-phone-music` into your resources folder
+
+<FileTree>
+  <FileTree.Folder name="data" defaultOpen>
+    <FileTree.File name="server.cfg" />
+    <FileTree.Folder name="resources" defaultOpen>
+        <FileTree.Folder name="[phone]" defaultOpen>
+            <FileTree.Folder name="lb-phone" defaultOpen>
+            </FileTree.Folder>
+            <FileTree.Folder name="lb-phone-prop" defaultOpen>
+            </FileTree.Folder>
+            <FileTree.Folder name="lb-phone-prop-music <-" defaultOpen>
+            </FileTree.Folder>
+        </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+### Resource start order
+
+It's important for your resources to start in a logical order to prevent errors from missing dependencies.
+
+```bash
+start lb-phone
+start lb-phone-music
+```
+
+### SQL Schema
+- Execute the SQL Query you'll find inside the resource.
+- Without running the provided sql query, the resource wont work.
+<FileTree>
+  <FileTree.Folder name="data" defaultOpen>
+    <FileTree.File name="server.cfg" />
+    <FileTree.Folder name="resources" defaultOpen>
+        <FileTree.Folder name="[phone]" defaultOpen>
+            <FileTree.Folder name="lb-phone" defaultOpen>
+            </FileTree.Folder>
+            <FileTree.Folder name="lb-phone-prop" defaultOpen>
+            </FileTree.Folder>
+            <FileTree.Folder name="lb-phone-prop-music" defaultOpen>
+                <FileTree.File name="phone_ntune_playlists.sql <-" />
+            </FileTree.Folder>
+        </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+```sql
+DROP TABLE IF EXISTS `phone_ntune_playlists`;
+CREATE TABLE `phone_ntune_playlists`  (
+  `phoneNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `thumbnail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `trackId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `date` timestamp NULL DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+```
+
+</Steps>

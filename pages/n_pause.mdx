@@ -1,0 +1,77 @@
+import ResourceLinks from '@components/resource-links';
+import { Steps, Tabs, Tab } from 'nextra-theme-docs';
+import { Callout } from 'nextra/components';
+
+# N Pause Menu - AAA Pause Menu
+
+<ResourceLinks tebex="https://store.nxbr.dev/product/7055828" youtube="https://www.youtube.com/watch?v=HmWtbNOvgn4" cfx="https://forum.cfx.re/t/aaa-pause-menu/5362086" />
+
+A Sleek & Modern pause menu
+
+<Callout type="warning">
+This resource supports by default ESX, QB & QBOX. For any other framework please contact me on [discord](https://discord.com/invite/mVUgnGjXQU).
+
+</Callout>
+
+## Installation
+<Steps>
+### Make sure you already have one of those frameworks
+- [esx](../oxmysql)
+- [qb](../ox_lib/)
+- [qbx](../ox_lib/)
+
+### Buy a [copy](https://store.nxbr.dev/product/7055828).
+
+
+### Download `N Developments - Pause` from [CFX Portal](https://portal.cfx.re/)
+
+### Resource start order
+
+It's important for your resources to start in a logical order to prevent errors from missing dependencies.
+
+```bash
+start framework # the name of your framework (i.e. ox_core, es_extended, qbx_core)
+start n_pause
+```
+
+### Config
+
+Resource configuration is handled using config.lua, make sure you can always revert default config file by the one below.
+
+```lua
+Config = {}
+
+Config.PauseOptions = {
+    language = "en",
+    logo = {
+        url = "https://images-ext-1.discordapp.net/external/yiIw8CPKqw8l2CKiTRdkcWzIX0RKF28D_MzGKtv-hEY/https/i.ibb.co/Q3TLDbXR/logo5121.png?format=webp&quality=lossless",
+        position = "middle-high", -- top-left | top-right | bottom-left | bottom-right | middle-high | middle-low
+        size = 100 -- optional size in px
+    },
+    changeCharacterEnabled = true,
+    showServerInfo = true,
+    showCharacterInfo = true,
+    showBankMoney = true, -- showCharacterInfo should be true
+    showCashMoney = true, -- showCharacterInfo should be true
+    showPhoneNumber = true -- showCharacterInfo should be true
+}
+
+Config.ServerInfo = {
+    name = GetConvar('sv_hostname', 'Project N'),
+    maxPlayers = GetConvarInt('sv_maxclients', 32),
+    uptime = GetGameTimer(),
+}
+```
+
+</Steps>
+
+## Other Pause Menus incompatibilities
+
+- Any resource with their own built-in pause-menu are expected to have compatibility issues.
+- You can disable anytime individual features from pause menu, watch config.lua
+
+## Using an unsupported framework
+
+If your framework does not have official support, open a ticket at [Discord](https://discord.com/invite/mVUgnGjXQU).  
+
+This setup is easy, so it's up to your own ability as a developer to make it work.

@@ -1,0 +1,31 @@
+import ResourceLinks from '@components/resource-links';
+import { Callout } from 'nextra/components';
+import { FileTree } from 'nextra/components';
+
+## Server Logout
+<Callout type="warning">
+This feature is enabled by default and cannot be hidden/removed from the UI. You can definly prevent the user from logout on the open handler
+
+</Callout>
+
+### Prevent a user from logout/disconnect
+- n_pause/server/open.lua
+  - handler: `n_pause:disconnect`
+  - default line: `@20`
+- By commenting out the function `DropPlayer` , it will not disconnect the user
+  - Inform the user `_source` with your desired notification system that he is not allowed/able to disconnect from the server
+<FileTree>
+  <FileTree.Folder name="n_pause" defaultOpen>
+    <FileTree.Folder name="server" defaultOpen>
+      <FileTree.File name="open.lua"/>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+```lua
+-- Handle disconnect
+RegisterServerEvent('n_pause:disconnect', function()
+    local _source = source
+    -- DropPlayer(_source, 'You have left the game.')
+
+end)
+```

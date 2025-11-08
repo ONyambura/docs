@@ -26,12 +26,20 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
       - name: Install dependencies
         run: npm ci
 
       - name: Install SWC for Linux
-        run: npm install @next/swc-linux-x64-gnu
-        
+        run: npm install @next/swc-linux-x64-gnu@13.5.11
+
       - name: Build site
         run: |
           npx next build

@@ -27,7 +27,7 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm ci  # or yarn install if using yarn
+        run: npm ci
 
       - name: Build site
         run: |

@@ -32,7 +32,7 @@ jobs:
       - name: Build site
         run: |
           npx next build
-          npx next export  # <-- generates the static `out` folder
+          npx next export
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

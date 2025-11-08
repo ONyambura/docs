@@ -38,9 +38,8 @@ const MemberLink: React.FC<{
           className="w-24 rounded-md bg-neutral-100 shadow-md dark:bg-neutral-900" 
         />
       </a>
-
-      <>
-        {kofi && (
+      
+      {kofi && (
           <a 
             href={`https://ko-fi.com/${kofi}`} 
             target="_blank" 
@@ -96,8 +95,6 @@ const MemberLink: React.FC<{
             </button>
           </a>
         )} */}
-      </>
-
     </div>
   );
 };

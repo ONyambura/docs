@@ -50,8 +50,7 @@ jobs:
       - name: Build and export site
         run: |
           npx next build
-          npx next export
-
+          
       # 7️⃣ Upload static site artifact for GitHub Pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

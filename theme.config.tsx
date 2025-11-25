@@ -40,14 +40,14 @@ const config: DocsThemeConfig = {
   logo: (
     <div
       style={{
-        paddingLeft: '50px',
+        paddingLeft: '210px',
         lineHeight: '38px',
-        background: "url('https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/new_logo_nobg.png') no-repeat left",
-        backgroundSize: '38px',
+        background: "url('https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/long_logo_new.png') no-repeat left",
+        backgroundSize: '200px',
         fontWeight: 550,
       }}
     >
-      NXBR Docs
+      Docs
     </div>
   ),
   // project: {

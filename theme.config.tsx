@@ -38,17 +38,25 @@ function useNextSeoProps() {
 
 const config: DocsThemeConfig = {
   logo: (
-    <div
-      style={{
-        paddingLeft: '210px',
-        lineHeight: '38px',
-        background: "url('https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/long_logo_new.png') no-repeat left",
-        backgroundSize: '200px',
-        fontWeight: 550,
-      }}
-    >
-      Docs
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <img
+        src="https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/long_logo_new.png" // Path relative to the public directory
+        alt="N Developments"
+        style={{ lineHeight: '38px', paddingLeft: '5px' }} // Adjust size as needed
+      />
+      {/* <span style={{ fontWeight: 700 }}>Project Name</span> */}
     </div>
+    // <div
+    //   style={{
+    //     paddingLeft: '210px',
+    //     lineHeight: '38px',
+    //     background: "url('https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/long_logo_new.png') no-repeat left",
+    //     backgroundSize: '200px',
+    //     fontWeight: 550,
+    //   }}
+    // >
+    //   Docs
+    // </div>
   ),
   // project: {
   //   link: 'https://github.com/NXBR/docs',

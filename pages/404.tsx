@@ -12,9 +12,9 @@ const FourOhFour: React.FC = () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center bg-neutral-900">
-      <img src="https://avatars.githubusercontent.com/u/209772401" width="64" />
-      <p className="text-4xl text-white">404</p>
-      <p className="text-lg text-white">Redirecting...</p>
+      <img src="https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/logo.png" width="64" />
+      <p className="text-4xl text-white">Woopsss 404</p>
+      <p className="text-lg text-white">Moving back to home...</p>
     </div>
   );
 };

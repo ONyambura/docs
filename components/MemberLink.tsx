@@ -13,11 +13,12 @@ const MemberLink: React.FC<{
   username?: string, 
   github?: string, 
   discord?: string, 
+  store?: string,
   cfx?: string,
   youtube?: string,
   image?: string, 
   kofi?: string 
-}> = ({ username, github, discord, cfx, youtube, image, kofi }) => {
+}> = ({ username, github, discord, store, cfx, youtube, image, kofi }) => {
   // const haskofi = !!kofi;
   // const hasDiscord = !!discord && !haskofi;
   // const hasCfx = !!cfx && !haskofi && !hasDiscord;
@@ -26,7 +27,7 @@ const MemberLink: React.FC<{
   return (
     <div key={username} className="flex flex-col items-center justify-center gap-2">
       <a 
-        href={`https://github.com/${github}`} 
+        href={github ? `https://github.com/${github}` : store} 
         target="_blank" 
         rel="noopener noreferrer"
         className="flex flex-col items-center gap-2"
@@ -56,7 +57,7 @@ const MemberLink: React.FC<{
         {discord  && (
           // 
           <a 
-            href={`https://forum.cfx.re/u/${cfx}/summary`} 
+            href={`https://discord.com/invite/${discord}`} 
             target="_blank" 
             rel="noopener noreferrer"
             className="w-full"

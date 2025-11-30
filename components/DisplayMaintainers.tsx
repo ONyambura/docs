@@ -4,6 +4,7 @@ interface Profile {
   username: string;
   github?: string;
   discord?: string;
+  store?: string;
   cfx?: string;
   youtube?: string
   avatar_url: string;
@@ -21,6 +22,7 @@ const profiles: Profile[] = [
     username: 'N-Developments',
     youtube: '@n-developments',
     discord: 'mVUgnGjXQU',
+    store: 'https://store.nxbr.dev',
     avatar_url: 'https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/logo.png',
   },
 ];
@@ -41,6 +43,7 @@ const Displayprofiles = () => (
         username={profile.username}
         github={profile.github}
         discord={profile.discord}
+        store={profile.store}
         cfx={profile.cfx}
         youtube={profile.youtube}
         image={profile.avatar_url}

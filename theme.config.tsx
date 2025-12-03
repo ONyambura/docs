@@ -2,6 +2,7 @@ import React from 'react';
 import { DocsThemeConfig, useConfig } from 'nextra-theme-docs';
 import { useRouter } from 'next/router';
 import Search from '@components/Search';
+import DiscordWidget from "@components/DiscordWidget";
 
 function useHead() {
   const { asPath } = useRouter();
@@ -37,6 +38,15 @@ function useNextSeoProps() {
 }
 
 const config: DocsThemeConfig = {
+  main: ({ children }) => {
+    return (
+      <>
+        {children}
+        {/* 🔥 Inject globally at end of every page */}
+        <DiscordWidget />
+      </>
+    );
+  },
   logo: (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <img
@@ -44,27 +54,11 @@ const config: DocsThemeConfig = {
         alt="N Developments"
         style={{ lineHeight: '38px', paddingLeft: '5px' }} // Adjust size as needed
       />
-      {/* <span style={{ fontWeight: 700 }}>Project Name</span> */}
     </div>
-    // <div
-    //   style={{
-    //     paddingLeft: '210px',
-    //     lineHeight: '38px',
-    //     background: "url('https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/long_logo_new.png') no-repeat left",
-    //     backgroundSize: '200px',
-    //     fontWeight: 550,
-    //   }}
-    // >
-    //   Docs
-    // </div>
   ),
-  // project: {
-  //   link: 'https://github.com/NXBR/docs',
-  // },
   chat: {
     link: 'https://discord.nxbr.dev',
   },
-  // docsRepositoryBase: 'https://github.com/NXBR/docs/blob/main',
   footer: {
     text: '2025 © NXBR Studios - All Rights Reserved. We are not affiliated with Rockstar Games',
   },
@@ -75,12 +69,79 @@ const config: DocsThemeConfig = {
   primaryHue: { dark: 200, light: 200 },
   sidebar: {
     defaultMenuCollapseLevel: 1,
+
   },
   toc: {
     backToTop: true,
-  },
+    // extraContent: () => (
+    //   <div
+    //     style={{
+    //       marginTop: "1.5rem",
+    //       padding: "1rem",
+    //       borderRadius: "16px",
+    //       background:
+    //         "linear-gradient(145deg, var(--nextra-bg-soft), var(--nextra-bg))",
+    //       border: "1px solid var(--nextra-border)",
+    //       boxShadow: "0 4px 14px rgba(0,0,0,0.1)",
+    //       backdropFilter: "blur(12px)",
+    //       transition: "all 0.3s ease",
+    //       overflow: "hidden",
+    //     }}
+    //     className="discord-widget-card"
+    //   >
+    //     {/* Header */}
+    //     <div
+    //       style={{
+    //         display: "flex",
+    //         alignItems: "center",
+    //         gap: "8px",
+    //         marginBottom: "0.75rem",
+    //       }}
+    //     >
+    //       <img
+    //         src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"
+    //         alt="Discord"
+    //         width="22"
+    //         height="22"
+    //         style={{
+    //           opacity: 0.9,
+    //           filter: "drop-shadow(0 0 4px rgba(88,101,242,0.5))",
+    //         }}
+    //       />
+    //       <span
+    //         style={{
+    //           fontSize: "0.95rem",
+    //           fontWeight: 700,
+    //           opacity: 0.9,
+    //         }}
+    //       >
+    //         Join Our Discord
+    //       </span>
+    //     </div>
 
+    //     {/* Iframe */}
+    //     <iframe
+    //       src="https://discord.com/widget?id=685925212142829779&theme=dark"
+    //       width="100%"
+    //       height="420"
+    //       style={{
+    //         border: "none",
+    //         borderRadius: "12px",
+    //         boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
+    //         transition: "transform 0.25s ease",
+    //       }}
+    //       className="discord-iframe"
+    //       frameBorder="0"
+    //       allowTransparency={true}
+    //       sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+    //     />
+    //   </div>
+    // )
+  },
+  feedback: { content: null },
+  editLink: { component: null },
   useNextSeoProps: useNextSeoProps,
+  
 };
 
 export default config;

@@ -29,6 +29,14 @@ ul.nx-list-disc li li li {
 ol.nx-list-decimal {
   margin-top: 0 !important;
 }
+.discord-widget-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.discord-iframe:hover {
+  transform: scale(1.01);
+}
 
 :root {
   --docsearch-highlight-color: #0ea5e9;

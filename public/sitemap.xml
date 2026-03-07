@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>https://docs.nxbr.dev</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_crosshair</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_crosshair/updates</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_easysit</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_easysit/updates</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_pause</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_pause/Exports/client</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_pause/Handlers/client</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_pause/Intergrations/logout</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_pause/Intergrations/relog</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_pause/updates</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_tune</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.nxbr.dev/n_tune/updates</loc><lastmod>2026-03-07T16:14:07.729Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+</urlset>

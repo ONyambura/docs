@@ -9,6 +9,25 @@ function useHead() {
   const { frontMatter, title } = useConfig();
   const url = `https://docs.nxbr.dev${asPath}`;
   const description = frontMatter.description || "Documentation for NXBR's resources for FiveM/RedM";
+  const siteName = 'NXBR Docs';
+  const keywords = [
+    'N Developments', 'N Developments Docs',
+    'Nyambura', 'Nyambura Docs',
+    'NXBR', 'NXBR Docs',
+    'Nexbur', 'Nexbur Docs',
+    'FiveM', 'FiveM scripts', 'FiveM resources',
+    'RedM', 'RedM scripts', 'RedM resources',
+    'N Easy Sit', 'N Pause', 'N Tune', 'N Crosshair',
+  ].join(', ');
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteName,
+    alternateName: ['N Developments', 'Nyambura', 'NXBR', 'Nexbur', 'N Developments Docs', 'Nyambura Docs', 'NXBR Docs', 'Nexbur Docs'],
+    url: 'https://docs.nxbr.dev',
+    description: "Documentation for NXBR's resources for FiveM/RedM",
+  };
 
   return (
     <>
@@ -16,9 +35,28 @@ function useHead() {
       <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ONyambura/pictures/refs/heads/main/N%20Logos%20-%20Purple/transpared_ico.ico" />
       <meta httpEquiv="Content-Language" content="en" />
       <meta name="description" content={description} />
-      <meta name="og:title" content={title} />
-      <meta name="og:description" content={description} />
-      <meta name="og:url" content={url} />
+      <meta name="keywords" content={keywords} />
+      <meta name="author" content="NXBR" />
+      <link rel="canonical" href={url} />
+
+      {/* Open Graph */}
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={siteName} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={url} />
+      <meta property="og:locale" content="en_US" />
+
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </>
   );
 }
@@ -60,7 +98,7 @@ const config: DocsThemeConfig = {
     link: 'https://discord.nxbr.dev',
   },
   footer: {
-    text: '2025 © NXBR Studios - All Rights Reserved. We are not affiliated with Rockstar Games',
+    text: '2026 © NXBR Studios - All Rights Reserved. We are not affiliated with Rockstar Games',
   },
   search: {
     component: <Search />,

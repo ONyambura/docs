@@ -1,0 +1,105 @@
+## Visibility
+
+Same behaviour as the client exports. Local scripts: `TriggerEvent`. Server → this client: `TriggerClientEvent`.
+
+### n_sling:hide
+
+```lua
+---@alias serverId
+---| number # player to hide on this client
+---| nil # hide the local player
+AddEventHandler('n_sling:hide', function(serverId)
+    -- props deleted for that player on this client
+end)
+```
+
+**Parameters**
+
+- `serverId` (optional) `number`
+
+**Receives**
+
+- player server id, or none (local player)
+
+### n_sling:show
+
+```lua
+AddEventHandler('n_sling:show', function(serverId)
+    -- props deleted then spawned again
+end)
+```
+
+**Parameters**
+
+- `serverId` (optional) `number`
+
+**Receives**
+
+- player server id, or none (local player)
+
+### n_sling:hideAll
+
+```lua
+AddEventHandler('n_sling:hideAll', function()
+    -- every sling this client is drawing is deleted
+end)
+```
+
+**Parameters**
+
+- none
+
+**Receives**
+
+- none
+
+### n_sling:showAll
+
+```lua
+AddEventHandler('n_sling:showAll', function()
+    -- every player's slings spawned again on this client
+end)
+```
+
+**Parameters**
+
+- none
+
+**Receives**
+
+- none
+
+### n_sling:toggle
+
+```lua
+---@alias on
+---|'true' # show
+---|'false' # hide
+---|'nil' # flip
+AddEventHandler('n_sling:toggle', function(on, serverId)
+    print(on, serverId)
+end)
+```
+
+**Parameters**
+
+- `on` (optional) `boolean`
+- `serverId` (optional) `number`
+
+**Receives**
+
+- `true / false / nil`
+- player server id, or none
+
+You can also **trigger** these from another resource:
+
+```lua
+-- clothing / appearance (this client only)
+AddEventHandler('your_clothing:opened', function()
+    TriggerEvent('n_sling:hide')
+end)
+
+AddEventHandler('your_clothing:closed', function()
+    TriggerEvent('n_sling:show')
+end)
+```

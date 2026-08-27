@@ -1,0 +1,102 @@
+## Visibility
+
+Admin-only hide / show for every client. Prefer the [server exports](/n_sling/Exports/server) from other resources.
+
+### n_sling:hidePlayer
+
+Admin-only. Hides that player for everyone.
+
+```lua
+---@alias target
+---| number # player server id
+---| nil # defaults to the admin who fired it
+TriggerServerEvent('n_sling:hidePlayer', target)
+```
+
+**Parameters**
+
+- `target` (optional) `number`
+
+**Receives**
+
+- player server id (source must be an n_sling admin)
+
+### n_sling:showPlayer
+
+Admin-only. Shows that player for everyone.
+
+```lua
+TriggerServerEvent('n_sling:showPlayer', target)
+```
+
+**Parameters**
+
+- `target` (optional) `number`
+
+**Receives**
+
+- player server id (source must be an n_sling admin)
+
+## Internal
+
+These are used by n_sling itself. You can listen, but you should not replace them.
+
+### n_sling:refresh
+
+Source's inventory → worn state bag.
+
+```lua
+TriggerServerEvent('n_sling:refresh')
+```
+
+**Parameters**
+
+- none (`source` is the player)
+
+**Receives**
+
+- none
+
+### n_sling:playerReady
+
+Source just joined; push worn list.
+
+```lua
+TriggerServerEvent('n_sling:playerReady')
+```
+
+**Parameters**
+
+- none
+
+**Receives**
+
+- none
+
+### n_sling:req
+
+NUI admin panel — not for third parties.
+
+**Parameters**
+
+- `token` `number`
+- `action` `string`
+- `data` `table`
+
+### n_sling:storeUpdated
+
+Fired to every client when slings / theme / setup are saved. You may listen; n_sling does not require a handler.
+
+```lua
+AddEventHandler('n_sling:storeUpdated', function(store)
+    -- store.setup, store.theme, store.keybinds, store.slings
+end)
+```
+
+**Parameters**
+
+- `store` `table`
+
+**Receives**
+
+- public store payload

@@ -17,7 +17,7 @@ function useHead() {
     'Nexbur', 'Nexbur Docs',
     'FiveM', 'FiveM scripts', 'FiveM resources',
     'RedM', 'RedM scripts', 'RedM resources',
-    'N Easy Sit', 'N Pause', 'N Tune', 'N Crosshair',
+    'N Easy Sit', 'N Pause', 'N Tune', 'N Crosshair', 'N Sling',
   ].join(', ');
 
   const jsonLd = {

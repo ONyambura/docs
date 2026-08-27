@@ -1,0 +1,137 @@
+## Visibility
+
+Hide **deletes** sling objects on this client. Show **spawns them again** from the current worn list.
+
+### Hide
+
+Deletes sling props on this client. Pass a server id to target another player. Omit it to target yourself.
+
+```lua
+exports.n_sling:Hide()
+exports.n_sling:Hide(serverId)
+```
+
+**Parameters**
+
+- `serverId` (optional) `number`
+
+**Returns**
+
+- none
+
+### Show
+
+Deletes then spawns sling props again for that player on this client.
+
+```lua
+exports.n_sling:Show()
+exports.n_sling:Show(serverId)
+```
+
+**Parameters**
+
+- `serverId` (optional) `number`
+
+**Returns**
+
+- none
+
+### HideAll
+
+Deletes every sling this client is drawing (you + other players).
+
+```lua
+exports.n_sling:HideAll()
+```
+
+**Parameters**
+
+- none
+
+**Returns**
+
+- none
+
+### ShowAll
+
+Spawns every player's slings again on this client. Always deletes first.
+
+```lua
+exports.n_sling:ShowAll()
+```
+
+**Parameters**
+
+- none
+
+**Returns**
+
+- none
+
+### Toggle
+
+Shows, hides, or flips visibility for a player on this client.
+
+```lua
+exports.n_sling:Toggle()
+exports.n_sling:Toggle(false, serverId)
+```
+
+**Parameters**
+
+- `on` (optional) `boolean` — `true` show, `false` hide, `nil` flip
+- `serverId` (optional) `number`
+
+**Returns**
+
+- `true / false` — whether slings are visible after the call
+
+### IsHidden
+
+```lua
+exports.n_sling:IsHidden()
+exports.n_sling:IsHidden(serverId)
+```
+
+**Parameters**
+
+- `serverId` (optional) `number`
+
+**Returns**
+
+- `true / false`
+
+### Refresh
+
+Same as `Show()` — delete + spawn.
+
+```lua
+exports.n_sling:Refresh()
+exports.n_sling:Refresh(serverId)
+```
+
+**Parameters**
+
+- `serverId` (optional) `number`
+
+**Returns**
+
+- none
+
+## Editor
+
+### IsEditing
+
+Returns whether the placement gizmo is open.
+
+```lua
+exports.n_sling:IsEditing()
+```
+
+**Parameters**
+
+- none
+
+**Returns**
+
+- `true / false`

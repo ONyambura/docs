@@ -1,0 +1,162 @@
+## Visibility
+
+Server Hide / Show tells **every client** to delete that player's props and (on Show) spawn them again. Use this from appearance menus so other players don't keep seeing the sling.
+
+### Hide
+
+Deletes `src`'s sling props on every client. Omit / `-1` hides everything everywhere.
+
+```lua
+exports.n_sling:Hide(source)
+exports.n_sling:Hide()
+```
+
+**Parameters**
+
+- `src` (optional) `number` — player server id. Omit or `<= 0` to hide all slings on all clients.
+
+**Returns**
+
+- none
+
+### Show
+
+Spawns `src`'s slings again on every client (deletes first). Omit / `-1` shows everything.
+
+```lua
+exports.n_sling:Show(source)
+exports.n_sling:Show()
+```
+
+**Parameters**
+
+- `src` (optional) `number`
+
+**Returns**
+
+- none
+
+### HideAll
+
+Deletes every sling **that one client** is drawing (cutscene camera on one player). Omit / `-1` targets every client.
+
+```lua
+exports.n_sling:HideAll(source)
+```
+
+**Parameters**
+
+- `src` (optional) `number` — whose client
+
+**Returns**
+
+- none
+
+### ShowAll
+
+```lua
+exports.n_sling:ShowAll(source)
+```
+
+**Parameters**
+
+- `src` (optional) `number`
+
+**Returns**
+
+- none
+
+### Toggle
+
+```lua
+exports.n_sling:Toggle(source, false)
+```
+
+**Parameters**
+
+- `src` `number` — player whose props to toggle on every client
+- `on` (optional) `boolean` — `true` show, `false` hide, `nil` flip
+
+**Returns**
+
+- none
+
+## Data
+
+### Refresh
+
+Rebuilds the `n_sling` state bag from that player's inventory.
+
+```lua
+exports.n_sling:Refresh(source)
+```
+
+**Parameters**
+
+- `src` `number`
+
+**Returns**
+
+- none
+
+### GetWorn
+
+Current worn list that would be pushed (`item`, `model`, `bone`, `pos`, `rot`, …).
+
+```lua
+exports.n_sling:GetWorn(source)
+```
+
+**Parameters**
+
+- `src` `number`
+
+**Returns**
+
+- `table`
+
+### GetSlings
+
+All configured sling entries, keyed by item name.
+
+```lua
+exports.n_sling:GetSlings()
+```
+
+**Parameters**
+
+- none
+
+**Returns**
+
+- `table`
+
+### GetSling
+
+One sling config, or `nil`.
+
+```lua
+exports.n_sling:GetSling('weapon_pistol')
+```
+
+**Parameters**
+
+- `item` `string`
+
+**Returns**
+
+- `table / nil`
+
+### IsAdmin
+
+```lua
+exports.n_sling:IsAdmin(source)
+```
+
+**Parameters**
+
+- `src` `number`
+
+**Returns**
+
+- `true / false`

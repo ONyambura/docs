@@ -1,0 +1,201 @@
+import ResourceLinks from '@components/resource-links';
+import { Steps, Tabs, Tab } from 'nextra-theme-docs';
+import { Callout, FileTree } from 'nextra/components';
+
+# N Sling
+
+In-game sling editor. Admins place inventory items on the character with a translate / rotate gizmo and an orbit camera. Positions are saved from the NUI panel (JSON or database). Lua config stays small on purpose.
+
+<ResourceLinks />
+
+<Callout type="warning">
+This resource supports by default ESX, QB, QBOX, ox_core, vRP and standalone (ACE). For any other framework please contact me on [discord](https://discord.com/invite/mVUgnGjXQU).
+</Callout>
+
+<Callout type="warning">
+Dependencies
+
+Inventory is auto-detected (ox_inventory, qb-inventory, qs-inventory, and others — confirm it in the first-run wizard).
+
+- [oxmysql](https://github.com/overextended/oxmysql) — optional, only when `Config.Save = 'database'`
+- [ox_lib](https://github.com/communityox/ox_lib) — optional, used for notifications when present
+</Callout>
+
+## Installation
+<Steps>
+### Make sure you already have a supported inventory
+
+First **started** resource wins. You can override it in the setup wizard.
+
+- [ox_inventory](https://github.com/overextended/ox_inventory)
+- qb-inventory / ps-inventory / lj-inventory
+- qs-inventory / origen_inventory / codem-inventory / tgiann-inventory
+- core_inventory / chezza / jaksam
+- ESX default items (fallback)
+
+### Unpack the resource `n_sling` into your resources folder
+<FileTree>
+  <FileTree.Folder name="data" defaultOpen>
+    <FileTree.File name="server.cfg" />
+    <FileTree.Folder name="resources" defaultOpen>
+      <FileTree.Folder name="[nxbr]" defaultOpen>
+        <FileTree.Folder name="n_sling <-" defaultOpen>
+        </FileTree.Folder>
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+### Resource start order
+
+It's important for your resources to start in a logical order to prevent errors from missing dependencies.
+
+```bash
+ensure oxmysql # only if Config.Save = 'database'
+ensure inventory # ox_inventory, qb-inventory, qs-inventory, ...
+ensure n_sling
+```
+
+### Ace Permissions
+<Tabs items={['group', 'steam', 'license']}>
+  <Tabs.Tab>
+```bash
+add_ace group.admin command.sling allow
+add_ace group.admin n_sling.admin allow
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+```bash
+add_ace identifier.steam:xxxxxxxxxxxxx command.sling allow
+add_ace identifier.steam:xxxxxxxxxxxxx n_sling.admin allow
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+```bash
+add_ace identifier.license:xxxxxxxxxxxxx command.sling allow
+add_ace identifier.license:xxxxxxxxxxxxx n_sling.admin allow
+```
+  </Tabs.Tab>
+</Tabs>
+
+ACE always works (including standalone). Framework groups in `Config.Admin.Groups` are checked after ACE.
+
+If you change `Config.Command`, the command ACE follows it (`command.<Command>`).
+
+### Config
+
+Resource configuration is handled using config.lua. Everything else — inventory, image path, theme, keybinds, slings — is set in the panel.
+
+```lua
+Config = {}
+
+--- 'json' writes data/store.json
+--- 'database' uses oxmysql table `n_sling` (created automatically)
+Config.Save = 'json'
+
+--- Chat command that opens the editor. ACE object defaults to command.<this>
+Config.Command = 'sling'
+
+Config.Admin = {
+    Groups = { 'admin', 'superadmin', 'god', 'mod' },
+    Ace = 'n_sling.admin',
+    -- Export = { resource = 'my_admin', name = 'IsSlingAdmin' },
+}
+```
+
+### SQL Schema
+
+- Only needed when `Config.Save = 'database'`.
+- Table `n_sling` is created on first start. You do **not** have to import SQL by hand.
+- If oxmysql is missing, the resource falls back to JSON and prints a warning.
+
+```sql
+CREATE TABLE IF NOT EXISTS `n_sling` (
+    `id` TINYINT NOT NULL PRIMARY KEY,
+    `payload` LONGTEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+JSON file: `n_sling/data/store.json`. Back it up; a resource update can overwrite the default empty file if you replace the folder.
+
+</Steps>
+
+## First start
+
+Open the panel with `/sling` (or `Config.Command`).
+
+If setup is not completed, a wizard opens:
+
+1. Confirm the **auto-detected inventory** (or pick another).
+2. Confirm the **image path** (pre-filled from the inventory).
+3. Set **theme** colours (default primary `250, 143, 20`).
+
+After that the panel lists every configured sling. Images are `imagesPath + '/' + item image`.
+
+If an item has no model and is not a weapon, set **Model override** in the add dialog (`w_ar_carbinerifle`, `prop_…`, etc.).
+
+## Editor
+
+Add sling → pick an item and a slot → the panel hides, the item spawns on you.
+
+| Default | Action |
+|---|---|
+| G | Toggle gizmo cursor |
+| W | Translate |
+| R | Rotate |
+| Q | Local / world space |
+| [ ] | Cycle attach bone |
+| LMB | Grab the gizmo (cursor on) |
+| RMB | Orbit camera (cursor off) |
+| Scroll | Zoom |
+| Enter | Save (deletes preview, restores panel) |
+| Backspace / Esc | Cancel |
+
+Helper HUD in the corner lists whatever keybinds you saved in Settings.
+
+## Runtime
+
+Configured slings attach on players who have that item. The equipped copy in hands is hidden; putting the weapon away shows the sling again.
+
+Other clients see attachments through the `n_sling` state bag.
+
+Hide **deletes** the objects. Show **spawns them again** from the current worn list (it does not just hide the alpha). Use this from clothing / appearance / cutscenes — see [Integrations](/n_sling/Integrations/clothing), [Exports](/n_sling/Exports/client) and [Handlers](/n_sling/Handlers/client).
+
+## Inventories
+
+Detection order (first **started** resource wins). Confirm or override in the setup wizard.
+
+| Inventory | Resource | Images |
+|---|---|---|
+| ox_inventory | `ox_inventory` | `nui://ox_inventory/web/images` |
+| qs-inventory | `qs-inventory` | `nui://qs-inventory/html/images` |
+| origen_inventory | `origen_inventory` | `nui://origen_inventory/html/images` |
+| codem-inventory | `codem-inventory` | `nui://codem-inventory/html/itemimages` |
+| tgiann-inventory | `tgiann-inventory` | `nui://tgiann-inventory/nui/images` |
+| core_inventory | `core_inventory` | `nui://core_inventory/html/img` |
+| ps-inventory | `ps-inventory` | `nui://ps-inventory/html/images` |
+| lj-inventory | `lj-inventory` | `nui://lj-inventory/html/images` |
+| qb-inventory | `qb-inventory` | `nui://qb-inventory/html/images` |
+| chezza | `inventory` | `nui://inventory/html/images` |
+| jaksam | `jaksam_inventory` | `nui://jaksam_inventory/html/images` |
+| ESX fallback | `es_extended` | set in setup |
+
+Some tgiann packs use a separate `inventory_images` resource — set the path in setup if so.
+
+## Using an unsupported framework
+
+If your framework does not have official support, open a ticket at [Discord](https://discord.com/invite/mVUgnGjXQU).
+
+You can also plug your own admin check:
+
+```lua
+Config.Admin.Export = { resource = 'my_admin', name = 'IsSlingAdmin' }
+```
+
+```lua
+exports('IsSlingAdmin', function(source)
+    return true -- your check
+end)
+```
+
+The export is called even if the detected framework is not `custom`. ACE still applies.

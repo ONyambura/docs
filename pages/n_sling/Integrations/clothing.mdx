@@ -1,0 +1,59 @@
+import { Callout } from 'nextra/components';
+
+## Clothing / appearance
+
+<Callout type="info">
+Hide **deletes** the sling objects. Show **spawns them again**. Do not only set entity alpha — the next refresh would bring them back anyway.
+</Callout>
+
+### This client only
+
+Use this when only the player looking at the menu should lose the sling (local camera / NUI). Other players still see it on them.
+
+```lua
+AddEventHandler('your_clothing:opened', function()
+    exports.n_sling:Hide()
+end)
+
+AddEventHandler('your_clothing:closed', function()
+    exports.n_sling:Show()
+end)
+```
+
+### Whole server
+
+Use this when everyone should stop seeing that player's slings (shared appearance room, photos, etc.).
+
+```lua
+-- server
+AddEventHandler('your_clothing:opened', function(src)
+    exports.n_sling:Hide(src)
+end)
+
+AddEventHandler('your_clothing:closed', function(src)
+    exports.n_sling:Show(src)
+end)
+```
+
+### Cutscene (one client's view)
+
+Deletes every sling that client is drawing (themselves + other players), then brings them back.
+
+```lua
+-- server
+exports.n_sling:HideAll(source)
+
+-- later
+exports.n_sling:ShowAll(source)
+```
+
+### Inventory changed
+
+After you add / remove a slung item from a player, rebuild the worn list:
+
+```lua
+-- server
+exports.n_sling:Refresh(source)
+```
+
+Do not write `Player(src).state.n_sling` yourself unless you intend to replace the worn list.

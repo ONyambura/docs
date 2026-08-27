@@ -136,6 +136,8 @@ If an item has no model and is not a weapon, set **Model override** in the add d
 
 ## Editor
 
+Placement uses the same DRAW_GIZMO method as [object_gizmo](https://github.com/DemiAutomatic/object_gizmo) (built in — `object_gizmo` does not need to be started).
+
 Add sling → pick an item and a slot → the panel hides, the item spawns on you.
 
 | Default | Action |
@@ -157,9 +159,11 @@ Helper HUD in the corner lists whatever keybinds you saved in Settings.
 
 Configured slings attach on players who have that item. The equipped copy in hands is hidden; putting the weapon away shows the sling again.
 
-Other clients see attachments through the `n_sling` state bag.
+**Props are networked, same as n_snippets bags.** You create one object on your own ped, attach it, and the server keeps the net id. Other clients do not spawn copies — OneSync streams the entity. That is what stops a third player from seeing doubles.
 
-Hide **deletes** the objects. Show **spawns them again** from the current worn list (it does not just hide the alpha). Use this from clothing / appearance / cutscenes — see [Integrations](/n_sling/Integrations/clothing), [Exports](/n_sling/Exports/client) and [Handlers](/n_sling/Handlers/client).
+Settings → **Spawn delay** (default 3 seconds) waits after you spawn / character load before creating your objects.
+
+Clothing **Hide** is local invisibility; other players still see your sling. Dropping the item or logout deletes the networked entity for everyone. See [Integrations](/n_sling/Integrations/clothing), [Exports](/n_sling/Exports/client) and [Handlers](/n_sling/Handlers/client).
 
 ## Inventories
 

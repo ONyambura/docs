@@ -3,7 +3,7 @@ import { Callout } from 'nextra/components';
 ## Clothing / appearance
 
 <Callout type="info">
-Hide **deletes** the sling objects. Show **spawns them again**. Do not only set entity alpha — the next refresh would bring them back anyway.
+Client **Hide** only hides slings on that screen (clothing camera). Other players still see the networked prop. Server **Hide(src)** tells every client to hide that player.
 </Callout>
 
 ### This client only
@@ -37,7 +37,7 @@ end)
 
 ### Cutscene (one client's view)
 
-Deletes every sling that client is drawing (themselves + other players), then brings them back.
+Hides every sling on that client's screen (themselves + other players), then brings them back.
 
 ```lua
 -- server

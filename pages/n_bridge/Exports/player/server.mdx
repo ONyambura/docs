@@ -428,6 +428,131 @@ end
 Bridge.SetPlayerJob(source, 'police', 4)
 ```
 
+### GetCharacter
+
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`table|nil` — `{ firstName, lastName, phone, gender, dateOfBirth }`. Phone is `nil` on ox and ND. vRP has no date of birth or gender.
+
+**Example**
+
+```lua
+local character = Bridge.GetCharacter(source)
+
+if not character then
+    return
+end
+
+print(character.firstName, character.phone)
+```
+
+### IsBoss
+
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`boolean` — `false` on ND and vRP, which have no boss flag. ox is `true` only when that grade is named `boss` or marked as the group owner.
+
+**Example**
+
+```lua
+if not Bridge.IsBoss(source) then
+    Bridge.Notify(source, { description = 'Bosses only', kind = 'error' })
+    return
+end
+```
+
+### HasGroup
+
+**Parameters**
+
+- `source` `number` — server id
+- `filter` `string|string[]|table` — a job, gang, or character id; a list of those; or `{ police = 2 }` for a minimum grade
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.HasGroup(source, 'police') then
+    Bridge.Notify(source, { description = 'Police only', kind = 'info' })
+end
+
+if Bridge.HasGroup(source, { police = 2 }) then
+    print('sergeant or higher')
+end
+```
+
+### GetJobs
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table` — list of `{ name, label, grades }`. Each grade is `{ grade, name, label, isBoss }`. ND and vRP return an empty list.
+
+**Example**
+
+```lua
+local jobs = Bridge.GetJobs()
+
+for i = 1, #jobs do
+    print(jobs[i].name, jobs[i].label)
+end
+```
+
+### GetGangs
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table` — same shape as `GetJobs`. ESX, ND, and vRP return an empty list. vRP has no gang.
+
+**Example**
+
+```lua
+local gangs = Bridge.GetGangs()
+
+for i = 1, #gangs do
+    print(gangs[i].name)
+end
+```
+
+### RegisterCallback
+
+The handler runs on the server. Call `reply` once with the values the client should receive.
+
+**Parameters**
+
+- `name` `string`
+- `handler` `function` — `handler(source, reply, ...)`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.RegisterCallback('garage:price', function(source, reply, plate)
+    reply(500)
+end)
+```
+
 ### OnPlayerReady
 
 Runs for characters who are already loaded, and for each character that loads later.

@@ -26,7 +26,9 @@ Bridge.RaisePlayerReady()
 
 Build return values with `Bridge.Player`, `Bridge.Job`, `Bridge.MoneyArgs`, and `Bridge.ItemContext` so they match the shipped backends.
 
-Framework server: `getPlayer`, `getPlayers`, `getIdentifier`, `getJob`, `setJob`, `getGang`, `setGang`, `setDuty`, `getMoney`, `addMoney(source, account, amount, reason)`, `removeMoney`, `setMoney`, `getMetadata`, `setMetadata`, `getByIdentifier`, `getByPhone`, `getPlayersByJob`, `getDutyCount`, `hasPermission`, `registerUsable`. `Bridge.MoneyReason(reason)` fills a missing reason with `n_bridge`.
+Framework server: `getPlayer`, `getPlayers`, `getIdentifier`, `getJob`, `setJob`, `getGang`, `setGang`, `setDuty`, `getMoney`, `addMoney(source, account, amount, reason)`, `removeMoney`, `setMoney`, `getMetadata`, `setMetadata`, `getByIdentifier`, `getByPhone`, `getPlayersByJob`, `getDutyCount`, `getCharacter`, `isBoss`, `hasGroup`, `getJobs`, `getGangs`, `hasPermission`, `registerUsable`. `Bridge.MoneyReason(reason)` fills a missing reason with `n_bridge`.
+
+Framework client also implements `getCharacter`, `isBoss`, `getVehicleProperties(vehicle)`, and `setVehicleProperties(vehicle, props)`.
 
 Framework client: `getPlayerData`, `isLoaded`, `getIdentifier`, `getJob`, `getGang`, `getMoney`, `getMetadata`. Public names are `GetPlayerData`, `IsPlayerLoaded`, `GetIdentifier`, `GetPlayerJob`, `GetPlayerGang`, `GetPlayerMoney`, and `GetPlayerMetadata`. Client methods take no server id.
 

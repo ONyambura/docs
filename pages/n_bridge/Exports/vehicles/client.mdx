@@ -24,3 +24,132 @@ if vehicles and vehicles[1] then
     Bridge.GiveKeys(source, vehicles[1].plate)
 end
 ```
+
+### SpawnVehicle
+
+Yields until the model is loaded. The vehicle is networked.
+
+**Parameters**
+
+- `model` `string|number` — model name or hash
+- `coords` `vector3` — optional. Defaults to the local player.
+- `heading` `number` — optional
+
+**Returns**
+
+`number` — vehicle entity, or `0` when the model cannot be loaded.
+
+**Example**
+
+```lua
+local vehicle = Bridge.SpawnVehicle('adder', GetEntityCoords(PlayerPedId()), 90.0)
+
+if vehicle ~= 0 then
+    TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
+end
+```
+
+### DeleteVehicle
+
+**Parameters**
+
+- `vehicle` `number` — vehicle entity
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local vehicle = Bridge.GetClosestVehicle(nil, 4.0)
+
+if vehicle ~= 0 then
+    Bridge.DeleteVehicle(vehicle)
+end
+```
+
+### GetPlate
+
+**Parameters**
+
+- `vehicle` `number` — vehicle entity
+
+**Returns**
+
+`string|nil` — plate text with surrounding spaces removed.
+
+**Example**
+
+```lua
+local plate = Bridge.GetPlate(vehicle)
+
+if plate then
+    Bridge.GiveKeys(plate)
+end
+```
+
+### GetClosestVehicle
+
+**Parameters**
+
+- `coords` `vector3` — optional
+- `radius` `number` — optional. Defaults to `5.0`.
+
+**Returns**
+
+`number, number|nil` — vehicle entity, or `0` when none is in range, and the distance.
+
+**Example**
+
+```lua
+local vehicle, distance = Bridge.GetClosestVehicle(nil, 6.0)
+
+if vehicle ~= 0 then
+    print(Bridge.GetPlate(vehicle), distance)
+end
+```
+
+### GetVehicleProperties
+
+The table is the one that framework already stores for its vehicles. Qbox, ox, and ND need ox_lib. Without it the result is `nil`.
+
+**Parameters**
+
+- `vehicle` `number` — vehicle entity
+
+**Returns**
+
+`table|nil`
+
+**Example**
+
+```lua
+local props = Bridge.GetVehicleProperties(vehicle)
+
+if props then
+    print(props.plate or props.model)
+end
+```
+
+### SetVehicleProperties
+
+**Parameters**
+
+- `vehicle` `number` — vehicle entity
+- `props` `table` — a table previously returned by `GetVehicleProperties` on this server
+
+**Returns**
+
+`boolean` — `false` when ox_lib is required and not started.
+
+**Example**
+
+```lua
+local props = Bridge.GetVehicleProperties(vehicle)
+
+if props then
+    props.fuelLevel = 100.0
+    Bridge.SetVehicleProperties(vehicle, props)
+end
+```

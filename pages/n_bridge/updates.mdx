@@ -1,5 +1,13 @@
 # Updates
 
+## 0.8.0
+
+`GetCharacter` returns first name, last name, phone, gender, and date of birth. Phone is missing on ox and ND. `IsBoss` is false on ND and vRP. `HasGroup` accepts a name, a list, or a minimum grade. `GetJobs` and `GetGangs` list what that framework has registered. ESX, ND, and vRP have no gang list.
+
+`RegisterCallback` and `TriggerCallback` are the bridge's own callbacks. Client helpers cover the closest player, ped, vehicle, and object, plus spawn, delete, and plate. `GetVehicleProperties` and `SetVehicleProperties` use that framework's property table. Qbox, ox, and ND need ox_lib for properties.
+
+`GetSlotWithItem` works on the server as well as the client.
+
 ## 0.7.0
 
 Cash and bank add, remove, and set take an optional reason. When the caller omits it, the bridge sends `n_bridge`. vRP accepts the argument and ignores it. Society add and remove take the same reason, and only qb-banking stores it.

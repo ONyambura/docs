@@ -152,6 +152,152 @@ if type(hunger) == 'number' then
 end
 ```
 
+### GetCharacter
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table|nil` — `{ firstName, lastName, phone, gender, dateOfBirth }`. Phone is `nil` on ox and ND. vRP returns `nil`.
+
+**Example**
+
+```lua
+local character = Bridge.GetCharacter()
+
+if character then
+    print(character.firstName, character.lastName)
+end
+```
+
+### IsBoss
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean` — `false` on ND and vRP.
+
+**Example**
+
+```lua
+if Bridge.IsBoss() then
+    Bridge.OpenBossMenu()
+end
+```
+
+### TriggerCallback
+
+Asks the server callback registered with `RegisterCallback`. The result arrives in `handler`.
+
+**Parameters**
+
+- `name` `string`
+- `handler` `function` — receives the values passed to `reply`
+- `...` — extra arguments forwarded to the server handler
+
+**Returns**
+
+`boolean` — `true` when the request was sent.
+
+**Example**
+
+```lua
+Bridge.TriggerCallback('garage:price', function(price)
+    print(price)
+end, plate)
+```
+
+### GetClosestPlayer
+
+**Parameters**
+
+- `coords` `vector3` — optional. Defaults to the local player.
+- `radius` `number` — optional. Defaults to `5.0`.
+
+**Returns**
+
+`number|nil, number|nil` — server id and distance. Both are `nil` when nobody is inside the radius.
+
+**Example**
+
+```lua
+local playerId, distance = Bridge.GetClosestPlayer(nil, 3.0)
+
+if playerId then
+    print(playerId, distance)
+end
+```
+
+### GetNearbyPlayers
+
+**Parameters**
+
+- `coords` `vector3` — optional
+- `radius` `number` — optional. Defaults to `5.0`.
+
+**Returns**
+
+`table` — list of `{ id, distance }`. `id` is a server id.
+
+**Example**
+
+```lua
+local nearby = Bridge.GetNearbyPlayers(nil, 8.0)
+
+for i = 1, #nearby do
+    print(nearby[i].id, nearby[i].distance)
+end
+```
+
+### GetClosestPed
+
+Skips the local player and other players.
+
+**Parameters**
+
+- `coords` `vector3` — optional
+- `radius` `number` — optional. Defaults to `5.0`.
+
+**Returns**
+
+`number, number|nil` — ped entity, or `0` when none is in range, and the distance.
+
+**Example**
+
+```lua
+local ped = Bridge.GetClosestPed(nil, 4.0)
+
+if ped ~= 0 then
+    print(ped)
+end
+```
+
+### GetClosestObject
+
+**Parameters**
+
+- `coords` `vector3` — optional
+- `radius` `number` — optional. Defaults to `5.0`.
+
+**Returns**
+
+`number, number|nil` — object entity, or `0` when none is in range, and the distance.
+
+**Example**
+
+```lua
+local object = Bridge.GetClosestObject(GetEntityCoords(PlayerPedId()), 2.0)
+
+if object ~= 0 then
+    print(object)
+end
+```
+
 ### OnPlayerReady
 
 **Parameters**

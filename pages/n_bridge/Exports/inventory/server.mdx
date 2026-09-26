@@ -192,6 +192,28 @@ if item then
 end
 ```
 
+### GetSlotWithItem
+
+**Parameters**
+
+- `inventory` `number|string`
+- `item` `string`
+- `metadata` `table` — optional. ESX default items and chezza have no metadata, so the match is by name.
+
+**Returns**
+
+`table|nil` — `{ name, count, metadata, slot }`.
+
+**Example**
+
+```lua
+local item = Bridge.GetSlotWithItem(source, 'phone')
+
+if item then
+    print(item.slot, item.count)
+end
+```
+
 ### GetPlayerWeight
 
 **Parameters**

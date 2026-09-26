@@ -48,7 +48,7 @@ Swap in `es_extended`, `qb-core`, or `qb-inventory` when that is what the server
 
 ```lua
 Config.Use = {
-    framework = 'auto', -- esx | qb | qbox | ox | vrp | standalone | custom
+    framework = 'auto', -- esx | qb | qbox | ox | nd | vrp | standalone | custom
     inventory = 'auto',
     notify = 'auto',
     target = 'auto',
@@ -99,10 +99,10 @@ Keymaster escrow leaves these plain. Everything else under `providers/` is locke
 - `providers/**/custom/**`
 - `docs/**`
 
-## What 0.4.0 ships
+## What 0.6.0 ships
 
 Framework, inventory, notify, target, progress, appearance, fuel, keys, phone, dispatch, society, owned vehicles, text UI, and boss menu.
 
-Each export group opens into Client and Server.
+Each export page lists one function per section: parameters, the return value, and a full example. Player calls include job, gang, duty, metadata, and lookup by identifier. ND Core is a framework provider.
 
 Client reads do not take a server id: inventory count, items, weapon, and open; keys give, remove, has, and lock; gang and identifier. n_carlock and wasabi_carlock are separate providers.

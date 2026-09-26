@@ -1,5 +1,13 @@
 # Updates
 
+## 0.4.0
+
+Client inventory, keys, gang, identifier, and boss menu. Server and Client lists sit under Exports, after the topic pages.
+
+n_carlock and wasabi_carlock are separate providers. ps-inventory, lj-inventory, illenium-appearance, fivem-appearance, each fuel script, cd_dispatch, cd_dispatch3d, ps-dispatch, and Qbox vehicles are separate files too.
+
+Client calls do not take a server id. `GiveKeys(plate)` is local. `GiveKeys(source, plate)` stays on the server. `ToggleLock` is n_carlock.
+
 ## 0.3.0
 
 Client player calls use the usual names. `GetPlayerData`, `GetPlayerJob`, and `GetPlayerMoney` describe the local player and do not take a server id. Server `GetPlayerJob` and `GetPlayerMoney` still take a server id.

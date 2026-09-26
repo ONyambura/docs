@@ -11,5 +11,8 @@
   "dispatch": "Dispatch",
   "society": "Society",
   "vehicles": "Vehicles",
-  "textui": "Text UI"
+  "textui": "Text UI",
+  "bossmenu": "Boss Menu",
+  "server": "Server",
+  "client": "Client"
 }

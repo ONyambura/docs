@@ -34,6 +34,8 @@ local sources = Bridge.GetPlayers()
 local id = Bridge.GetIdentifier(source)
 ```
 
+The client form is `Bridge.GetIdentifier()` and returns the local character id.
+
 ### GetPlayerJob
 
 ```lua
@@ -42,7 +44,11 @@ local job = Bridge.GetPlayerJob(source)
 
 ### GetPlayerGang
 
-Same shape as the job. `name` is `none` when the framework has no gang.
+```lua
+local gang = Bridge.GetPlayerGang(source)
+```
+
+Same shape as the job. `name` is `none` when the framework has no gang. The client form is `Bridge.GetPlayerGang()`.
 
 ### GetPlayerMoney
 
@@ -86,6 +92,22 @@ Same table as server `GetPlayer`, or `nil` before the character exists.
 ```lua
 local job = Bridge.GetPlayerJob()
 ```
+
+### GetPlayerGang
+
+```lua
+local gang = Bridge.GetPlayerGang()
+```
+
+ESX reads `gang`, then `job2`. ox_core reads groups whose type is `gang`.
+
+### GetIdentifier
+
+```lua
+local id = Bridge.GetIdentifier()
+```
+
+vRP and standalone return `nil`.
 
 ### GetPlayerMoney
 

@@ -21,8 +21,8 @@
 - `codem` — `codem-inventory`
 - `core` — `core_inventory`
 - `jaksam` — `jaksam_inventory`
-- `ps` — `ps-inventory` (same file as qb)
-- `lj` — `lj-inventory` (same file as qb, player item API)
+- `ps` — `ps-inventory`
+- `lj` — `lj-inventory`, through the player item API
 - `qb` — `qb-inventory`
 - `chezza` — resource folder `inventory`, ESX item methods
 - `esx` — default ESX items, only if no dedicated inventory above is started
@@ -58,9 +58,10 @@
 
 ## Keys
 
-`GiveKeys(source, plate)` and `RemoveKeys(source, plate)`. qs-vehiclekeys takes an optional model string.
+Server `GiveKeys(source, plate)` and client `GiveKeys(plate)` are both published. qs-vehiclekeys takes an optional model string on the server.
 
-- `n_carlock` and `wasabi_carlock` — server `GiveKey` / `RemoveKey`
+- `n_carlock` — server `GiveKeys(source, plate)`, client `GiveKeys(plate, target)`, `HasKey`, `ToggleLock`
+- `wasabi_carlock` — server `GiveKey(source, plate)`, client `GiveKey(plate)`
 - `qbx_vehiclekeys` — plate is resolved to a spawned vehicle entity
 - `qb-vehiclekeys` — server `GiveKeys` / `RemoveKeys`
 - `qs-vehiclekeys` — `GiveServerKeys` / `RemoveServerKeys`
@@ -110,3 +111,10 @@ Needs `oxmysql`.
 ## Text UI
 
 - `ox_lib`, `okok` (`okokTextUI`), `qb` (`qb-core` DrawText), `custom`
+
+## Boss menu
+
+- `qbx_management` — `qb-bossmenu:client:OpenMenu`
+- `qb-management` — `qb-bossmenu:client:OpenMenu`
+- `esx_society` — `esx_society:openBossMenu` for the local job
+- `custom`

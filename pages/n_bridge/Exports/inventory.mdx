@@ -1,6 +1,8 @@
 # Inventory
 
-Server only.
+Server calls take a server id. Client calls read the local player and do not.
+
+## Server
 
 ```lua
 Bridge.GetItemCount(source, 'water', metadata)
@@ -20,3 +22,18 @@ end)
 ```
 
 ox_inventory only runs that callback for items the inventory already treats as usable.
+
+## Client
+
+```lua
+Bridge.GetItemCount('water', metadata)
+Bridge.HasItem('water', 1, metadata)
+Bridge.GetItemLabel('water')
+local items = Bridge.GetPlayerItems()
+local weapon = Bridge.GetCurrentWeapon()
+Bridge.OpenInventory('stash', { id = 'locker', owner = 'police' })
+```
+
+Each row from `GetPlayerItems` is `{ name, count, metadata, slot, label }`. `GetCurrentWeapon` returns one row, or `nil`.
+
+`OpenInventory` kinds are `stash`, `player`, and `shop`. ESX and chezza return `false`. jaksam returns `false` for another player. Adding and removing items stays on the server.

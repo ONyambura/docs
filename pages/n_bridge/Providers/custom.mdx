@@ -28,9 +28,11 @@ Build return values with `Bridge.Player`, `Bridge.Job`, `Bridge.MoneyArgs`, and 
 
 Framework server: `getPlayer`, `getPlayers`, `getIdentifier`, `getJob`, `getGang`, `getMoney`, `addMoney`, `removeMoney`, `hasPermission`, `registerUsable`.
 
-Framework client: `getPlayerData`, `getJob`, `getMoney`. Public names are `GetPlayerData`, `GetPlayerJob`, and `GetPlayerMoney`.
+Framework client: `getPlayerData`, `getIdentifier`, `getJob`, `getGang`, `getMoney`. Public names are `GetPlayerData`, `GetIdentifier`, `GetPlayerJob`, `GetPlayerGang`, and `GetPlayerMoney`. Client methods take no server id.
 
-Inventory: `getCount`, `hasItem`, `addItem`, `removeItem`, `canCarry`, `getLabel`, `registerUsable`.
+Inventory server: `getCount(source, item, metadata)`, `hasItem`, `addItem`, `removeItem`, `canCarry`, `getLabel`, `registerUsable`.
+
+Inventory client: `getCount(item, metadata)`, `hasItem`, `getLabel`, `getItems`, `getWeapon`, `openInventory`.
 
 `registerUsable` may call `Bridge.Call('framework', 'registerUsable', item, handler)`. The framework method must not call the inventory method back.
 
@@ -40,7 +42,11 @@ Appearance: `getAppearance`, `setAppearance(appearance)`, `openAppearance(shopId
 
 Fuel: `getFuel(vehicle)`, `setFuel(vehicle, amount)`.
 
-Keys: `giveKeys(source, plate, model)`, `removeKeys(source, plate, model)`.
+Keys server: `giveKeys(source, plate, model)`, `removeKeys(source, plate, model)`, `hasKeys(source, plate)`.
+
+Keys client: `giveKeys(plate, extra)`, `removeKeys(plate, extra)`, `hasKeys(plate)`, `toggleLock()`.
+
+Boss menu: `open()`.
 
 Phone: `sendMail(source, data)`, `sendNotification(source, data)`.
 

@@ -1,0 +1,95 @@
+# Client
+
+Every client export. These describe the local player. They do not take a server id.
+
+## Player
+
+| Export | Returns |
+| --- | --- |
+| `GetPlayerData()` | same table as server `GetPlayer`, or `nil` before the character exists |
+| `GetIdentifier()` | character id, or `nil`. vRP and standalone have no local id |
+| `GetPlayerJob()` | `{ name, grade, label, gradeLabel, onDuty }` |
+| `GetPlayerGang()` | same shape. ESX uses `gang`, then `job2`. ox_core uses groups whose type is `gang` |
+| `GetPlayerMoney(account)` | number. `account` defaults to `cash`. vRP returns `0` |
+| `OnPlayerReady(function() end)` | `true`. Runs immediately when the character is already loaded |
+
+## Inventory
+
+| Export | Returns |
+| --- | --- |
+| `GetItemCount(item, metadata)` | number |
+| `HasItem(item, count, metadata)` | boolean. `count` defaults to `1` |
+| `GetItemLabel(item)` | string. core_inventory returns the item name |
+| `GetPlayerItems()` | `{ name, count, metadata, slot, label }` |
+| `GetCurrentWeapon()` | one item row, or `nil` |
+| `OpenInventory(kind, data)` | boolean |
+
+`kind` is `stash`, `player`, or `shop`. `data` may be `{ id, owner, label, items, slots, maxWeight, type }`.
+
+ESX and chezza have no client open, so `OpenInventory` returns `false`. jaksam cannot open another player's inventory from the client, so `kind = 'player'` returns `false`. Add, remove, carry, and usable registration stay on the server.
+
+## Notify
+
+`Notify(data)` shows `{ title, description, kind, duration }`. Server `Notify(source, data)` is what other resources should call.
+
+## Target
+
+| Export | Returns |
+| --- | --- |
+| `AddEntityTarget(entity, options)` | id |
+| `AddModelTarget(models, options)` | id |
+| `AddBoxZone(data)` | id |
+| `RemoveTarget(id)` | boolean |
+
+An option is `{ name, label, icon, distance, onSelect, canInteract }`. A box is `{ id, coords, size, rotation, options }`.
+
+## Progress
+
+`Progress(data)` returns boolean. `data` is `{ duration, label, canCancel, anim, disable }`. `canCancel` defaults to `true`.
+
+## Appearance
+
+| Export | Returns |
+| --- | --- |
+| `GetAppearance()` | appearance table, or `nil` on qb-clothing |
+| `SetAppearance(appearance)` | boolean |
+| `OpenAppearance(shopId)` | boolean. No argument opens the wardrobe or changing room. A string opens that shop where the script has one |
+
+## Fuel
+
+| Export | Returns |
+| --- | --- |
+| `GetFuel(vehicle)` | number |
+| `SetFuel(vehicle, amount)` | boolean |
+
+ox_fuel reads the `fuel` state bag, then the native level. The other fuel scripts use `GetFuel` / `SetFuel`.
+
+## Keys
+
+| Export | Returns |
+| --- | --- |
+| `GiveKeys(plate, extra)` | boolean |
+| `RemoveKeys(plate, extra)` | boolean |
+| `HasKeys(plate, vehicle)` | boolean |
+| `ToggleLock()` | boolean |
+
+`GiveKeys(plate)` gives the local player that plate.
+
+`extra` is a server id on n_carlock, the player who should receive or lose the key. On qs-vehiclekeys, qbx_vehiclekeys, and p_vehiclekeys it is the vehicle entity. Those three also search for the plate when you omit the entity. p_vehiclekeys and qbx_vehiclekeys need a networked vehicle.
+
+qb-vehiclekeys and qbx_vehiclekeys have no client remove. Call server `RemoveKeys` for those. qs-vehiclekeys, MrNewbVehicleKeys, and p_vehiclekeys have no client `HasKeys`, so that call returns `false`.
+
+`ToggleLock` is n_carlock. Other key scripts do not implement it, and the call logs once.
+
+## Text UI
+
+| Export | Returns |
+| --- | --- |
+| `ShowText(text)` | boolean |
+| `HideText()` | boolean |
+
+## Boss menu
+
+`OpenBossMenu()` returns boolean.
+
+qbx_management and qb-management open `qb-bossmenu:client:OpenMenu`. esx_society opens the menu for the local job. Unemployed returns `false`.

@@ -1,3 +1,22 @@
 # Server
 
-Appearance has no server exports.
+illenium-appearance, fivem-appearance, rcore_clothing, qb-clothing, and op-clothing open on the client. There is no server appearance export.
+
+### OpenAppearance
+
+Call this from a client script.
+
+**Parameters**
+
+- `shop` `string` — optional
+
+**Returns**
+
+Nothing on the server. The client call returns `boolean`.
+
+**Example**
+
+```lua
+-- client.lua
+Bridge.OpenAppearance('binco')
+```

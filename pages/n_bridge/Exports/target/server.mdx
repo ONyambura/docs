@@ -1,3 +1,31 @@
 # Server
 
-Target has no server exports.
+ox_target and qb-target register options on the client. There is no server target export.
+
+### AddEntityTarget
+
+Call this from a client script. The option table is `{ name, label, icon, distance, onSelect, canInteract }`.
+
+**Parameters**
+
+- `entity` `number`
+- `options` `table`
+
+**Returns**
+
+Nothing on the server. The client call returns `boolean`.
+
+**Example**
+
+```lua
+-- client.lua
+Bridge.AddEntityTarget(entity, {
+    {
+        name = 'n_bridge_search',
+        label = 'Search',
+        distance = 2.0,
+        onSelect = function()
+        end,
+    },
+})
+```

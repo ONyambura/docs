@@ -1,14 +1,61 @@
 # Server
 
-A server id, then a plate.
-
-```lua
-Bridge.GiveKeys(source, plate)
-Bridge.RemoveKeys(source, plate)
-Bridge.HasKeys(source, plate)
-Bridge.GiveKeys(source, plate, 'ADDER')
-```
-
-Returns `true` or `false`. The model string is only used by qs-vehiclekeys. qbx_vehiclekeys and p_vehiclekeys need that plate spawned. qs-vehiclekeys, MrNewbVehicleKeys, and p_vehiclekeys return `false` from `HasKeys`.
+A server id, then a plate. qbx_vehiclekeys and p_vehiclekeys need that plate spawned. qs-vehiclekeys, MrNewbVehicleKeys, and p_vehiclekeys return `false` from `HasKeys`.
 
 n_carlock is `GiveKeys(source, plate)`. wasabi_carlock is its own provider: `GiveKey(source, plate)` and `HasKey(source, plate)`.
+
+### GiveKeys
+
+**Parameters**
+
+- `source` `number` — server id
+- `plate` `string`
+- `model` `string` — optional. Only qs-vehiclekeys uses it.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.GiveKeys(source, '44WSX569')
+Bridge.GiveKeys(source, '44WSX569', 'ADDER')
+```
+
+### RemoveKeys
+
+**Parameters**
+
+- `source` `number`
+- `plate` `string`
+- `model` `string` — optional, qs-vehiclekeys only
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.RemoveKeys(source, '44WSX569')
+```
+
+### HasKeys
+
+**Parameters**
+
+- `source` `number`
+- `plate` `string`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.HasKeys(source, '44WSX569') then
+    Bridge.Notify(source, { description = 'You have the keys', kind = 'success' })
+end
+```

@@ -1,10 +1,60 @@
 # Client
 
+`GetAppearance` returns the backend table, or `nil` for qb-clothing. A shop id is optional and only used by op-clothing and rcore_clothing.
+
+### GetAppearance
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table|nil`
+
+**Example**
+
 ```lua
 local appearance = Bridge.GetAppearance()
-Bridge.SetAppearance(appearance)
+
+if appearance then
+    print(json.encode(appearance))
+end
+```
+
+### SetAppearance
+
+**Parameters**
+
+- `appearance` `table` — the table returned by `GetAppearance`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local appearance = Bridge.GetAppearance()
+
+if appearance then
+    Bridge.SetAppearance(appearance)
+end
+```
+
+### OpenAppearance
+
+**Parameters**
+
+- `shop` `string` — optional shop id for op-clothing and rcore_clothing. Omit it to open the wardrobe or changing room.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.OpenAppearance()
 Bridge.OpenAppearance('binco')
 ```
-
-`GetAppearance` returns the backend table, or `nil` for qb-clothing. `SetAppearance` and `OpenAppearance` return `true` or `false`. A shop id is optional and only used by op-clothing and rcore_clothing.

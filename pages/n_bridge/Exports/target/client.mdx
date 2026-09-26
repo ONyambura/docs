@@ -2,20 +2,102 @@
 
 Each option is `{ name, label, icon, distance, onSelect, canInteract }`.
 
-```lua
-Bridge.AddEntityTarget(entity, options)
-Bridge.AddModelTarget({ `prop_vend_soda_01` }, options)
+### AddEntityTarget
 
+**Parameters**
+
+- `entity` `number` — ped, vehicle, or object
+- `options` `table` — list of option tables
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.AddEntityTarget(entity, {
+    {
+        name = 'n_bridge_search',
+        label = 'Search',
+        icon = 'fa-solid fa-magnifying-glass',
+        distance = 2.0,
+        onSelect = function()
+            Bridge.Notify({ description = 'Searched', kind = 'success' })
+        end,
+    },
+})
+```
+
+### AddModelTarget
+
+**Parameters**
+
+- `models` `number|number[]` — model hash or a list of hashes
+- `options` `table`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.AddModelTarget({ `prop_vend_soda_01` }, {
+    {
+        name = 'n_bridge_vending',
+        label = 'Buy a drink',
+        onSelect = function()
+        end,
+    },
+})
+```
+
+### AddBoxZone
+
+**Parameters**
+
+- `box` `table` — `{ id, coords, size, rotation, options }`
+- `coords` and `size` are `vector3`. `rotation` is degrees.
+
+**Returns**
+
+`string|number` — the zone id passed to `RemoveTarget`.
+
+**Example**
+
+```lua
 local id = Bridge.AddBoxZone({
     id = 'counter',
     coords = vec3(0.0, 0.0, 0.0),
     size = vec3(1.5, 1.5, 1.5),
     rotation = 0.0,
-    options = options,
+    options = {
+        {
+            name = 'n_bridge_counter',
+            label = 'Use counter',
+            onSelect = function()
+            end,
+        },
+    },
 })
+```
 
+qb-target calls `onSelect` with `{ entity = entity }`.
+
+### RemoveTarget
+
+**Parameters**
+
+- `id` `string|number` — zone id from `AddBoxZone`, or an entity from `AddEntityTarget`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.RemoveTarget(id)
 Bridge.RemoveTarget(entity)
 ```
-
-`AddBoxZone` returns the zone id used by `RemoveTarget`. qb-target calls `onSelect` with `{ entity = entity }`.

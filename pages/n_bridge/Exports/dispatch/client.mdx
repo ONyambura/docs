@@ -1,3 +1,28 @@
 # Client
 
-Dispatch has no client exports. `SendDispatch` is server only. cd_dispatch, cd_dispatch3d, and ps-dispatch still file the alert from the player's client inside the provider.
+`SendDispatch` is a server call. cd_dispatch, cd_dispatch3d, and ps-dispatch still file the alert from the player's client inside the provider.
+
+### SendDispatch
+
+Call this from the server and pass `source`.
+
+**Parameters**
+
+- `data` `table` — `{ source, code, title, message, jobs, blip }`
+
+**Returns**
+
+Nothing on this page. The server call returns `boolean`.
+
+**Example**
+
+```lua
+-- server.lua
+Bridge.SendDispatch({
+    source = source,
+    code = '10-31',
+    title = 'Store robbery',
+    message = 'A clerk triggered the alarm.',
+    jobs = { 'police' },
+})
+```

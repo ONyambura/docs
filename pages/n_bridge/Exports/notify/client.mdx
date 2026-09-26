@@ -1,5 +1,20 @@
 # Client
 
+Draws a notification on the local client. Other resources should call the server export so the notice reaches the right player.
+
+### Notify
+
+**Parameters**
+
+- `data` `table|string` — a string is the description. A table is `{ title, description, kind, duration }`.
+- `kind` is `info`, `success`, `warning`, or `error`. `duration` is milliseconds and defaults to `5000`.
+
+**Returns**
+
+`boolean` — `true` when a notify provider is selected.
+
+**Example**
+
 ```lua
 Bridge.Notify({
     title = 'Shop',
@@ -8,5 +23,3 @@ Bridge.Notify({
     duration = 3000,
 })
 ```
-
-`kind` is `info`, `success`, `warning`, or `error`. `data` can be a table or a string. Other resources should call the server export so the notice reaches the right player.

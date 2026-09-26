@@ -1,3 +1,22 @@
 # Server
 
-Text UI has no server exports.
+ox_lib, okokTextUI, and qb-core draw text on the client. There is no server text export.
+
+### ShowText
+
+Call this from a client script.
+
+**Parameters**
+
+- `text` `string`
+
+**Returns**
+
+Nothing on the server. The client call returns `boolean`.
+
+**Example**
+
+```lua
+-- client.lua
+Bridge.ShowText('[E] Open the locker')
+```

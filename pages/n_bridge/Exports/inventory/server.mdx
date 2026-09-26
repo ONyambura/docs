@@ -1,49 +1,433 @@
 # Server
 
-Calls take an inventory id. For a player that is the server id. Stash ids are strings.
+`inventory` is a server id for a player, or a stash id string on ox_inventory and core_inventory. Item rows are `{ name, count, metadata, slot, label }`.
 
-The names follow [ox_inventory server functions](https://overextended.dev/ox_inventory/Functions/Server). Other inventories implement the same call when that script has the export. A missing export logs once and returns `nil`.
+Names follow the [ox_inventory server functions](https://overextended.dev/ox_inventory/Functions/Server). core_inventory implements the matching calls from the [C8RE export list](https://docs.c8re.store/core-inventory/exports). ESX default items use `xPlayer` inventory methods. A backend that does not export the call logs once and returns `nil`.
+
+### GetItemCount
+
+**Parameters**
+
+- `inventory` `number|string`
+- `item` `string`
+- `metadata` `table` — optional. Every listed key must match.
+
+**Returns**
+
+`number`
+
+**Example**
 
 ```lua
-Bridge.GetItemCount(source, 'water', metadata)
-Bridge.HasItem(source, 'water', 1, metadata)
-Bridge.AddItem(source, 'water', 2, metadata)
-Bridge.RemoveItem(source, 'water', 1, metadata)
-Bridge.CanCarry(source, 'water', 2, metadata)
-Bridge.CanCarryWeight(source, 1000)
-Bridge.GetItemLabel('water')
-Bridge.GetInventoryItems(source)
-Bridge.GetSlot(source, 1)
-Bridge.GetPlayerWeight(source)
-Bridge.GetPlayerMaxWeight(source)
+local count = Bridge.GetItemCount(source, 'water', { type = 'fresh' })
+
+if count < 1 then
+    return
+end
 ```
 
-`metadata` is optional. Add, remove, carry, and has return booleans. Count and weight return numbers. `GetInventoryItems` returns `{ name, count, metadata, slot, label }`.
+### HasItem
+
+**Parameters**
+
+- `inventory` `number|string`
+- `item` `string`
+- `count` `number` — optional. Defaults to `1`.
+- `metadata` `table` — optional
+
+**Returns**
+
+`boolean`
+
+**Example**
 
 ```lua
-Bridge.SetItemMetadata(source, slot, metadata)
-Bridge.SetDurability(source, slot, 100)
+if not Bridge.HasItem(source, 'lockpick', 1) then
+    Bridge.Notify(source, { description = 'You need a lockpick', kind = 'error' })
+    return
+end
+```
+
+### AddItem
+
+**Parameters**
+
+- `inventory` `number|string`
+- `item` `string`
+- `count` `number`
+- `metadata` `table` — optional
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local added = Bridge.AddItem(source, 'water', 2, { type = 'fresh' })
+
+if added then
+    print(Bridge.GetItemCount(source, 'water'))
+end
+```
+
+### RemoveItem
+
+Fails when the player does not hold enough.
+
+**Parameters**
+
+- `inventory` `number|string`
+- `item` `string`
+- `count` `number`
+- `metadata` `table` — optional
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if not Bridge.RemoveItem(source, 'water', 1) then
+    return
+end
+```
+
+### CanCarry
+
+**Parameters**
+
+- `inventory` `number|string`
+- `item` `string`
+- `count` `number`
+- `metadata` `table` — optional. Used by ox_inventory and core_inventory.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.CanCarry(source, 'water', 5) then
+    Bridge.AddItem(source, 'water', 5)
+end
+```
+
+### CanCarryWeight
+
+ox_inventory `CanCarryWeight`.
+
+**Parameters**
+
+- `inventory` `number|string`
+- `weight` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.CanCarryWeight(source, 1000) then
+    Bridge.AddItem(source, 'radio', 1)
+end
+```
+
+### GetItemLabel
+
+**Parameters**
+
+- `item` `string`
+
+**Returns**
+
+`string` — the label, or the item name when the backend has none.
+
+**Example**
+
+```lua
+local label = Bridge.GetItemLabel('water')
+Bridge.Notify(source, { description = label, kind = 'info' })
+```
+
+### GetInventoryItems
+
+**Parameters**
+
+- `inventory` `number|string` — player id. ox_inventory also accepts a stash id and an owner through the provider.
+
+**Returns**
+
+`table` — list of `{ name, count, metadata, slot, label }`.
+
+**Example**
+
+```lua
+local items = Bridge.GetInventoryItems(source)
+
+for i = 1, #items do
+    print(items[i].slot, items[i].name, items[i].count)
+end
+```
+
+### GetSlot
+
+ox_inventory `GetSlot`. qb-inventory and ps-inventory use `GetItemBySlot`. core_inventory uses `getItemBySlot`.
+
+**Parameters**
+
+- `inventory` `number|string`
+- `slot` `number`
+
+**Returns**
+
+`table|nil` — `{ name, count, metadata, slot }`.
+
+**Example**
+
+```lua
+local item = Bridge.GetSlot(source, 1)
+
+if item then
+    print(item.name, item.count)
+end
+```
+
+### GetPlayerWeight
+
+ox_inventory, ESX `getWeight`, and chezza.
+
+**Parameters**
+
+- `inventory` `number|string`
+
+**Returns**
+
+`number`
+
+**Example**
+
+```lua
+local weight = Bridge.GetPlayerWeight(source)
+local maxWeight = Bridge.GetPlayerMaxWeight(source)
+print(weight, maxWeight)
+```
+
+### GetPlayerMaxWeight
+
+ox_inventory, ESX `getMaxWeight`, and chezza.
+
+**Parameters**
+
+- `inventory` `number|string`
+
+**Returns**
+
+`number`
+
+**Example**
+
+```lua
+print(Bridge.GetPlayerMaxWeight(source))
+```
+
+### SetMaxWeight
+
+ox_inventory `SetMaxWeight`. ESX uses `setMaxWeight`.
+
+**Parameters**
+
+- `inventory` `number|string`
+- `weight` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.SetMaxWeight(source, 30000)
+```
+
+### SetItemMetadata
+
+ox_inventory `SetMetadata`. core_inventory `setMetadata`.
+
+**Parameters**
+
+- `inventory` `number|string`
+- `slot` `number`
+- `metadata` `table`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetItemMetadata(source, 1, { durability = 50, serial = 'A12' })
+```
+
+### SetDurability
+
+ox_inventory `SetDurability`. core_inventory `setDurability`.
+
+**Parameters**
+
+- `inventory` `number|string`
+- `slot` `number`
+- `durability` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetDurability(source, 1, 100)
+```
+
+### ClearInventory
+
+ox_inventory `ClearInventory`. qb-inventory and ps-inventory `ClearInventory`. core_inventory `clearInventory`.
+
+**Parameters**
+
+- `inventory` `number|string`
+- `keep` `string|string[]` — optional item names to leave in the inventory. ox_inventory only.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.ClearInventory(source, { 'phone', 'id_card' })
 ```
 
-`keep` on `ClearInventory` is an item name or a list of names. ox_inventory only.
+### RegisterStash
+
+ox_inventory `RegisterStash`.
+
+**Parameters**
+
+- `id` `string`
+- `label` `string`
+- `slots` `number`
+- `maxWeight` `number`
+- `owner` `boolean|string` — optional
+- `groups` `table` — optional, such as `{ police = 0 }`
+- `coords` `vector3` — optional
+
+**Returns**
+
+`boolean`
+
+**Example**
 
 ```lua
 Bridge.RegisterStash('police_locker', 'Locker', 50, 100000, true, { police = 0 })
+```
+
+### ForceOpenInventory
+
+ox_inventory `forceOpenInventory` skips the usual distance and job checks. qb-inventory and ps-inventory use `OpenInventory`. core_inventory uses `openOtherPlayerInventory` for another player and `openInventory` for a stash.
+
+**Parameters**
+
+- `playerId` `number` — who sees the inventory
+- `kind` `string` — `stash`, `player`, `glovebox`, `trunk`, and the other ox_inventory types
+- `data` `string|number|table` — stash id, target server id, or `{ id, owner, label }`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.ForceOpenInventory(source, 'stash', 'society_police')
 Bridge.ForceOpenInventory(source, 'player', target)
+```
+
+### CloseInventory
+
+Closes the inventory UI for that player.
+
+**Parameters**
+
+- `playerId` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.CloseInventory(source)
+```
+
+### ConfiscateInventory
+
+ox_inventory `ConfiscateInventory`. core_inventory `confiscatePlayerInventory`.
+
+**Parameters**
+
+- `playerId` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.ConfiscateInventory(source)
+```
+
+### ReturnInventory
+
+ox_inventory `ReturnInventory`. core_inventory `returnPlayerInventory`.
+
+**Parameters**
+
+- `playerId` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.ReturnInventory(source)
 ```
 
-`RegisterStash`, `ConfiscateInventory`, `ReturnInventory`, `SetDurability`, and `SetMaxWeight` are ox_inventory. `ForceOpenInventory` skips the usual distance and job checks on ox_inventory. qb-inventory and ps-inventory open with `OpenInventory`.
+### RegisterUsableItem
+
+The handler runs on the server when the player uses the item. ox_inventory only fires it for items the inventory already treats as usable.
+
+**Parameters**
+
+- `item` `string`
+- `handler` `function` — `handler(source, item)` where `item` is `{ name, count, metadata, slot }`
+
+**Returns**
+
+`boolean`
+
+**Example**
 
 ```lua
-Bridge.RegisterUsableItem('radio', function(source, item)
-    -- item = { name, count, metadata, slot }
+Bridge.RegisterUsableItem('radio', function(playerId, item)
+    print(playerId, item.name, item.slot)
 end)
 ```
-
-ox_inventory only runs that callback for items the inventory already treats as usable.

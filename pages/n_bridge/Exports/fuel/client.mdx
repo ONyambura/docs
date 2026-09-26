@@ -1,8 +1,41 @@
 # Client
 
+ox_fuel reads the `fuel` state bag, then the native level. The other fuel scripts use `GetFuel` and `SetFuel`.
+
+### GetFuel
+
+**Parameters**
+
+- `vehicle` `number` — vehicle entity
+
+**Returns**
+
+`number`
+
+**Example**
+
 ```lua
 local amount = Bridge.GetFuel(vehicle)
-Bridge.SetFuel(vehicle, 80.0)
+print(amount)
 ```
 
-`GetFuel` returns a number. `SetFuel` returns `true` or `false`. ox_fuel reads the `fuel` state bag, then the native level. The other fuel scripts use `GetFuel` and `SetFuel`.
+### SetFuel
+
+**Parameters**
+
+- `vehicle` `number` — vehicle entity
+- `amount` `number` — `0.0` to `100.0`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local amount = Bridge.GetFuel(vehicle)
+
+if amount < 20.0 then
+    Bridge.SetFuel(vehicle, 80.0)
+end
+```

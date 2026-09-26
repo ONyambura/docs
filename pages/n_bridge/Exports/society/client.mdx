@@ -1,3 +1,26 @@
 # Client
 
-Society money has no client exports. The boss menu is its own group.
+Society balances are server-side. The boss menu is its own group.
+
+### GetSocietyMoney
+
+Call this from the server.
+
+**Parameters**
+
+- `job` `string` — society name, such as `police`
+
+**Returns**
+
+Nothing on the client. The server call returns a number, or `nil`.
+
+**Example**
+
+```lua
+-- server.lua
+local balance = Bridge.GetSocietyMoney('police')
+
+if balance and balance >= 100 then
+    Bridge.RemoveSocietyMoney('police', 100)
+end
+```

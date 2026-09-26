@@ -1,6 +1,19 @@
 # Server
 
-The server relays to that player's client. The notify provider draws it there.
+The server sends `n_bridge:notify` to that player's client. The notify provider draws it there.
+
+### Notify
+
+**Parameters**
+
+- `source` `number` — server id
+- `data` `table|string` — `{ title, description, kind, duration }`. `kind` is `info`, `success`, `warning`, or `error`.
+
+**Returns**
+
+`boolean` — `true` when the client event is sent.
+
+**Example**
 
 ```lua
 Bridge.Notify(source, {
@@ -10,5 +23,3 @@ Bridge.Notify(source, {
     duration = 4000,
 })
 ```
-
-`kind` is `info`, `success`, `warning`, or `error`. Returns `true` when the client event is sent.

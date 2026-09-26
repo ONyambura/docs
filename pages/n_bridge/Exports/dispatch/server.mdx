@@ -1,7 +1,29 @@
 # Server
 
+`source` is required for cd_dispatch, cd_dispatch3d, and ps-dispatch. Coords fall back to that player's ped when omitted.
+
+### SendDispatch
+
+**Parameters**
+
+- `data` `table`
+- `source` `number` — player the alert is filed from
+- `code` `string` — defaults to `10-00`
+- `title` `string`
+- `message` `string`
+- `coords` `vector3` — optional
+- `jobs` `string|string[]` — defaults to `police`
+- `priority` `string` — optional
+- `blip` `table` — `{ sprite, color, scale, length }`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
 ```lua
-Bridge.SendDispatch({
+local sent = Bridge.SendDispatch({
     source = source,
     code = '10-31',
     title = 'Store robbery',
@@ -10,8 +32,8 @@ Bridge.SendDispatch({
     priority = 'high',
     blip = { sprite = 161, color = 1, scale = 1.0, length = 5 },
 })
+
+if not sent then
+    Bridge.Notify(source, { description = 'Dispatch failed', kind = 'error' })
+end
 ```
-
-Returns `true` or `false`. `jobs` is a string or an array. `blip` is `{ sprite, color, scale, length }`.
-
-`source` is required for cd_dispatch, cd_dispatch3d, and ps-dispatch. Coords fall back to that player's ped when omitted.

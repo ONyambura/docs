@@ -1,7 +1,25 @@
 # Client
 
+qbx_management and qb-management open `qb-bossmenu:client:OpenMenu`. esx_society opens the boss menu for the local job. Unemployed returns `false`.
+
+### OpenBossMenu
+
+**Parameters**
+
+None. The menu uses the local player's job.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
 ```lua
+local job = Bridge.GetPlayerJob()
+
+if job.name == 'unemployed' then
+    return
+end
+
 Bridge.OpenBossMenu()
 ```
-
-Returns `true` or `false`. qbx_management and qb-management open `qb-bossmenu:client:OpenMenu`. esx_society opens the boss menu for the local job. Unemployed returns `false`.

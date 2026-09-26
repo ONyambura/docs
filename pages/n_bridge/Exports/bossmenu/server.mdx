@@ -1,3 +1,24 @@
 # Server
 
-Boss menu has no server exports. Society money is under Society.
+The boss menu opens on the client. Society money is under Society.
+
+### OpenBossMenu
+
+Call this from a client script. It uses the local job.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+Nothing on the server. The client call returns `boolean`.
+
+**Example**
+
+```lua
+-- client.lua
+if Bridge.GetPlayerJob().name ~= 'unemployed' then
+    Bridge.OpenBossMenu()
+end
+```

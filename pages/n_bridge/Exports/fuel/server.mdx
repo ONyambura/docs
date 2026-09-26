@@ -1,3 +1,24 @@
 # Server
 
-Fuel has no server exports.
+Fuel scripts in this bridge expose `GetFuel` and `SetFuel` on the client. There is no server fuel export.
+
+### SetFuel
+
+Call this from a client script, with a vehicle entity that exists on that client.
+
+**Parameters**
+
+- `vehicle` `number`
+- `amount` `number`
+
+**Returns**
+
+Nothing on the server. The client call returns `boolean`.
+
+**Example**
+
+```lua
+-- client.lua
+Bridge.SetFuel(vehicle, 80.0)
+print(Bridge.GetFuel(vehicle))
+```

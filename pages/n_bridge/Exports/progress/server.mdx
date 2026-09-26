@@ -1,3 +1,30 @@
 # Server
 
-Progress has no server exports.
+ox_lib, qb-core, and esx_progressbar draw the bar on the client. There is no server progress export.
+
+### Progress
+
+Call this from a client script.
+
+**Parameters**
+
+- `data` `table` — `{ duration, label, canCancel, anim, disable }`
+
+**Returns**
+
+Nothing on the server. The client call returns `boolean`.
+
+**Example**
+
+```lua
+-- client.lua
+local finished = Bridge.Progress({
+    duration = 3000,
+    label = 'Locking',
+    canCancel = true,
+})
+
+if finished then
+    Bridge.ToggleLock()
+end
+```

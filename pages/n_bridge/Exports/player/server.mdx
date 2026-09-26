@@ -1,64 +1,407 @@
 # Server
 
-These calls take a server id.
+These calls take a server id. Job and gang tables are `{ name, grade, label, gradeLabel, onDuty }`.
+
+ESX, QBCore, Qbox, ox_core, and ND Core each implement the calls their own docs publish. A framework with no matching function returns `false` or `nil`.
 
 ### GetPlayer
 
+Reads the loaded character.
+
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`table|nil` — `{ source, identifier, name, job, gang }`, or `nil` when that player is not loaded.
+
+**Example**
+
 ```lua
 local player = Bridge.GetPlayer(source)
-```
 
-Returns `nil`, or `{ source, identifier, name, job, gang }`. Job and gang are `{ name, grade, label, gradeLabel, onDuty }`.
+if not player then
+    return
+end
+
+print(player.name, player.job.name, player.job.grade)
+```
 
 ### GetPlayers
 
+Lists every loaded character.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`number[]` — server ids.
+
+**Example**
+
 ```lua
-local sources = Bridge.GetPlayers()
+for _, playerId in ipairs(Bridge.GetPlayers()) do
+    local player = Bridge.GetPlayer(playerId)
+    print(playerId, player and player.name)
+end
 ```
 
 ### GetIdentifier
 
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`string|nil` — ESX identifier, QB or Qbox citizen id, ox_core state id, ND identifier, or the license on standalone.
+
+**Example**
+
 ```lua
-local id = Bridge.GetIdentifier(source)
+local identifier = Bridge.GetIdentifier(source)
+
+if not identifier then
+    return
+end
+
+MySQL.update('UPDATE rentals SET owner = ? WHERE id = ?', { identifier, rentalId })
+```
+
+### GetPlayerByIdentifier
+
+Finds an online player from that identifier.
+
+**Parameters**
+
+- `identifier` `string` — the same value `GetIdentifier` returns
+
+**Returns**
+
+`number|nil` — server id, or `nil` when that character is offline.
+
+**Example**
+
+```lua
+local target = Bridge.GetPlayerByIdentifier('ABC12345')
+
+if not target then
+    return
+end
+
+Bridge.AddPlayerMoney(target, 'bank', 500)
 ```
 
 ### GetPlayerJob
 
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`table` — `{ name, grade, label, gradeLabel, onDuty }`. Unemployed when the framework has no job.
+
+**Example**
+
 ```lua
 local job = Bridge.GetPlayerJob(source)
+
+if job.name ~= 'police' or not job.onDuty then
+    return
+end
+```
+
+### SetPlayerJob
+
+Sets the primary job. ESX uses `xPlayer.setJob`. QBCore uses `SetJob`. Qbox uses `SetJob`. ox_core uses `setGroup`. ND Core uses `setJob`.
+
+**Parameters**
+
+- `source` `number` — server id
+- `name` `string` — job name that already exists on that framework
+- `grade` `number` — grade or rank. Defaults to `0`. ND Core defaults a missing rank to `1`.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local hired = Bridge.SetPlayerJob(source, 'police', 2)
+
+if not hired then
+    return
+end
+
+local job = Bridge.GetPlayerJob(source)
+print(job.label, job.gradeLabel)
 ```
 
 ### GetPlayerGang
 
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`table` — same shape as a job. `name` is `none` on ESX, ND Core, and vRP, which have no gang table. ESX still reads `gang` or `job2` when a fork stores one.
+
+**Example**
+
 ```lua
 local gang = Bridge.GetPlayerGang(source)
+
+if gang.name == 'none' then
+    return
+end
+
+print(gang.name, gang.grade)
 ```
 
-`name` is `none` when the framework has no gang.
+### SetPlayerGang
+
+QBCore uses `SetGang`. Qbox uses `SetGang`. ox_core uses `setGroup`. ESX and ND Core return `false`.
+
+**Parameters**
+
+- `source` `number` — server id
+- `name` `string` — gang name
+- `grade` `number` — grade. Defaults to `0`.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if not Bridge.SetPlayerGang(source, 'ballas', 1) then
+    return
+end
+
+print(Bridge.GetPlayerGang(source).name)
+```
+
+### SetJobDuty
+
+QBCore uses `SetJobDuty`. Qbox uses `SetJobDuty`. ESX calls `setJob` again with the duty flag from the ESX xPlayer docs. ox_core and ND Core return `false`.
+
+**Parameters**
+
+- `source` `number` — server id
+- `onDuty` `boolean`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetJobDuty(source, true)
+
+local job = Bridge.GetPlayerJob(source)
+print(job.onDuty)
+```
+
+### GetPlayersByJob
+
+**Parameters**
+
+- `job` `string` — job name
+- `onDuty` `boolean` — optional. When `true`, QBCore uses `GetPlayersByJob` with the duty filter, and ESX skips players whose job `onDuty` is `false`.
+
+**Returns**
+
+`number[]` — server ids.
+
+**Example**
+
+```lua
+local officers = Bridge.GetPlayersByJob('police', true)
+
+for i = 1, #officers do
+    Bridge.Notify(officers[i], { description = 'Backup requested', kind = 'info' })
+end
+```
 
 ### GetPlayerMoney
 
+**Parameters**
+
+- `source` `number` — server id
+- `account` `string` — optional. `cash` is the default. ESX maps `cash` to `money`. ox_core cash is the `money` item. ND Core reads `cash` or `bank`.
+
+**Returns**
+
+`number`
+
+**Example**
+
 ```lua
-Bridge.GetPlayerMoney(source, 'bank')
-Bridge.AddPlayerMoney(source, 'cash', 250)
-Bridge.RemovePlayerMoney(source, 'bank', 100)
+local bank = Bridge.GetPlayerMoney(source, 'bank')
+local cash = Bridge.GetPlayerMoney(source, 'cash')
+
+print(bank, cash)
 ```
 
-`cash` is the default account. `AddPlayerMoney(source, 500)` adds cash. ESX maps `cash` to `money`. ox_core `cash` is the `money` item. Add and remove return `true` or `false`.
+### AddPlayerMoney
+
+**Parameters**
+
+- `source` `number` — server id
+- `account` `string` — optional when the next argument is the amount. `AddPlayerMoney(source, 500)` adds cash.
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if not Bridge.AddPlayerMoney(source, 'bank', 250) then
+    return
+end
+
+print(Bridge.GetPlayerMoney(source, 'bank'))
+```
+
+### RemovePlayerMoney
+
+Fails when the balance is lower than `amount`.
+
+**Parameters**
+
+- `source` `number` — server id
+- `account` `string` — optional. Same shorthand as add.
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if not Bridge.RemovePlayerMoney(source, 'cash', 100) then
+    Bridge.Notify(source, { description = 'Not enough cash', kind = 'error' })
+    return
+end
+```
+
+### SetPlayerMoney
+
+Sets the balance to an exact amount. ESX uses `setAccountMoney`. QBCore uses `SetMoney`. Qbox uses `SetMoney`. ox_core adds or removes the difference. ND Core returns `false`.
+
+**Parameters**
+
+- `source` `number` — server id
+- `account` `string` — `cash` or `bank`
+- `amount` `number` — zero or higher
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetPlayerMoney(source, 'cash', 500)
+print(Bridge.GetPlayerMoney(source, 'cash'))
+```
+
+### GetPlayerMetadata
+
+ESX uses `getMeta`. QBCore uses `GetMetaData`. Qbox uses `GetMetadata`. ox_core uses `player.get`. ND Core uses `getMetadata`.
+
+**Parameters**
+
+- `source` `number` — server id
+- `key` `string`
+
+**Returns**
+
+`any` — the stored value, or `nil`.
+
+**Example**
+
+```lua
+local hunger = Bridge.GetPlayerMetadata(source, 'hunger')
+
+if type(hunger) == 'number' and hunger < 20 then
+    Bridge.Notify(source, { description = 'You are hungry', kind = 'warning' })
+end
+```
+
+### SetPlayerMetadata
+
+ESX uses `setMeta`. QBCore uses `SetMetaData`. Qbox uses `SetMetadata`. ox_core uses `player.set`. ND Core uses `setMetadata`.
+
+**Parameters**
+
+- `source` `number` — server id
+- `key` `string`
+- `value` `any`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.SetPlayerMetadata(source, 'hunger', 80) then
+    print(Bridge.GetPlayerMetadata(source, 'hunger'))
+end
+```
 
 ### HasPermission
 
-```lua
-Bridge.HasPermission(source, 'admin')
-```
+QBCore uses `HasPermission`. ESX compares `getGroup`. ox_core checks `getGroup`, then ACE. Standalone checks ACE only.
 
-`standalone` checks ACE only.
+**Parameters**
+
+- `source` `number` — server id
+- `permission` `string` — group or ACE name
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if not Bridge.HasPermission(source, 'admin') then
+    return
+end
+
+Bridge.SetPlayerJob(source, 'police', 4)
+```
 
 ### OnPlayerReady
 
+Runs for characters who are already loaded, and for each character that loads later.
+
+**Parameters**
+
+- `handler` `function` — called as `handler(source)`
+
+**Returns**
+
+`boolean` — `true` when the handler was stored.
+
+**Example**
+
 ```lua
-Bridge.OnPlayerReady(function(source)
+Bridge.OnPlayerReady(function(playerId)
+    local player = Bridge.GetPlayer(playerId)
+    print(('loaded %s'):format(player and player.name or playerId))
 end)
 ```
-
-Players who loaded before the handler was registered are still passed in.

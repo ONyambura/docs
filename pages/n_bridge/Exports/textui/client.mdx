@@ -1,8 +1,35 @@
 # Client
 
+### ShowText
+
+**Parameters**
+
+- `text` `string`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
 ```lua
-Bridge.ShowText('Press E')
-Bridge.HideText()
+Bridge.ShowText('[E] Open the locker')
 ```
 
-Both return `true` or `false`.
+### HideText
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.ShowText('[E] Open the locker')
+Wait(2000)
+Bridge.HideText()
+```

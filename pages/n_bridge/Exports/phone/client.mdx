@@ -1,3 +1,27 @@
 # Client
 
-Phone has no client exports. Send mail and notifications from the server.
+Phone mail and notifications are sent from the server, because the phone resource looks up the player there.
+
+### SendPhoneNotification
+
+Call `Bridge.SendPhoneNotification` from the server.
+
+**Parameters**
+
+- `source` `number`
+- `data` `table` — `{ title, description, app }`
+
+**Returns**
+
+Nothing on the client. The server call returns `boolean`.
+
+**Example**
+
+```lua
+-- server.lua
+Bridge.SendPhoneNotification(source, {
+    title = 'City Hall',
+    description = 'Approved.',
+    app = 'Mail',
+})
+```

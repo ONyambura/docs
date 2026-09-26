@@ -4,57 +4,171 @@ Local player. These calls do not take a server id.
 
 ### GetPlayerData
 
+**Parameters**
+
+None.
+
+**Returns**
+
+`table|nil` — same shape as server `GetPlayer`, or `nil` before the character exists.
+
+**Example**
+
 ```lua
 local me = Bridge.GetPlayerData()
+
+if not me then
+    return
+end
+
+print(me.identifier)
+print(me.job.name, me.job.grade, me.job.onDuty)
+print(me.gang.name)
 ```
 
-Same table as server `GetPlayer`, or `nil` before the character exists.
+### IsPlayerLoaded
+
+ESX uses `IsPlayerLoaded`. QBCore and Qbox read `LocalPlayer.state.isLoggedIn`. ox_core and ND Core check that the local character exists.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean`
+
+**Example**
 
 ```lua
-{
-    source = 12,
-    identifier = 'citizenid, license, or character id',
-    name = 'Jane Doe',
-    job = { name = 'police', grade = 2, label = 'Police', gradeLabel = 'Officer', onDuty = true },
-    gang = { name = 'none', grade = 0, label = 'none', gradeLabel = 'none', onDuty = false },
-}
+CreateThread(function()
+    while not Bridge.IsPlayerLoaded() do
+        Wait(200)
+    end
+
+    local me = Bridge.GetPlayerData()
+    print(me.name, me.job.label)
+end)
 ```
 
 ### GetIdentifier
 
-```lua
-local id = Bridge.GetIdentifier()
-```
+**Parameters**
 
-vRP and standalone return `nil`.
+None.
+
+**Returns**
+
+`string|nil` — vRP and standalone return `nil`.
+
+**Example**
+
+```lua
+local identifier = Bridge.GetIdentifier()
+
+if identifier then
+    print(identifier)
+end
+```
 
 ### GetPlayerJob
 
+**Parameters**
+
+None.
+
+**Returns**
+
+`table` — `{ name, grade, label, gradeLabel, onDuty }`.
+
+**Example**
+
 ```lua
 local job = Bridge.GetPlayerJob()
+
+if job.name == 'ambulance' and job.onDuty then
+    Bridge.ShowText('On duty')
+end
 ```
 
 ### GetPlayerGang
 
+**Parameters**
+
+None.
+
+**Returns**
+
+`table` — same shape as the job. ESX reads `gang`, then `job2`. ox_core reads groups whose type is `gang`. `name` is `none` when there is no gang.
+
+**Example**
+
 ```lua
 local gang = Bridge.GetPlayerGang()
-```
 
-Same shape as the job. ESX reads `gang`, then `job2`. ox_core reads groups whose type is `gang`. `name` is `none` when there is no gang.
+if gang.name ~= 'none' then
+    print(gang.label, gang.gradeLabel)
+end
+```
 
 ### GetPlayerMoney
 
+**Parameters**
+
+- `account` `string` — optional. `cash` is the default. ESX maps it to `money`. vRP returns `0`.
+
+**Returns**
+
+`number`
+
+**Example**
+
 ```lua
 local cash = Bridge.GetPlayerMoney('cash')
+local bank = Bridge.GetPlayerMoney('bank')
+
+if cash < 50 then
+    Bridge.Notify({ description = 'Not enough cash', kind = 'error' })
+end
 ```
 
-`cash` is the default. ESX maps it to `money`. vRP returns `0`.
+### GetPlayerMetadata
+
+Reads the local metadata table. ESX, QBCore, Qbox, ox_core, and ND Core. Changing metadata stays on the server.
+
+**Parameters**
+
+- `key` `string`
+
+**Returns**
+
+`any`
+
+**Example**
+
+```lua
+local hunger = Bridge.GetPlayerMetadata('hunger')
+
+if type(hunger) == 'number' then
+    print(('hunger %s'):format(hunger))
+end
+```
 
 ### OnPlayerReady
 
+**Parameters**
+
+- `handler` `function` — called with no server id
+
+**Returns**
+
+`boolean`
+
+**Example**
+
 ```lua
 Bridge.OnPlayerReady(function()
+    local me = Bridge.GetPlayerData()
+    print(me and me.job.name or 'unemployed')
 end)
 ```
-
-No server id. If the character is already loaded, the handler runs immediately.

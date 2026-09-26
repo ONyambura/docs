@@ -26,9 +26,9 @@ Bridge.RaisePlayerReady()
 
 Build return values with `Bridge.Player`, `Bridge.Job`, `Bridge.MoneyArgs`, and `Bridge.ItemContext` so they match the shipped backends.
 
-Framework server: `getPlayer`, `getPlayers`, `getIdentifier`, `getJob`, `getGang`, `getMoney`, `addMoney`, `removeMoney`, `hasPermission`, `registerUsable`.
+Framework server: `getPlayer`, `getPlayers`, `getIdentifier`, `getJob`, `setJob`, `getGang`, `setGang`, `setDuty`, `getMoney`, `addMoney`, `removeMoney`, `setMoney`, `getMetadata`, `setMetadata`, `getByIdentifier`, `getPlayersByJob`, `hasPermission`, `registerUsable`.
 
-Framework client: `getPlayerData`, `getIdentifier`, `getJob`, `getGang`, `getMoney`. Public names are `GetPlayerData`, `GetIdentifier`, `GetPlayerJob`, `GetPlayerGang`, and `GetPlayerMoney`. Client methods take no server id.
+Framework client: `getPlayerData`, `isLoaded`, `getIdentifier`, `getJob`, `getGang`, `getMoney`, `getMetadata`. Public names are `GetPlayerData`, `IsPlayerLoaded`, `GetIdentifier`, `GetPlayerJob`, `GetPlayerGang`, `GetPlayerMoney`, and `GetPlayerMetadata`. Client methods take no server id.
 
 Inventory server: `getCount(source, item, metadata)`, `hasItem`, `addItem`, `removeItem`, `canCarry`, `getLabel`, `registerUsable`.
 

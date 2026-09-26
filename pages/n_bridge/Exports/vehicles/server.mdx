@@ -1,20 +1,27 @@
 # Server
 
-Needs `oxmysql`.
+Needs `oxmysql`. ESX reads `owned_vehicles`. QB and Qbox read `player_vehicles`. The query does not alter the table.
+
+### GetOwnedVehicles
+
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`table|nil` — a list, or `nil` when the player or the database is missing. Each row is `{ plate, model, garage, state }`. `state` is `garaged`, `out`, or `impounded`. `garage` is `nil` on ESX. ESX `model` is the hash stored in the vehicle JSON.
+
+**Example**
 
 ```lua
 local vehicles = Bridge.GetOwnedVehicles(source)
+
+if not vehicles then
+    return
+end
+
+for i = 1, #vehicles do
+    print(vehicles[i].plate, vehicles[i].model, vehicles[i].state)
+end
 ```
-
-Returns a list, or `nil` when the player or the database is missing:
-
-```lua
-{
-    plate = '44WSX569',
-    model = 'adder',
-    garage = 'pillboxgarage',
-    state = 'garaged', -- garaged | out | impounded
-}
-```
-
-ESX reads `owned_vehicles`. QB and Qbox read `player_vehicles`. `garage` is `nil` on ESX. ESX `model` is the hash stored in the vehicle JSON.

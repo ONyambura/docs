@@ -2,10 +2,57 @@
 
 `job` is the society name, such as `police`. ESX accounts use the `society_` prefix internally.
 
+### GetSocietyMoney
+
+**Parameters**
+
+- `job` `string`
+
+**Returns**
+
+`number|nil` — `nil` when no society provider is selected.
+
+**Example**
+
 ```lua
 local balance = Bridge.GetSocietyMoney('police')
-Bridge.AddSocietyMoney('police', 500)
-Bridge.RemoveSocietyMoney('police', 100)
+print(balance or 0)
 ```
 
-`GetSocietyMoney` returns a number, or `nil` when no provider is selected. Add and remove return `true` or `false`.
+### AddSocietyMoney
+
+**Parameters**
+
+- `job` `string`
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.AddSocietyMoney('police', 500) then
+    print(Bridge.GetSocietyMoney('police'))
+end
+```
+
+### RemoveSocietyMoney
+
+**Parameters**
+
+- `job` `string`
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if not Bridge.RemoveSocietyMoney('police', 100) then
+    return
+end
+```

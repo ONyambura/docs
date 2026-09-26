@@ -2,21 +2,77 @@
 
 A plate, for the local player. No server id.
 
+qb-vehiclekeys and qbx_vehiclekeys cannot remove a key from the client. Use the server call. qs-vehiclekeys, MrNewbVehicleKeys, and p_vehiclekeys return `false` from `HasKeys`. `ToggleLock` is n_carlock.
+
+### GiveKeys
+
+**Parameters**
+
+- `plate` `string`
+- `extra` `number` — optional. n_carlock treats this as the server id who should receive the key. qs-vehiclekeys, qbx_vehiclekeys, and p_vehiclekeys treat a vehicle entity here and search for the plate when it is omitted. qbx and p_vehiclekeys need a networked entity.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
 ```lua
-Bridge.GiveKeys(plate)
-Bridge.RemoveKeys(plate)
-Bridge.HasKeys(plate)
-Bridge.ToggleLock()
+Bridge.GiveKeys('44WSX569')
+Bridge.GiveKeys('44WSX569', target)
 ```
 
-Returns `true` or `false`.
+### RemoveKeys
 
-n_carlock accepts a server id as the second argument, the player who should receive or lose the key.
+**Parameters**
+
+- `plate` `string`
+- `extra` `number` — optional, same meaning as `GiveKeys`
+
+**Returns**
+
+`boolean`
+
+**Example**
 
 ```lua
-Bridge.GiveKeys(plate, target)
+Bridge.RemoveKeys('44WSX569')
 ```
 
-qs-vehiclekeys, qbx_vehiclekeys, and p_vehiclekeys accept a vehicle entity instead, and search for the plate when it is omitted. The entity must be networked for qbx and p_vehiclekeys.
+### HasKeys
 
-qb-vehiclekeys and qbx_vehiclekeys cannot remove a key from the client. Use the server call. qs-vehiclekeys, MrNewbVehicleKeys, and p_vehiclekeys return `false` from `HasKeys`. `ToggleLock` is n_carlock. Other key scripts log once and do nothing.
+**Parameters**
+
+- `plate` `string`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.HasKeys('44WSX569') then
+    Bridge.ToggleLock()
+end
+```
+
+### ToggleLock
+
+n_carlock only. Other key scripts log once and do nothing.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.HasKeys('44WSX569') then
+    Bridge.ToggleLock()
+end
+```

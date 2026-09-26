@@ -1,18 +1,50 @@
 # Server
 
+`data` is `{ sender, subject, message, address, title, description, app }`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail returns `false`.
+
+### SendPhoneMail
+
+**Parameters**
+
+- `source` `number` — server id
+- `data` `table` — `{ sender, subject, message, address }`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
 ```lua
-Bridge.SendPhoneMail(source, {
+local sent = Bridge.SendPhoneMail(source, {
     sender = 'City Hall',
     subject = 'Licence',
     message = 'Approved.',
     address = 'jane@mail.com',
 })
 
+if not sent then
+    Bridge.Notify(source, { description = 'Mail failed', kind = 'error' })
+end
+```
+
+### SendPhoneNotification
+
+**Parameters**
+
+- `source` `number`
+- `data` `table` — `{ title, description, app }`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
 Bridge.SendPhoneNotification(source, {
     title = 'City Hall',
     description = 'Approved.',
     app = 'Mail',
 })
 ```
-
-Returns `true` or `false`. `data` is `{ sender, subject, message, address, title, description, app }`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail returns `false`.

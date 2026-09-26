@@ -1,37 +1,285 @@
 # Client
 
-Local inventory. These calls do not take a server id.
+Local inventory. These calls do not take a server id. Adding and removing items stays on the server.
 
-The names follow [ox_inventory client functions](https://overextended.dev/ox_inventory/Functions/Client). Other inventories implement count, items, label, weapon, and open when that script has the export.
+Names follow the [ox_inventory client functions](https://overextended.dev/ox_inventory/Functions/Client). core_inventory implements `closeInventory` and `getWeaponEquiped` from the [C8RE client exports](https://docs.c8re.store/core-inventory/exports).
+
+### GetItemCount
+
+**Parameters**
+
+- `item` `string`
+- `metadata` `table` — optional
+
+**Returns**
+
+`number`
+
+**Example**
 
 ```lua
-Bridge.GetItemCount('water', metadata)
-Bridge.HasItem('water', 1, metadata)
-Bridge.GetItemLabel('water')
-Bridge.GetSlotWithItem('water', metadata)
-local items = Bridge.GetPlayerItems()
-local weapon = Bridge.GetCurrentWeapon()
-Bridge.GetPlayerWeight()
-Bridge.GetPlayerMaxWeight()
+local count = Bridge.GetItemCount('water')
+
+if count > 0 then
+    Bridge.Notify({ description = ('Water x%s'):format(count), kind = 'info' })
+end
 ```
 
-Each row is `{ name, count, metadata, slot, label }`. `GetCurrentWeapon` returns one row, or `nil`. Weight calls are ox_inventory.
+### HasItem
+
+**Parameters**
+
+- `item` `string`
+- `count` `number` — optional. Defaults to `1`.
+- `metadata` `table` — optional
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.HasItem('lockpick', 1) then
+    Bridge.ShowText('You can pick this lock')
+end
+```
+
+### GetItemLabel
+
+**Parameters**
+
+- `item` `string`
+
+**Returns**
+
+`string`
+
+**Example**
+
+```lua
+print(Bridge.GetItemLabel('water'))
+```
+
+### GetSlotWithItem
+
+ox_inventory `GetSlotWithItem`.
+
+**Parameters**
+
+- `item` `string`
+- `metadata` `table` — optional
+
+**Returns**
+
+`table|nil` — `{ name, count, metadata, slot }`.
+
+**Example**
+
+```lua
+local slot = Bridge.GetSlotWithItem('phone')
+
+if slot then
+    Bridge.UseSlot(slot.slot)
+end
+```
+
+### GetPlayerItems
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table` — list of `{ name, count, metadata, slot, label }`.
+
+**Example**
+
+```lua
+local items = Bridge.GetPlayerItems()
+
+for i = 1, #items do
+    print(items[i].name, items[i].count)
+end
+```
+
+### GetCurrentWeapon
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table|nil` — one item row, or `nil` when nothing is equipped. core_inventory uses `getWeaponEquiped`.
+
+**Example**
+
+```lua
+local weapon = Bridge.GetCurrentWeapon()
+
+if weapon then
+    print(weapon.name, weapon.slot)
+end
+```
+
+### GetPlayerWeight
+
+ox_inventory `GetPlayerWeight`.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`number`
+
+**Example**
+
+```lua
+print(Bridge.GetPlayerWeight(), Bridge.GetPlayerMaxWeight())
+```
+
+### GetPlayerMaxWeight
+
+ox_inventory `GetPlayerMaxWeight`.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`number`
+
+**Example**
+
+```lua
+local maxWeight = Bridge.GetPlayerMaxWeight()
+```
+
+### OpenInventory
+
+ox_inventory kinds are `player`, `shop`, `stash`, `crafting`, `container`, `drop`, `glovebox`, `trunk`, and `dumpster`. ESX and chezza return `false`. jaksam returns `false` for another player.
+
+**Parameters**
+
+- `kind` `string`
+- `data` `table|string|number` — stash `{ id, owner }`, shop `{ type, id }`, trunk `{ netid }`, or a target server id
+
+**Returns**
+
+`boolean`
+
+**Example**
 
 ```lua
 Bridge.OpenInventory('stash', { id = 'police_locker', owner = 'license:xxxxxxxx' })
 Bridge.OpenInventory('player', target)
-Bridge.OpenInventory('shop', { type = 'General', id = 4 })
 Bridge.OpenInventory('trunk', { netid = NetworkGetNetworkIdFromEntity(vehicle) })
-Bridge.CloseInventory()
-Bridge.SetStashTarget('motel5', 'bobsmith')
 ```
 
-ox_inventory `OpenInventory` kinds include `player`, `shop`, `stash`, `crafting`, `container`, `drop`, `glovebox`, `trunk`, and `dumpster`. ESX and chezza return `false`. jaksam returns `false` for another player.
+### CloseInventory
+
+ox_inventory and core_inventory.
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean`
+
+**Example**
 
 ```lua
-Bridge.UseSlot(1)
-Bridge.GiveItemToTarget(serverId, slot, count)
-Bridge.DisplayMetadata({ serial = 'Serial' })
+Bridge.CloseInventory()
 ```
 
-`UseSlot`, `GiveItemToTarget`, `DisplayMetadata`, and `SetStashTarget` are ox_inventory. Adding and removing items stays on the server.
+### SetStashTarget
+
+ox_inventory `setStashTarget`. The next stash open uses this id until you clear it.
+
+**Parameters**
+
+- `id` `string|nil`
+- `owner` `string|nil` — optional
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetStashTarget('motel5', 'bobsmith')
+Bridge.OpenInventory('stash')
+```
+
+### UseSlot
+
+ox_inventory `useSlot`.
+
+**Parameters**
+
+- `slot` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local phone = Bridge.GetSlotWithItem('phone')
+
+if phone then
+    Bridge.UseSlot(phone.slot)
+end
+```
+
+### GiveItemToTarget
+
+ox_inventory `giveItemToTarget`.
+
+**Parameters**
+
+- `serverId` `number` — the other player
+- `slot` `number`
+- `count` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local slot = Bridge.GetSlotWithItem('water')
+
+if slot then
+    Bridge.GiveItemToTarget(serverId, slot.slot, 1)
+end
+```
+
+### DisplayMetadata
+
+ox_inventory `displayMetadata`. Adds a label for a metadata key in the tooltip.
+
+**Parameters**
+
+- `metadata` `table|string` — `{ serial = 'Serial' }`, or one key
+- `value` `string` — label when `metadata` is a single key
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.DisplayMetadata({ serial = 'Serial', ammo = 'Ammo' })
+```

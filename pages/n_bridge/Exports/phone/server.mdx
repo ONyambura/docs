@@ -1,6 +1,4 @@
-# Phone
-
-Server only.
+# Server
 
 ```lua
 Bridge.SendPhoneMail(source, {
@@ -17,4 +15,4 @@ Bridge.SendPhoneNotification(source, {
 })
 ```
 
-Returns `true` or `false`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail returns `false`.
+Returns `true` or `false`. `data` is `{ sender, subject, message, address, title, description, app }`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail returns `false`.

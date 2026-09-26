@@ -1,0 +1,20 @@
+# Client
+
+Local inventory. These calls do not take a server id.
+
+```lua
+Bridge.GetItemCount('water', metadata)
+Bridge.HasItem('water', 1, metadata)
+Bridge.GetItemLabel('water')
+local items = Bridge.GetPlayerItems()
+local weapon = Bridge.GetCurrentWeapon()
+Bridge.OpenInventory('stash', { id = 'locker', owner = 'police' })
+```
+
+`metadata` is optional. `count` on `HasItem` defaults to `1`.
+
+Each row from `GetPlayerItems` is `{ name, count, metadata, slot, label }`. `GetCurrentWeapon` returns one row, or `nil`.
+
+`OpenInventory` kinds are `stash`, `player`, and `shop`. `data` may include `id`, `owner`, `label`, `items`, `slots`, `maxWeight`, and `type`. ESX and chezza return `false`. jaksam returns `false` for another player. core_inventory `GetItemLabel` returns the item name.
+
+Adding and removing items stays on the server.

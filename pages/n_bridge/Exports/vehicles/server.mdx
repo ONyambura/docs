@@ -1,6 +1,6 @@
-# Vehicles
+# Server
 
-Server only. Needs `oxmysql`.
+Needs `oxmysql`.
 
 ```lua
 local vehicles = Bridge.GetOwnedVehicles(source)
@@ -17,4 +17,4 @@ Returns a list, or `nil` when the player or the database is missing:
 }
 ```
 
-ESX reads `owned_vehicles`. QB and Qbox read `player_vehicles`. `garage` is `nil` on ESX.
+ESX reads `owned_vehicles`. QB and Qbox read `player_vehicles`. `garage` is `nil` on ESX. ESX `model` is the hash stored in the vehicle JSON.

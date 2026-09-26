@@ -1,0 +1,8 @@
+# Client
+
+```lua
+local amount = Bridge.GetFuel(vehicle)
+Bridge.SetFuel(vehicle, 80.0)
+```
+
+`GetFuel` returns a number. `SetFuel` returns `true` or `false`. ox_fuel reads the `fuel` state bag, then the native level. The other fuel scripts use `GetFuel` and `SetFuel`.

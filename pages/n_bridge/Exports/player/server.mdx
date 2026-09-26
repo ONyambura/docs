@@ -1,0 +1,64 @@
+# Server
+
+These calls take a server id.
+
+### GetPlayer
+
+```lua
+local player = Bridge.GetPlayer(source)
+```
+
+Returns `nil`, or `{ source, identifier, name, job, gang }`. Job and gang are `{ name, grade, label, gradeLabel, onDuty }`.
+
+### GetPlayers
+
+```lua
+local sources = Bridge.GetPlayers()
+```
+
+### GetIdentifier
+
+```lua
+local id = Bridge.GetIdentifier(source)
+```
+
+### GetPlayerJob
+
+```lua
+local job = Bridge.GetPlayerJob(source)
+```
+
+### GetPlayerGang
+
+```lua
+local gang = Bridge.GetPlayerGang(source)
+```
+
+`name` is `none` when the framework has no gang.
+
+### GetPlayerMoney
+
+```lua
+Bridge.GetPlayerMoney(source, 'bank')
+Bridge.AddPlayerMoney(source, 'cash', 250)
+Bridge.RemovePlayerMoney(source, 'bank', 100)
+```
+
+`cash` is the default account. `AddPlayerMoney(source, 500)` adds cash. ESX maps `cash` to `money`. ox_core `cash` is the `money` item. Add and remove return `true` or `false`.
+
+### HasPermission
+
+```lua
+Bridge.HasPermission(source, 'admin')
+```
+
+`standalone` checks ACE only.
+
+### OnPlayerReady
+
+```lua
+Bridge.OnPlayerReady(function(source)
+end)
+```
+
+Players who loaded before the handler was registered are still passed in.

@@ -1,0 +1,14 @@
+# Server
+
+A server id, then a plate.
+
+```lua
+Bridge.GiveKeys(source, plate)
+Bridge.RemoveKeys(source, plate)
+Bridge.HasKeys(source, plate)
+Bridge.GiveKeys(source, plate, 'ADDER')
+```
+
+Returns `true` or `false`. The model string is only used by qs-vehiclekeys. qbx_vehiclekeys and p_vehiclekeys need that plate spawned. qs-vehiclekeys, MrNewbVehicleKeys, and p_vehiclekeys return `false` from `HasKeys`.
+
+n_carlock is `GiveKeys(source, plate)`. wasabi_carlock is its own provider: `GiveKey(source, plate)` and `HasKey(source, plate)`.

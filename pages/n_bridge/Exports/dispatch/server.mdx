@@ -1,6 +1,4 @@
-# Dispatch
-
-Server only.
+# Server
 
 ```lua
 Bridge.SendDispatch({
@@ -13,5 +11,7 @@ Bridge.SendDispatch({
     blip = { sprite = 161, color = 1, scale = 1.0, length = 5 },
 })
 ```
+
+Returns `true` or `false`. `jobs` is a string or an array. `blip` is `{ sprite, color, scale, length }`.
 
 `source` is required for cd_dispatch, cd_dispatch3d, and ps-dispatch. Coords fall back to that player's ped when omitted.

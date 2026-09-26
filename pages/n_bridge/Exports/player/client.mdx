@@ -1,0 +1,60 @@
+# Client
+
+Local player. These calls do not take a server id.
+
+### GetPlayerData
+
+```lua
+local me = Bridge.GetPlayerData()
+```
+
+Same table as server `GetPlayer`, or `nil` before the character exists.
+
+```lua
+{
+    source = 12,
+    identifier = 'citizenid, license, or character id',
+    name = 'Jane Doe',
+    job = { name = 'police', grade = 2, label = 'Police', gradeLabel = 'Officer', onDuty = true },
+    gang = { name = 'none', grade = 0, label = 'none', gradeLabel = 'none', onDuty = false },
+}
+```
+
+### GetIdentifier
+
+```lua
+local id = Bridge.GetIdentifier()
+```
+
+vRP and standalone return `nil`.
+
+### GetPlayerJob
+
+```lua
+local job = Bridge.GetPlayerJob()
+```
+
+### GetPlayerGang
+
+```lua
+local gang = Bridge.GetPlayerGang()
+```
+
+Same shape as the job. ESX reads `gang`, then `job2`. ox_core reads groups whose type is `gang`. `name` is `none` when there is no gang.
+
+### GetPlayerMoney
+
+```lua
+local cash = Bridge.GetPlayerMoney('cash')
+```
+
+`cash` is the default. ESX maps it to `money`. vRP returns `0`.
+
+### OnPlayerReady
+
+```lua
+Bridge.OnPlayerReady(function()
+end)
+```
+
+No server id. If the character is already loaded, the handler runs immediately.

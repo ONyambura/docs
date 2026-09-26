@@ -1,6 +1,4 @@
-# Progress
-
-Client only.
+# Client
 
 ```lua
 local finished = Bridge.Progress({
@@ -12,4 +10,4 @@ local finished = Bridge.Progress({
 })
 ```
 
-Returns `true` when the bar finishes, and `false` when it is cancelled or no progress provider is selected. Qbox progress expects `ox_lib`.
+Returns `true` when the bar finishes, and `false` when it is cancelled or no progress provider is selected. `canCancel` defaults to `true`. Qbox progress expects `ox_lib`.

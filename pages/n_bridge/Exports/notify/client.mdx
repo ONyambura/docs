@@ -1,0 +1,12 @@
+# Client
+
+```lua
+Bridge.Notify({
+    title = 'Shop',
+    description = 'Not enough cash',
+    kind = 'error',
+    duration = 3000,
+})
+```
+
+`kind` is `info`, `success`, `warning`, or `error`. `data` can be a table or a string. Other resources should call the server export so the notice reaches the right player.

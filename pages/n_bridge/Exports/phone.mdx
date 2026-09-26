@@ -1,0 +1,20 @@
+# Phone
+
+Server only.
+
+```lua
+Bridge.SendPhoneMail(source, {
+    sender = 'City Hall',
+    subject = 'Licence',
+    message = 'Approved.',
+    address = 'jane@mail.com',
+})
+
+Bridge.SendPhoneNotification(source, {
+    title = 'City Hall',
+    description = 'Approved.',
+    app = 'Mail',
+})
+```
+
+Returns `true` or `false`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail returns `false`.

@@ -1,0 +1,12 @@
+# Appearance
+
+Client only.
+
+```lua
+local appearance = Bridge.GetAppearance()
+Bridge.SetAppearance(appearance)
+Bridge.OpenAppearance()
+Bridge.OpenAppearance('binco')
+```
+
+`GetAppearance` returns the backend table, or `nil` for qb-clothing. `SetAppearance` and `OpenAppearance` return `true` or `false`. A shop id is optional and only used by op-clothing and rcore_clothing.

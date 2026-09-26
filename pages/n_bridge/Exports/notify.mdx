@@ -1,0 +1,29 @@
+# Notify
+
+## Server
+
+The server relays to that player's client. The notify provider draws it there.
+
+```lua
+Bridge.Notify(source, {
+    title = 'Garage',
+    description = 'Vehicle stored',
+    kind = 'success',
+    duration = 4000,
+})
+```
+
+`kind` is `info`, `success`, `warning`, or `error`.
+
+## Client
+
+```lua
+Bridge.Notify({
+    title = 'Shop',
+    description = 'Not enough cash',
+    kind = 'error',
+    duration = 3000,
+})
+```
+
+`data` can be a table or a string.

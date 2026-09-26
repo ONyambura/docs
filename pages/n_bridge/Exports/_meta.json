@@ -1,4 +1,15 @@
 {
-  "client": "Client",
-  "server": "Server"
+  "player": "Player",
+  "inventory": "Inventory",
+  "notify": "Notify",
+  "target": "Target",
+  "progress": "Progress",
+  "appearance": "Appearance",
+  "fuel": "Fuel",
+  "keys": "Keys",
+  "phone": "Phone",
+  "dispatch": "Dispatch",
+  "society": "Society",
+  "vehicles": "Vehicles",
+  "textui": "Text UI"
 }

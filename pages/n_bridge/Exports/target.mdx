@@ -1,0 +1,21 @@
+# Target
+
+Client only. Each option is `{ name, label, icon, distance, onSelect, canInteract }`.
+
+```lua
+Bridge.AddEntityTarget(entity, options)
+Bridge.AddModelTarget({ `prop_vend_soda_01` }, options)
+
+local id = Bridge.AddBoxZone({
+    id = 'counter',
+    coords = vec3(0.0, 0.0, 0.0),
+    size = vec3(1.5, 1.5, 1.5),
+    rotation = 0.0,
+    options = options,
+})
+
+Bridge.RemoveTarget(id)
+Bridge.RemoveTarget(entity)
+```
+
+`AddBoxZone` returns the zone id used by `RemoveTarget`. qb-target calls `onSelect` with `{ entity = entity }`.

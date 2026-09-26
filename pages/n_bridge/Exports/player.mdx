@@ -1,0 +1,105 @@
+# Player
+
+Server calls take a server id. Client calls describe the local player and do not.
+
+## Server
+
+### GetPlayer
+
+```lua
+local player = Bridge.GetPlayer(source)
+```
+
+Returns `nil`, or:
+
+```lua
+{
+    source = 12,
+    identifier = 'citizenid, license, or character id',
+    name = 'Jane Doe',
+    job = { name = 'police', grade = 2, label = 'Police', gradeLabel = 'Officer', onDuty = true },
+    gang = { name = 'none', grade = 0, label = 'none', gradeLabel = 'none', onDuty = false },
+}
+```
+
+### GetPlayers
+
+```lua
+local sources = Bridge.GetPlayers()
+```
+
+### GetIdentifier
+
+```lua
+local id = Bridge.GetIdentifier(source)
+```
+
+### GetPlayerJob
+
+```lua
+local job = Bridge.GetPlayerJob(source)
+```
+
+### GetPlayerGang
+
+Same shape as the job. `name` is `none` when the framework has no gang.
+
+### GetPlayerMoney
+
+```lua
+Bridge.GetPlayerMoney(source, 'bank')
+Bridge.AddPlayerMoney(source, 'cash', 250)
+Bridge.RemovePlayerMoney(source, 'bank', 100)
+```
+
+`cash` is the default account. `AddPlayerMoney(source, 500)` adds cash. ESX maps `cash` to `money`. ox_core `cash` is the `money` item.
+
+### HasPermission
+
+```lua
+Bridge.HasPermission(source, 'admin')
+```
+
+`standalone` checks ACE only.
+
+### OnPlayerReady
+
+```lua
+Bridge.OnPlayerReady(function(source)
+end)
+```
+
+Players who loaded before the handler was registered are still passed in.
+
+## Client
+
+### GetPlayerData
+
+```lua
+local me = Bridge.GetPlayerData()
+```
+
+Same table as server `GetPlayer`, or `nil` before the character exists.
+
+### GetPlayerJob
+
+```lua
+local job = Bridge.GetPlayerJob()
+```
+
+### GetPlayerMoney
+
+```lua
+local cash = Bridge.GetPlayerMoney('cash')
+```
+
+vRP does not expose local money. That call returns `0`.
+
+### OnPlayerReady
+
+```lua
+Bridge.OnPlayerReady(function()
+end)
+```
+
+No server id. If the character is already loaded, the handler runs immediately.

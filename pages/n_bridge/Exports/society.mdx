@@ -1,0 +1,11 @@
+# Society
+
+Server only. `job` is the society name, such as `police`. ESX accounts use the `society_` prefix internally.
+
+```lua
+local balance = Bridge.GetSocietyMoney('police')
+Bridge.AddSocietyMoney('police', 500)
+Bridge.RemoveSocietyMoney('police', 100)
+```
+
+`GetSocietyMoney` returns a number. Add and remove return `true` or `false`.

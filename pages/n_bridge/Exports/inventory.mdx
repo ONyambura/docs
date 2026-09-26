@@ -1,0 +1,22 @@
+# Inventory
+
+Server only.
+
+```lua
+Bridge.GetItemCount(source, 'water', metadata)
+Bridge.HasItem(source, 'water', 1, metadata)
+Bridge.AddItem(source, 'water', 2, metadata)
+Bridge.RemoveItem(source, 'water', 1, metadata)
+Bridge.CanCarry(source, 'water', 2, metadata)
+Bridge.GetItemLabel('water')
+```
+
+`metadata` is optional. Add, remove, carry, and has return booleans. Count returns a number. Label returns a string.
+
+```lua
+Bridge.RegisterUsableItem('radio', function(source, item)
+    -- item = { name, count, metadata, slot }
+end)
+```
+
+ox_inventory only runs that callback for items the inventory already treats as usable.

@@ -53,7 +53,7 @@
 ## Fuel
 
 - `ox_fuel` — `fuel` state bag plus the native fuel level
-- `lc_fuel`, `ps-fuel`, `LegacyFuel` — client `GetFuel` / `SetFuel`
+- `lc_fuel`, `cdn-fuel`, `qs-fuelstations`, `Renewed-Fuel`, `okokGasStation`, `x-fuel`, `ps-fuel`, `LegacyFuel` — client `GetFuel` / `SetFuel`
 - `custom`
 
 ## Keys
@@ -64,6 +64,8 @@
 - `qbx_vehiclekeys` — plate is resolved to a spawned vehicle entity
 - `qb-vehiclekeys` — server `GiveKeys` / `RemoveKeys`
 - `qs-vehiclekeys` — `GiveServerKeys` / `RemoveServerKeys`
+- `Renewed-Vehiclekeys` — server `addKey` / `removeKey`
+- `MrNewbVehicleKeys` — server `GiveKeysByPlate` / `RemoveKeysByPlate`
 - `p_vehiclekeys` — client `createKey` / `removeKey`. The vehicle must be networked.
 - `custom`
 
@@ -88,8 +90,23 @@
 - `lb-tablet` — server `AddDispatch`
 - `custom`
 
-## Not shipped yet
+## Society
 
-`society`, `vehicles`, `textui`.
+- `Renewed-Banking` — `getAccountMoney`, `addAccountMoney`, `removeAccountMoney`
+- `okokBanking` — `GetAccount`, `AddMoney`, `RemoveMoney`
+- `qb-banking` — `GetAccount`, `AddMoney`, `RemoveMoney`
+- `qb-management` — `GetAccount`, `AddMoney`, `RemoveMoney`
+- `esx_addonaccount` — shared account `society_<job>`
+- `custom`
 
-Leave them on `auto`. The export logs once and returns `nil`. Set the config key to `custom` when you are ready to fill the open stub.
+## Vehicles
+
+- `qbox` and `qb` — `player_vehicles`
+- `esx` — `owned_vehicles`
+- `custom`
+
+Needs `oxmysql`.
+
+## Text UI
+
+- `ox_lib`, `okok` (`okokTextUI`), `qb` (`qb-core` DrawText), `custom`

@@ -1,0 +1,17 @@
+# Dispatch
+
+Server only.
+
+```lua
+Bridge.SendDispatch({
+    source = source,
+    code = '10-31',
+    title = 'Store robbery',
+    message = 'A clerk triggered the alarm.',
+    jobs = { 'police' },
+    priority = 'high',
+    blip = { sprite = 161, color = 1, scale = 1.0, length = 5 },
+})
+```
+
+`source` is required for cd_dispatch, cd_dispatch3d, and ps-dispatch. Coords fall back to that player's ped when omitted.

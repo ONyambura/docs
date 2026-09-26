@@ -1,0 +1,15 @@
+# Progress
+
+Client only.
+
+```lua
+local finished = Bridge.Progress({
+    duration = 5000,
+    label = 'Searching',
+    canCancel = true,
+    anim = { dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', clip = 'machinic_loop_mechandplayer' },
+    disable = { move = true, car = true, combat = true, mouse = false },
+})
+```
+
+Returns `true` when the bar finishes, and `false` when it is cancelled or no progress provider is selected. Qbox progress expects `ox_lib`.

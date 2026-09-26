@@ -130,15 +130,38 @@ local finished = Bridge.Progress({
 
 Qbox progress expects `ox_lib`.
 
+## Appearance
+
+```lua
+local appearance = Bridge.GetAppearance()
+Bridge.SetAppearance(appearance)
+Bridge.OpenAppearance()
+```
+
+**Returns**
+
+- `GetAppearance` returns the backend table, or `nil` for qb-clothing
+- `SetAppearance` and `OpenAppearance` return `true` or `false`
+
+`OpenAppearance(shopId)` opens that shop on op-clothing and rcore_clothing. With no argument, op-clothing opens the wardrobe and rcore opens the changing room.
+
+## Fuel
+
+```lua
+local amount = Bridge.GetFuel(vehicle)
+Bridge.SetFuel(vehicle, 80.0)
+```
+
+**Returns**
+
+- `GetFuel` returns a number
+- `SetFuel` returns `true` or `false`
+
 ## Slots
 
 Not shipped. The export returns `nil` and logs once until you set that key to `custom` and fill the open file.
 
 ```lua
-Bridge.GetAppearance()
-Bridge.SetAppearance(data)
-Bridge.GetFuel(vehicle)
-Bridge.SetFuel(vehicle, amount)
 Bridge.ShowText('Press E')
 Bridge.HideText()
 ```

@@ -30,7 +30,7 @@
 
 ## Notify
 
-- `ox_lib`, `okok` (`okokNotify`), `qb` (`qbx_core` then `qb-core`), `esx`, `custom`
+- `ox_lib`, `okok` (`okokNotify`), `core_notify`, `qb` (`qbx_core` then `qb-core`), `esx`, `custom`
 
 ## Target
 
@@ -40,8 +40,56 @@
 
 - `ox_lib`, `qb` (`qb-core`), `esx` (`esx_progressbar`), `custom`
 
+## Appearance
+
+`op-clothing` is first. It provides the other clothing resource names, so those look started while it is running.
+
+- `op-clothing` — wardrobe by default. Pass a shop id to `OpenAppearance`.
+- `illenium-appearance` and `fivem-appearance` — same provider. `getPedAppearance`, `setPlayerAppearance`, `startPlayerCustomization`.
+- `rcore_clothing` — `getPlayerSkin` / `setPlayerSkin`. `OpenAppearance()` opens the changing room. A shop type opens that shop.
+- `qb-clothing` — [`qb-clothing`](https://github.com/qbcore-fivem/qb-clothing) events `openMenu` and `loadPlayerClothing`. `GetAppearance` returns `nil`.
+- `custom`
+
+## Fuel
+
+- `ox_fuel` — `fuel` state bag plus the native fuel level
+- `lc_fuel`, `ps-fuel`, `LegacyFuel` — client `GetFuel` / `SetFuel`
+- `custom`
+
+## Keys
+
+`GiveKeys(source, plate)` and `RemoveKeys(source, plate)`. qs-vehiclekeys takes an optional model string.
+
+- `n_carlock` and `wasabi_carlock` — server `GiveKey` / `RemoveKey`
+- `qbx_vehiclekeys` — plate is resolved to a spawned vehicle entity
+- `qb-vehiclekeys` — server `GiveKeys` / `RemoveKeys`
+- `qs-vehiclekeys` — `GiveServerKeys` / `RemoveServerKeys`
+- `p_vehiclekeys` — client `createKey` / `removeKey`. The vehicle must be networked.
+- `custom`
+
+## Phone
+
+`sky_phone` and `sd-phone` are ahead of `lb-phone` and `yseries`, because both provide those names.
+
+- `sky_phone` — notification through the `17mov_Phone` alias. `SendPhoneMail` returns `false`.
+- `sd-phone` — `notify` and `sendMail`. Mail uses `data.address`, or `getMailAddresses` for the player identifier.
+- `lb-phone` — `SendNotification` and `SendMail`. Without an address, the equipped phone email is used.
+- `yseries` — TeamsGG `SendNotification` and `SendMail` by server id
+- `custom`
+
+## Dispatch
+
+`cd_dispatch`, `cd_dispatch3d`, and `ps-dispatch` need `data.source`. The alert is filed from that player's client. `sd-phone` provides `lb-tablet`, so set `Config.Use.dispatch` when the phone is running and you want a different dispatch script.
+
+- `core_dispatch` — server `sendAlert`
+- `cd_dispatch3d` — `cd_dispatch3d:AddNotification`
+- `cd_dispatch` — `cd_dispatch:AddNotification`
+- `ps-dispatch` — client `CustomAlert`
+- `lb-tablet` — server `AddDispatch`
+- `custom`
+
 ## Not shipped yet
 
-`appearance`, `fuel`, `keys`, `phone`, `dispatch`, `society`, `vehicles`, `textui`.
+`society`, `vehicles`, `textui`.
 
 Leave them on `auto`. The export logs once and returns `nil`. Set the config key to `custom` when you are ready to fill the open stub.

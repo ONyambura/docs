@@ -1,4 +1,9 @@
 {
   "index": "Home",
-  "n_bridge": "N Bridge"
+  "n_bridge": "N Bridge",
+  "n_crosshair": "N Crosshair",
+  "n_easysit": "N Easysit",
+  "n_pause": "N Pause",
+  "n_sling": "N Sling",
+  "n_tune": "N Tune"
 }

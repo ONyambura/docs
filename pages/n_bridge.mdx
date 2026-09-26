@@ -1,3 +1,7 @@
+---
+title: N Bridge
+---
+
 import { Steps, Tabs, Tab } from 'nextra-theme-docs';
 import { Callout, FileTree } from 'nextra/components';
 
@@ -49,6 +53,11 @@ Config.Use = {
     notify = 'auto',
     target = 'auto',
     progress = 'auto',
+    appearance = 'auto',
+    fuel = 'auto',
+    keys = 'auto',
+    phone = 'auto',
+    dispatch = 'auto',
 }
 ```
 
@@ -86,6 +95,6 @@ Keymaster escrow leaves these plain. Everything else under `providers/` is locke
 - `providers/**/custom/**`
 - `docs/**`
 
-## What 0.1.0 ships
+## What 0.2.0 ships
 
-Framework, inventory, notify, target, and progress. Appearance, fuel, keys, phone, dispatch, society, vehicles, and text UI have exports and an open `custom` stub. They are not wired to a backend yet.
+Framework, inventory, notify, target, progress, appearance, fuel, keys, phone, and dispatch. Society, owned vehicles, and text UI have exports and an open `custom` stub.

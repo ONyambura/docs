@@ -35,3 +35,13 @@ Inventory: `getCount`, `hasItem`, `addItem`, `removeItem`, `canCarry`, `getLabel
 `registerUsable` may call `Bridge.Call('framework', 'registerUsable', item, handler)`. The framework method must not call the inventory method back.
 
 Notify: `push(data)`. Target: `addEntity`, `addModel`, `addBox`, `remove`. Progress: `start(data)` returns `true` or `false`.
+
+Appearance: `getAppearance`, `setAppearance(appearance)`, `openAppearance(shopId)`.
+
+Fuel: `getFuel(vehicle)`, `setFuel(vehicle, amount)`.
+
+Keys: `giveKeys(source, plate, model)`, `removeKeys(source, plate, model)`.
+
+Phone: `sendMail(source, data)`, `sendNotification(source, data)`.
+
+Dispatch: `send(data)`.

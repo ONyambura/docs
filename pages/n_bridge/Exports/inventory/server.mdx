@@ -1,8 +1,8 @@
 # Server
 
-`inventory` is a server id for a player, or a stash id string on ox_inventory and core_inventory. Item rows are `{ name, count, metadata, slot, label }`.
+`inventory` is a player server id, or a stash id when that inventory supports one. Item rows are `{ name, count, metadata, slot, label }`.
 
-Names follow the [ox_inventory server functions](https://overextended.dev/ox_inventory/Functions/Server). core_inventory implements the matching calls from the [C8RE export list](https://docs.c8re.store/core-inventory/exports). ESX default items use `xPlayer` inventory methods. A backend that does not export the call logs once and returns `nil`.
+ESX default items and chezza have no metadata. A call the selected inventory does not provide logs once and returns `nil` or `false`.
 
 ### GetItemCount
 
@@ -55,7 +55,7 @@ end
 - `inventory` `number|string`
 - `item` `string`
 - `count` `number`
-- `metadata` `table` — optional
+- `metadata` `table` — optional. Ignored for ESX default items and chezza.
 
 **Returns**
 
@@ -101,7 +101,7 @@ end
 - `inventory` `number|string`
 - `item` `string`
 - `count` `number`
-- `metadata` `table` — optional. Used by ox_inventory and core_inventory.
+- `metadata` `table` — optional
 
 **Returns**
 
@@ -116,8 +116,6 @@ end
 ```
 
 ### CanCarryWeight
-
-ox_inventory `CanCarryWeight`.
 
 **Parameters**
 
@@ -144,7 +142,7 @@ end
 
 **Returns**
 
-`string` — the label, or the item name when the backend has none.
+`string` — the label, or the item name when none is stored.
 
 **Example**
 
@@ -157,7 +155,7 @@ Bridge.Notify(source, { description = label, kind = 'info' })
 
 **Parameters**
 
-- `inventory` `number|string` — player id. ox_inventory also accepts a stash id and an owner through the provider.
+- `inventory` `number|string` — player id, or a stash id when that inventory supports one
 
 **Returns**
 
@@ -174,8 +172,6 @@ end
 ```
 
 ### GetSlot
-
-ox_inventory `GetSlot`. qb-inventory and ps-inventory use `GetItemBySlot`. core_inventory uses `getItemBySlot`.
 
 **Parameters**
 
@@ -198,8 +194,6 @@ end
 
 ### GetPlayerWeight
 
-ox_inventory, ESX `getWeight`, and chezza.
-
 **Parameters**
 
 - `inventory` `number|string`
@@ -218,8 +212,6 @@ print(weight, maxWeight)
 
 ### GetPlayerMaxWeight
 
-ox_inventory, ESX `getMaxWeight`, and chezza.
-
 **Parameters**
 
 - `inventory` `number|string`
@@ -235,8 +227,6 @@ print(Bridge.GetPlayerMaxWeight(source))
 ```
 
 ### SetMaxWeight
-
-ox_inventory `SetMaxWeight`. ESX uses `setMaxWeight`.
 
 **Parameters**
 
@@ -255,8 +245,6 @@ Bridge.SetMaxWeight(source, 30000)
 
 ### SetItemMetadata
 
-ox_inventory `SetMetadata`. core_inventory `setMetadata`.
-
 **Parameters**
 
 - `inventory` `number|string`
@@ -265,7 +253,7 @@ ox_inventory `SetMetadata`. core_inventory `setMetadata`.
 
 **Returns**
 
-`boolean`
+`boolean` — `false` for ESX default items and chezza, which have no metadata.
 
 **Example**
 
@@ -274,8 +262,6 @@ Bridge.SetItemMetadata(source, 1, { durability = 50, serial = 'A12' })
 ```
 
 ### SetDurability
-
-ox_inventory `SetDurability`. core_inventory `setDurability`.
 
 **Parameters**
 
@@ -295,12 +281,10 @@ Bridge.SetDurability(source, 1, 100)
 
 ### ClearInventory
 
-ox_inventory `ClearInventory`. qb-inventory and ps-inventory `ClearInventory`. core_inventory `clearInventory`.
-
 **Parameters**
 
 - `inventory` `number|string`
-- `keep` `string|string[]` — optional item names to leave in the inventory. ox_inventory only.
+- `keep` `string|string[]` — optional item names to leave behind. Inventories that have no keep list clear everything.
 
 **Returns**
 
@@ -313,8 +297,6 @@ Bridge.ClearInventory(source, { 'phone', 'id_card' })
 ```
 
 ### RegisterStash
-
-ox_inventory `RegisterStash`.
 
 **Parameters**
 
@@ -338,12 +320,12 @@ Bridge.RegisterStash('police_locker', 'Locker', 50, 100000, true, { police = 0 }
 
 ### ForceOpenInventory
 
-ox_inventory `forceOpenInventory` skips the usual distance and job checks. qb-inventory and ps-inventory use `OpenInventory`. core_inventory uses `openOtherPlayerInventory` for another player and `openInventory` for a stash.
+Opens an inventory for a player without the usual distance check.
 
 **Parameters**
 
 - `playerId` `number` — who sees the inventory
-- `kind` `string` — `stash`, `player`, `glovebox`, `trunk`, and the other ox_inventory types
+- `kind` `string` — `stash`, `player`, `glovebox`, or `trunk`
 - `data` `string|number|table` — stash id, target server id, or `{ id, owner, label }`
 
 **Returns**
@@ -375,45 +357,9 @@ Closes the inventory UI for that player.
 Bridge.CloseInventory(source)
 ```
 
-### ConfiscateInventory
-
-ox_inventory `ConfiscateInventory`. core_inventory `confiscatePlayerInventory`.
-
-**Parameters**
-
-- `playerId` `number`
-
-**Returns**
-
-`boolean`
-
-**Example**
-
-```lua
-Bridge.ConfiscateInventory(source)
-```
-
-### ReturnInventory
-
-ox_inventory `ReturnInventory`. core_inventory `returnPlayerInventory`.
-
-**Parameters**
-
-- `playerId` `number`
-
-**Returns**
-
-`boolean`
-
-**Example**
-
-```lua
-Bridge.ReturnInventory(source)
-```
-
 ### RegisterUsableItem
 
-The handler runs on the server when the player uses the item. ox_inventory only fires it for items the inventory already treats as usable.
+The handler runs on the server when the player uses the item. It only fires for items that inventory already treats as usable.
 
 **Parameters**
 

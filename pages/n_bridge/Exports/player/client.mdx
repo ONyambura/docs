@@ -28,8 +28,6 @@ print(me.gang.name)
 
 ### IsPlayerLoaded
 
-ESX uses `IsPlayerLoaded`. QBCore and Qbox read `LocalPlayer.state.isLoggedIn`. ox_core and ND Core check that the local character exists.
-
 **Parameters**
 
 None.
@@ -99,7 +97,7 @@ None.
 
 **Returns**
 
-`table` — same shape as the job. ESX reads `gang`, then `job2`. ox_core reads groups whose type is `gang`. `name` is `none` when there is no gang.
+`table` — same shape as the job. `name` is `none` when there is no gang. vRP has no gang.
 
 **Example**
 
@@ -115,7 +113,7 @@ end
 
 **Parameters**
 
-- `account` `string` — optional. `cash` is the default. ESX maps it to `money`. vRP returns `0`.
+- `account` `string` — optional. `cash` is the default. ESX maps it to the `money` account. vRP returns `0`.
 
 **Returns**
 
@@ -134,7 +132,7 @@ end
 
 ### GetPlayerMetadata
 
-Reads the local metadata table. ESX, QBCore, Qbox, ox_core, and ND Core. Changing metadata stays on the server.
+Reads the local metadata table. Changing metadata stays on the server.
 
 **Parameters**
 

@@ -2,7 +2,7 @@
 
 Local inventory. These calls do not take a server id. Adding and removing items stays on the server.
 
-Names follow the [ox_inventory client functions](https://overextended.dev/ox_inventory/Functions/Client). core_inventory implements `closeInventory` and `getWeaponEquiped` from the [C8RE client exports](https://docs.c8re.store/core-inventory/exports).
+ESX default items and chezza have no metadata. When the selected inventory has no matching call, the result is `nil` or `false`.
 
 ### GetItemCount
 
@@ -63,8 +63,6 @@ print(Bridge.GetItemLabel('water'))
 
 ### GetSlotWithItem
 
-ox_inventory `GetSlotWithItem`.
-
 **Parameters**
 
 - `item` `string`
@@ -112,7 +110,7 @@ None.
 
 **Returns**
 
-`table|nil` — one item row, or `nil` when nothing is equipped. core_inventory uses `getWeaponEquiped`.
+`table|nil` — one item row, or `nil` when nothing is equipped.
 
 **Example**
 
@@ -125,8 +123,6 @@ end
 ```
 
 ### GetPlayerWeight
-
-ox_inventory `GetPlayerWeight`.
 
 **Parameters**
 
@@ -144,8 +140,6 @@ print(Bridge.GetPlayerWeight(), Bridge.GetPlayerMaxWeight())
 
 ### GetPlayerMaxWeight
 
-ox_inventory `GetPlayerMaxWeight`.
-
 **Parameters**
 
 None.
@@ -162,7 +156,7 @@ local maxWeight = Bridge.GetPlayerMaxWeight()
 
 ### OpenInventory
 
-ox_inventory kinds are `player`, `shop`, `stash`, `crafting`, `container`, `drop`, `glovebox`, `trunk`, and `dumpster`. ESX and chezza return `false`. jaksam returns `false` for another player.
+Kinds are `player`, `shop`, `stash`, `crafting`, `container`, `drop`, `glovebox`, `trunk`, and `dumpster`. ESX and chezza return `false`. Opening another player returns `false` on jaksam.
 
 **Parameters**
 
@@ -183,8 +177,6 @@ Bridge.OpenInventory('trunk', { netid = NetworkGetNetworkIdFromEntity(vehicle) }
 
 ### CloseInventory
 
-ox_inventory and core_inventory.
-
 **Parameters**
 
 None.
@@ -201,7 +193,7 @@ Bridge.CloseInventory()
 
 ### SetStashTarget
 
-ox_inventory `setStashTarget`. The next stash open uses this id until you clear it.
+The next stash open uses this id until you clear it.
 
 **Parameters**
 
@@ -220,8 +212,6 @@ Bridge.OpenInventory('stash')
 ```
 
 ### UseSlot
-
-ox_inventory `useSlot`.
 
 **Parameters**
 
@@ -242,8 +232,6 @@ end
 ```
 
 ### GiveItemToTarget
-
-ox_inventory `giveItemToTarget`.
 
 **Parameters**
 
@@ -267,7 +255,7 @@ end
 
 ### DisplayMetadata
 
-ox_inventory `displayMetadata`. Adds a label for a metadata key in the tooltip.
+Adds a label for a metadata key in the tooltip.
 
 **Parameters**
 

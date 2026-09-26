@@ -2,7 +2,7 @@
 
 These calls take a server id. Job and gang tables are `{ name, grade, label, gradeLabel, onDuty }`.
 
-ESX, QBCore, Qbox, ox_core, and ND Core each implement the calls their own docs publish. A framework with no matching function returns `false` or `nil`.
+A framework with no matching function returns `false` or `nil`.
 
 ### GetPlayer
 
@@ -57,7 +57,7 @@ end
 
 **Returns**
 
-`string|nil` — ESX identifier, QB or Qbox citizen id, ox_core state id, ND identifier, or the license on standalone.
+`string|nil` — the character id. Standalone uses the license.
 
 **Example**
 
@@ -92,7 +92,31 @@ if not target then
     return
 end
 
-Bridge.AddPlayerMoney(target, 'bank', 500)
+Bridge.AddPlayerMoney(target, 'bank', 500, 'refund')
+```
+
+### GetPlayerByPhone
+
+Finds an online player from a phone number.
+
+**Parameters**
+
+- `number` `string` — phone number
+
+**Returns**
+
+`number|nil` — server id. ESX, ox, ND, and vRP return `nil`.
+
+**Example**
+
+```lua
+local target = Bridge.GetPlayerByPhone('555-0100')
+
+if not target then
+    return
+end
+
+Bridge.Notify(target, { description = 'Incoming call', kind = 'info' })
 ```
 
 ### GetPlayerJob
@@ -117,13 +141,13 @@ end
 
 ### SetPlayerJob
 
-Sets the primary job. ESX uses `xPlayer.setJob`. QBCore uses `SetJob`. Qbox uses `SetJob`. ox_core uses `setGroup`. ND Core uses `setJob`.
+Sets the primary job.
 
 **Parameters**
 
 - `source` `number` — server id
 - `name` `string` — job name that already exists on that framework
-- `grade` `number` — grade or rank. Defaults to `0`. ND Core defaults a missing rank to `1`.
+- `grade` `number` — grade or rank. Defaults to `0`. ND defaults a missing rank to `1`.
 
 **Returns**
 
@@ -150,7 +174,7 @@ print(job.label, job.gradeLabel)
 
 **Returns**
 
-`table` — same shape as a job. `name` is `none` on ESX, ND Core, and vRP, which have no gang table. ESX still reads `gang` or `job2` when a fork stores one.
+`table` — same shape as a job. `name` is `none` when that framework has no gang. vRP has no gang.
 
 **Example**
 
@@ -166,8 +190,6 @@ print(gang.name, gang.grade)
 
 ### SetPlayerGang
 
-QBCore uses `SetGang`. Qbox uses `SetGang`. ox_core uses `setGroup`. ESX and ND Core return `false`.
-
 **Parameters**
 
 - `source` `number` — server id
@@ -176,7 +198,7 @@ QBCore uses `SetGang`. Qbox uses `SetGang`. ox_core uses `setGroup`. ESX and ND 
 
 **Returns**
 
-`boolean`
+`boolean` — `false` on ESX, ND, and vRP.
 
 **Example**
 
@@ -190,8 +212,6 @@ print(Bridge.GetPlayerGang(source).name)
 
 ### SetJobDuty
 
-QBCore uses `SetJobDuty`. Qbox uses `SetJobDuty`. ESX calls `setJob` again with the duty flag from the ESX xPlayer docs. ox_core and ND Core return `false`.
-
 **Parameters**
 
 - `source` `number` — server id
@@ -199,7 +219,7 @@ QBCore uses `SetJobDuty`. Qbox uses `SetJobDuty`. ESX calls `setJob` again with 
 
 **Returns**
 
-`boolean`
+`boolean` — `false` on ox and ND, which have no duty flag.
 
 **Example**
 
@@ -215,7 +235,7 @@ print(job.onDuty)
 **Parameters**
 
 - `job` `string` — job name
-- `onDuty` `boolean` — optional. When `true`, QBCore uses `GetPlayersByJob` with the duty filter, and ESX skips players whose job `onDuty` is `false`.
+- `onDuty` `boolean` — optional. When `true`, only players marked on duty are returned.
 
 **Returns**
 
@@ -231,12 +251,36 @@ for i = 1, #officers do
 end
 ```
 
+### GetDutyCount
+
+Counts players on duty for a job.
+
+**Parameters**
+
+- `job` `string` — job name
+
+**Returns**
+
+`number` — ND has no duty flag, so the count is every player with that job.
+
+**Example**
+
+```lua
+local onDuty = Bridge.GetDutyCount('police')
+
+if onDuty < 1 then
+    return
+end
+
+print(onDuty)
+```
+
 ### GetPlayerMoney
 
 **Parameters**
 
 - `source` `number` — server id
-- `account` `string` — optional. `cash` is the default. ESX maps `cash` to `money`. ox_core cash is the `money` item. ND Core reads `cash` or `bank`.
+- `account` `string` — optional. `cash` is the default. ESX maps `cash` to the `money` account. ox cash is the `money` item. vRP and standalone return `0`.
 
 **Returns**
 
@@ -253,11 +297,14 @@ print(bank, cash)
 
 ### AddPlayerMoney
 
+`reason` is optional. When it is omitted the bridge sends `n_bridge`. vRP accepts the argument and ignores it.
+
 **Parameters**
 
 - `source` `number` — server id
-- `account` `string` — optional when the next argument is the amount. `AddPlayerMoney(source, 500)` adds cash.
+- `account` `string` — optional when the next argument is the amount. `AddPlayerMoney(source, 500, 'paycheck')` adds cash.
 - `amount` `number`
+- `reason` `string` — optional
 
 **Returns**
 
@@ -266,7 +313,7 @@ print(bank, cash)
 **Example**
 
 ```lua
-if not Bridge.AddPlayerMoney(source, 'bank', 250) then
+if not Bridge.AddPlayerMoney(source, 'bank', 250, 'paycheck') then
     return
 end
 
@@ -275,13 +322,14 @@ print(Bridge.GetPlayerMoney(source, 'bank'))
 
 ### RemovePlayerMoney
 
-Fails when the balance is lower than `amount`.
+Fails when the balance is lower than `amount`. `reason` follows the same rules as add.
 
 **Parameters**
 
 - `source` `number` — server id
 - `account` `string` — optional. Same shorthand as add.
 - `amount` `number`
+- `reason` `string` — optional
 
 **Returns**
 
@@ -290,7 +338,7 @@ Fails when the balance is lower than `amount`.
 **Example**
 
 ```lua
-if not Bridge.RemovePlayerMoney(source, 'cash', 100) then
+if not Bridge.RemovePlayerMoney(source, 'cash', 100, 'shop') then
     Bridge.Notify(source, { description = 'Not enough cash', kind = 'error' })
     return
 end
@@ -298,13 +346,14 @@ end
 
 ### SetPlayerMoney
 
-Sets the balance to an exact amount. ESX uses `setAccountMoney`. QBCore uses `SetMoney`. Qbox uses `SetMoney`. ox_core adds or removes the difference. ND Core returns `false`.
+Sets the balance to an exact amount. ND returns `false`. vRP ignores `reason`.
 
 **Parameters**
 
 - `source` `number` — server id
-- `account` `string` — `cash` or `bank`
+- `account` `string` — `cash` or `bank`. A bare amount is cash: `SetPlayerMoney(source, 500, 'fine')`.
 - `amount` `number` — zero or higher
+- `reason` `string` — optional
 
 **Returns**
 
@@ -313,13 +362,11 @@ Sets the balance to an exact amount. ESX uses `setAccountMoney`. QBCore uses `Se
 **Example**
 
 ```lua
-Bridge.SetPlayerMoney(source, 'cash', 500)
-print(Bridge.GetPlayerMoney(source, 'cash'))
+Bridge.SetPlayerMoney(source, 'bank', 500, 'fine')
+print(Bridge.GetPlayerMoney(source, 'bank'))
 ```
 
 ### GetPlayerMetadata
-
-ESX uses `getMeta`. QBCore uses `GetMetaData`. Qbox uses `GetMetadata`. ox_core uses `player.get`. ND Core uses `getMetadata`.
 
 **Parameters**
 
@@ -342,8 +389,6 @@ end
 
 ### SetPlayerMetadata
 
-ESX uses `setMeta`. QBCore uses `SetMetaData`. Qbox uses `SetMetadata`. ox_core uses `player.set`. ND Core uses `setMetadata`.
-
 **Parameters**
 
 - `source` `number` — server id
@@ -364,8 +409,6 @@ end
 
 ### HasPermission
 
-QBCore uses `HasPermission`. ESX compares `getGroup`. ox_core checks `getGroup`, then ACE. Standalone checks ACE only.
-
 **Parameters**
 
 - `source` `number` — server id
@@ -373,7 +416,7 @@ QBCore uses `HasPermission`. ESX compares `getGroup`. ox_core checks `getGroup`,
 
 **Returns**
 
-`boolean`
+`boolean` — standalone checks ACE only.
 
 **Example**
 

@@ -1,12 +1,20 @@
 # Updates
 
+## 0.7.0
+
+Cash and bank add, remove, and set take an optional reason. When the caller omits it, the bridge sends `n_bridge`. vRP accepts the argument and ignores it. Society add and remove take the same reason, and only qb-banking stores it.
+
+`GetPlayerByPhone` returns a server id. ESX, ox, ND, and vRP return `nil`. `GetDutyCount` returns how many players are on duty for a job. ND has no duty flag, so that count is everyone with the job.
+
+Export pages list parameters, the return value, and one example. Confiscate and return inventory are not bridge calls.
+
 ## 0.6.0
 
 Player calls now cover job, gang, duty, metadata, exact money, and lookup by identifier, using the ESX, QBCore, Qbox, ox_core, and ND Core functions those projects document. Every export page is one function, then parameters, the return value, and an example.
 
 ## 0.5.0
 
-Inventory exports follow the [ox_inventory server](https://overextended.dev/ox_inventory/Functions/Server) and [client](https://overextended.dev/ox_inventory/Functions/Client) function lists. Other inventories implement the calls they already export.
+Inventory exports cover slots, metadata, durability, weight, stashes, and usable items. Other inventories implement the calls they already provide. ESX default items and chezza have no metadata.
 
 ## 0.4.0
 

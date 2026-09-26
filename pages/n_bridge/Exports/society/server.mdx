@@ -1,6 +1,6 @@
 # Server
 
-`job` is the society name, such as `police`. ESX accounts use the `society_` prefix internally.
+`job` is the society name, such as `police`. Pass that name, not a prefixed account id.
 
 ### GetSocietyMoney
 
@@ -25,6 +25,7 @@ print(balance or 0)
 
 - `job` `string`
 - `amount` `number`
+- `reason` `string` — optional. qb-banking stores it. Other society scripts ignore it.
 
 **Returns**
 
@@ -33,7 +34,7 @@ print(balance or 0)
 **Example**
 
 ```lua
-if Bridge.AddSocietyMoney('police', 500) then
+if Bridge.AddSocietyMoney('police', 500, 'fine') then
     print(Bridge.GetSocietyMoney('police'))
 end
 ```
@@ -44,6 +45,7 @@ end
 
 - `job` `string`
 - `amount` `number`
+- `reason` `string` — optional. Same rule as add.
 
 **Returns**
 
@@ -52,7 +54,7 @@ end
 **Example**
 
 ```lua
-if not Bridge.RemoveSocietyMoney('police', 100) then
+if not Bridge.RemoveSocietyMoney('police', 100, 'payroll') then
     return
 end
 ```

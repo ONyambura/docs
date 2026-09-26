@@ -1,0 +1,47 @@
+# Shipped backends
+
+`auto` walks the open `core/catalog.lua` and keeps the first started resource. `qbx_core` is ahead of `qb-core`. Dedicated inventories are ahead of a resource named `inventory` and ahead of `es_extended`.
+
+## Framework
+
+- `qbox` — `qbx_core`
+- `qb` — `qb-core`
+- `esx` — `es_extended`. `cash` is the `money` account.
+- `ox` — `ox_core`. Cash is the `money` item. Bank is the character account.
+- `vrp` — `vrp`. Classic proxy calls, plus vRP 2 `users_by_source` when present.
+- `standalone` — no framework. `HasPermission` is ACE. Money stays `0`.
+- `custom` — open template
+
+## Inventory
+
+- `ox` — `ox_inventory`
+- `qs` — `qs-inventory`
+- `tgiann` — `tgiann-inventory`
+- `origen` — `origen_inventory`
+- `codem` — `codem-inventory`
+- `core` — `core_inventory`
+- `jaksam` — `jaksam_inventory`
+- `ps` — `ps-inventory` (same file as qb)
+- `lj` — `lj-inventory` (same file as qb, player item API)
+- `qb` — `qb-inventory`
+- `chezza` — resource folder `inventory`, ESX item methods
+- `esx` — default ESX items, only if no dedicated inventory above is started
+- `custom` — open template
+
+## Notify
+
+- `ox_lib`, `okok` (`okokNotify`), `qb` (`qbx_core` then `qb-core`), `esx`, `custom`
+
+## Target
+
+- `ox_target`, `qb-target`, `custom`
+
+## Progress
+
+- `ox_lib`, `qb` (`qb-core`), `esx` (`esx_progressbar`), `custom`
+
+## Not shipped yet
+
+`appearance`, `fuel`, `keys`, `phone`, `dispatch`, `society`, `vehicles`, `textui`.
+
+Leave them on `auto`. The export logs once and returns `nil`. Set the config key to `custom` when you are ready to fill the open stub.

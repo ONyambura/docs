@@ -1,0 +1,91 @@
+import { Steps, Tabs, Tab } from 'nextra-theme-docs';
+import { Callout, FileTree } from 'nextra/components';
+
+# N Bridge
+
+One function, whichever framework or inventory the server runs. Your resources call `Bridge` and stop branching on ESX, QB, Qbox, ox_core, vRP, and inventory scripts.
+
+<Callout type="warning">
+Start the framework and the inventory before `n_bridge`. Start every NXBR resource after it.
+</Callout>
+
+## Installation
+
+<Steps>
+### Drop the resource in
+
+<FileTree>
+  <FileTree.Folder name="resources" defaultOpen>
+    <FileTree.Folder name="[nxbr]" defaultOpen>
+      <FileTree.Folder name="n_bridge" defaultOpen>
+        <FileTree.File name="fxmanifest.lua" />
+        <FileTree.File name="config.lua" />
+        <FileTree.File name="init.lua" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+### Start order
+
+```bash
+ensure oxmysql
+ensure qbx_core
+ensure ox_inventory
+ensure ox_lib
+ensure n_bridge
+```
+
+Swap in `es_extended`, `qb-core`, or `qb-inventory` when that is what the server runs.
+
+### Pick backends in config.lua
+
+`auto` uses the first started resource in `core/catalog.lua`. Set an id to force one.
+
+```lua
+Config.Use = {
+    framework = 'auto', -- esx | qb | qbox | ox | vrp | standalone | custom
+    inventory = 'auto',
+    notify = 'auto',
+    target = 'auto',
+    progress = 'auto',
+}
+```
+
+The server console prints the choice on start: `framework=esx inventory=ox notify=ox_lib ...`.
+</Steps>
+
+## Call it from another resource
+
+<Tabs items={['import', 'export']}>
+  <Tabs.Tab>
+```lua
+-- fxmanifest.lua
+shared_script '@n_bridge/init.lua'
+```
+
+```lua
+local cash = Bridge.GetPlayerMoney(source, 'cash')
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+```lua
+local cash = exports.n_bridge:GetPlayerMoney(source, 'cash')
+```
+  </Tabs.Tab>
+</Tabs>
+
+`init.lua` in any resource other than `n_bridge` is only a proxy to those exports.
+
+## Readable files
+
+Keymaster escrow leaves these plain. Everything else under `providers/` is locked:
+
+- `fxmanifest.lua`, `config.lua`, `init.lua`
+- `core/**` (routing only, no third-party calls)
+- `providers/**/custom/**`
+- `docs/**`
+
+## What 0.1.0 ships
+
+Framework, inventory, notify, target, and progress. Appearance, fuel, keys, phone, dispatch, society, vehicles, and text UI have exports and an open `custom` stub. They are not wired to a backend yet.

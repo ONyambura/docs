@@ -1,0 +1,144 @@
+## Player
+
+Client calls do not take a server id.
+
+### GetMyPlayer
+
+```lua
+local me = Bridge.GetMyPlayer()
+```
+
+**Returns**
+
+- the same player table as server `GetPlayer`, or `nil` before the character exists
+
+### GetMyJob
+
+```lua
+local job = Bridge.GetMyJob()
+```
+
+**Returns**
+
+- job table
+
+### GetMyMoney
+
+```lua
+local cash = Bridge.GetMyMoney('cash')
+```
+
+**Parameters**
+
+- `account` (optional) `string`
+
+**Returns**
+
+- `number`
+
+vRP does not expose local money. That call returns `0`.
+
+### OnPlayerReady
+
+```lua
+Bridge.OnPlayerReady(function()
+end)
+```
+
+**Parameters**
+
+- `handler` `function` — no arguments
+
+If the local character is already loaded, the handler runs immediately.
+
+## Notify
+
+```lua
+Bridge.Notify({
+    title = 'Shop',
+    description = 'Not enough cash',
+    kind = 'error',
+    duration = 3000,
+})
+```
+
+**Parameters**
+
+- `data` `table` or `string`
+
+## Target
+
+Each option is `{ name, label, icon, distance, onSelect, canInteract }`.
+
+### AddEntityTarget
+
+```lua
+Bridge.AddEntityTarget(entity, options)
+```
+
+**Returns**
+
+- the entity, when the provider accepts it
+
+### AddModelTarget
+
+```lua
+Bridge.AddModelTarget({ `prop_vend_soda_01` }, options)
+```
+
+### AddBoxZone
+
+```lua
+local id = Bridge.AddBoxZone({
+    id = 'counter',
+    coords = vec3(0.0, 0.0, 0.0),
+    size = vec3(1.5, 1.5, 1.5),
+    rotation = 0.0,
+    options = options,
+})
+```
+
+**Returns**
+
+- zone id used by `RemoveTarget`
+
+### RemoveTarget
+
+```lua
+Bridge.RemoveTarget(id)
+Bridge.RemoveTarget(entity)
+```
+
+qb-target calls `onSelect` with `{ entity = entity }`.
+
+## Progress
+
+```lua
+local finished = Bridge.Progress({
+    duration = 5000,
+    label = 'Searching',
+    canCancel = true,
+    anim = { dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', clip = 'machinic_loop_mechandplayer' },
+    disable = { move = true, car = true, combat = true, mouse = false },
+})
+```
+
+**Returns**
+
+- `true` when the bar finishes
+- `false` when it is cancelled or no progress provider is selected
+
+Qbox progress expects `ox_lib`.
+
+## Slots
+
+Not shipped. The export returns `nil` and logs once until you set that key to `custom` and fill the open file.
+
+```lua
+Bridge.GetAppearance()
+Bridge.SetAppearance(data)
+Bridge.GetFuel(vehicle)
+Bridge.SetFuel(vehicle, amount)
+Bridge.ShowText('Press E')
+Bridge.HideText()
+```

@@ -1,0 +1,37 @@
+# Custom provider
+
+`providers/<capability>/custom` stays readable after escrow. Set the matching `Config.Use` key to `custom`.
+
+```lua
+if Bridge.Selected('framework') ~= 'custom' then return end
+
+Bridge.Provide('framework', 'custom', {
+    getMoney = function(source, account)
+        return 0
+    end,
+})
+```
+
+The public export is registered by `core/bind.lua`. Do not call `exports()` inside the provider.
+
+When the character is ready:
+
+```lua
+-- server
+Bridge.RaisePlayerReady(source)
+
+-- client
+Bridge.RaisePlayerReady()
+```
+
+Build return values with `Bridge.Player`, `Bridge.Job`, `Bridge.MoneyArgs`, and `Bridge.ItemContext` so they match the shipped backends.
+
+Framework server: `getPlayer`, `getPlayers`, `getIdentifier`, `getJob`, `getGang`, `getMoney`, `addMoney`, `removeMoney`, `hasPermission`, `registerUsable`.
+
+Framework client: `getMyPlayer`, `getMyJob`, `getMyMoney`.
+
+Inventory: `getCount`, `hasItem`, `addItem`, `removeItem`, `canCarry`, `getLabel`, `registerUsable`.
+
+`registerUsable` may call `Bridge.Call('framework', 'registerUsable', item, handler)`. The framework method must not call the inventory method back.
+
+Notify: `push(data)`. Target: `addEntity`, `addModel`, `addBox`, `remove`. Progress: `start(data)` returns `true` or `false`.

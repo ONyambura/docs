@@ -1,0 +1,248 @@
+## Player
+
+`shared_script '@n_bridge/init.lua'` then `Bridge.GetPlayer(source)`, or `exports.n_bridge:GetPlayer(source)`.
+
+Cash is the default account. `AddPlayerMoney(source, 500)` adds cash.
+
+### GetPlayer
+
+```lua
+local player = Bridge.GetPlayer(source)
+```
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+- `nil`, or a player table:
+
+```lua
+{
+    source = 12,
+    identifier = 'citizenid, license, or character id',
+    name = 'Jane Doe',
+    job = { name = 'police', grade = 2, label = 'Police', gradeLabel = 'Officer', onDuty = true },
+    gang = { name = 'none', grade = 0, label = 'none', gradeLabel = 'none', onDuty = false },
+}
+```
+
+### GetPlayers
+
+```lua
+local sources = Bridge.GetPlayers()
+```
+
+**Returns**
+
+- `number[]` server ids
+
+### GetIdentifier
+
+```lua
+local id = Bridge.GetIdentifier(source)
+```
+
+**Returns**
+
+- `string` or `nil`
+
+### GetPlayerJob
+
+```lua
+local job = Bridge.GetPlayerJob(source)
+```
+
+**Returns**
+
+- job table (`name`, `grade`, `label`, `gradeLabel`, `onDuty`)
+
+### GetPlayerGang
+
+Same shape as the job. `name` is `none` when the framework has no gang.
+
+### GetPlayerMoney
+
+```lua
+Bridge.GetPlayerMoney(source, 'bank')
+```
+
+**Parameters**
+
+- `source` `number`
+- `account` (optional) `string` — `cash` (default) or `bank`
+
+**Returns**
+
+- `number`
+
+ESX maps `cash` to the `money` account. ox_core `cash` is the `money` item. ox_core `bank` is the character account.
+
+### AddPlayerMoney
+
+```lua
+Bridge.AddPlayerMoney(source, 'cash', 250)
+```
+
+**Returns**
+
+- `boolean`
+
+### RemovePlayerMoney
+
+```lua
+Bridge.RemovePlayerMoney(source, 'bank', 100)
+```
+
+**Returns**
+
+- `boolean` — `false` when the balance is too low or the player is missing
+
+### HasPermission
+
+```lua
+Bridge.HasPermission(source, 'admin')
+```
+
+**Returns**
+
+- `boolean`
+
+`standalone` checks ACE only.
+
+### OnPlayerReady
+
+```lua
+Bridge.OnPlayerReady(function(source)
+end)
+```
+
+**Parameters**
+
+- `handler` `function` — receives the server id
+
+**Returns**
+
+- `boolean`
+
+Players who loaded before the handler was registered are still passed in. This is an export.
+
+## Inventory
+
+### GetItemCount
+
+```lua
+local count = Bridge.GetItemCount(source, 'water', metadata)
+```
+
+**Parameters**
+
+- `source` `number`
+- `item` `string`
+- `metadata` (optional) `table`
+
+**Returns**
+
+- `number`
+
+### HasItem
+
+```lua
+Bridge.HasItem(source, 'water', 1, metadata)
+```
+
+**Returns**
+
+- `boolean`
+
+### AddItem
+
+```lua
+Bridge.AddItem(source, 'water', 2, metadata)
+```
+
+**Returns**
+
+- `boolean`
+
+### RemoveItem
+
+```lua
+Bridge.RemoveItem(source, 'water', 1, metadata)
+```
+
+**Returns**
+
+- `boolean`
+
+### CanCarry
+
+```lua
+Bridge.CanCarry(source, 'water', 2, metadata)
+```
+
+**Returns**
+
+- `boolean`
+
+### GetItemLabel
+
+```lua
+local label = Bridge.GetItemLabel('water')
+```
+
+**Returns**
+
+- `string`
+
+### RegisterUsableItem
+
+```lua
+Bridge.RegisterUsableItem('radio', function(source, item)
+    -- item.name, item.count, item.metadata, item.slot
+end)
+```
+
+**Returns**
+
+- `boolean`
+
+ox_inventory runs the handler for items that inventory already treats as usable.
+
+## Notify
+
+```lua
+Bridge.Notify(source, {
+    title = 'Garage',
+    description = 'Vehicle stored',
+    kind = 'success',
+    duration = 4000,
+})
+```
+
+**Parameters**
+
+- `source` `number`
+- `data` `table` — `title`, `description`, `kind` (`info`, `success`, `warning`, `error`), `duration` milliseconds
+
+**Returns**
+
+- `boolean`
+
+The client notify provider draws it. Server code does not call ESX or QB notify itself.
+
+## Slots
+
+These names exist. No backend is shipped. A missing provider returns `nil` and logs once.
+
+```lua
+Bridge.GiveKeys(source, plate)
+Bridge.RemoveKeys(source, plate)
+Bridge.SendPhoneMail(source, data)
+Bridge.SendDispatch(data)
+Bridge.GetSocietyMoney(job)
+Bridge.AddSocietyMoney(job, amount)
+Bridge.RemoveSocietyMoney(job, amount)
+Bridge.GetOwnedVehicles(source)
+```

@@ -1,15 +1,44 @@
 # Server
 
+Calls take an inventory id. For a player that is the server id. Stash ids are strings.
+
+The names follow [ox_inventory server functions](https://overextended.dev/ox_inventory/Functions/Server). Other inventories implement the same call when that script has the export. A missing export logs once and returns `nil`.
+
 ```lua
 Bridge.GetItemCount(source, 'water', metadata)
 Bridge.HasItem(source, 'water', 1, metadata)
 Bridge.AddItem(source, 'water', 2, metadata)
 Bridge.RemoveItem(source, 'water', 1, metadata)
 Bridge.CanCarry(source, 'water', 2, metadata)
+Bridge.CanCarryWeight(source, 1000)
 Bridge.GetItemLabel('water')
+Bridge.GetInventoryItems(source)
+Bridge.GetSlot(source, 1)
+Bridge.GetPlayerWeight(source)
+Bridge.GetPlayerMaxWeight(source)
 ```
 
-`metadata` is optional. Add, remove, carry, and has return booleans. Count returns a number. Label returns a string.
+`metadata` is optional. Add, remove, carry, and has return booleans. Count and weight return numbers. `GetInventoryItems` returns `{ name, count, metadata, slot, label }`.
+
+```lua
+Bridge.SetItemMetadata(source, slot, metadata)
+Bridge.SetDurability(source, slot, 100)
+Bridge.SetMaxWeight(source, 30000)
+Bridge.ClearInventory(source, { 'phone', 'id_card' })
+```
+
+`keep` on `ClearInventory` is an item name or a list of names. ox_inventory only.
+
+```lua
+Bridge.RegisterStash('police_locker', 'Locker', 50, 100000, true, { police = 0 })
+Bridge.ForceOpenInventory(source, 'stash', 'society_police')
+Bridge.ForceOpenInventory(source, 'player', target)
+Bridge.CloseInventory(source)
+Bridge.ConfiscateInventory(source)
+Bridge.ReturnInventory(source)
+```
+
+`RegisterStash`, `ConfiscateInventory`, `ReturnInventory`, `SetDurability`, and `SetMaxWeight` are ox_inventory. `ForceOpenInventory` skips the usual distance and job checks on ox_inventory. qb-inventory and ps-inventory open with `OpenInventory`.
 
 ```lua
 Bridge.RegisterUsableItem('radio', function(source, item)
@@ -17,4 +46,4 @@ Bridge.RegisterUsableItem('radio', function(source, item)
 end)
 ```
 
-ox_inventory only runs that callback for items the inventory already treats as usable. lj-inventory carry only checks that the player exists.
+ox_inventory only runs that callback for items the inventory already treats as usable.

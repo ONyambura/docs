@@ -45,11 +45,11 @@
 
 `op-clothing` is first. It provides the other clothing resource names, so those look started while it is running.
 
-- `op-clothing` — wardrobe by default. Pass a shop id to `OpenAppearance`. Server reads the saved skin and outfits.
-- `illenium-appearance` — client menu. Server reads `users.skin` on ESX, otherwise the active `playerskins` row, plus `player_outfits`.
-- `fivem-appearance` — client menu only. It stores no skin and no outfits.
-- `rcore_clothing` — client menu. Server skin by identifier. No outfit list.
-- `qb-clothing` — client menu. Server reads the active `playerskins` row and `player_outfits`. The client has no appearance read.
+- `op-clothing` — wardrobe by default. Pass a shop id to `OpenAppearance`.
+- `illenium-appearance` — saved skin is `users.skin` on ESX, otherwise the active `playerskins` row. Outfits from `player_outfits`.
+- `fivem-appearance` — reads `users.skin` or `playerskins`, and `player_outfits` in either column layout, when those tables exist.
+- `rcore_clothing` — saved skin by identifier. Outfits from `rcore_clothing_outfits`.
+- `qb-clothing` — saved skin from the active `playerskins` row. Outfits from `player_outfits`. The client reads the ped into qb-clothing's skin format.
 - `custom`
 
 ## Fuel

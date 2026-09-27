@@ -1,6 +1,6 @@
 # Client
 
-`GetAppearance` reads the ped that is wearing the clothes. qb-clothing has no client read, so that call returns `nil`; the saved skin is `GetAppearance(source)` on the server. A shop id is optional and only used by op-clothing and rcore_clothing.
+`GetAppearance` reads the local ped. The table is in the selected clothing script's own format, so it can be passed back to `SetAppearance`. A shop id is optional and only used by op-clothing and rcore_clothing.
 
 ### GetAppearance
 
@@ -10,16 +10,14 @@ None.
 
 **Returns**
 
-`table|nil`
+`table` — qb-clothing yields briefly to fetch the saved face from the server.
 
 **Example**
 
 ```lua
 local appearance = Bridge.GetAppearance()
 
-if appearance then
-    print(json.encode(appearance))
-end
+print(json.encode(appearance))
 ```
 
 ### SetAppearance

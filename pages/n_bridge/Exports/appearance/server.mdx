@@ -1,8 +1,6 @@
 # Server
 
-Saved skin and outfits. The clothing menu itself stays on the client. Needs `oxmysql` for illenium-appearance and qb-clothing. The query does not alter the table.
-
-fivem-appearance does not store a skin or an outfit list, so both calls return `nil`. rcore_clothing has no outfit list, so `GetOutfits` returns `nil`.
+Reads the skin and outfits the selected clothing script stores. illenium-appearance, qb-clothing, fivem-appearance, and the rcore_clothing outfit list need `oxmysql`. Nothing is written to the database.
 
 ### GetAppearance
 
@@ -12,18 +10,16 @@ fivem-appearance does not store a skin or an outfit list, so both calls return `
 
 **Returns**
 
-`table|nil` — the saved skin. ESX illenium-appearance reads `users.skin`. qb-clothing and the other illenium frameworks read the active `playerskins` row. op-clothing and rcore_clothing return the skin those scripts already store.
+`table|nil` — the saved skin. When the player has no saved skin, the bridge returns what their ped is wearing as `{ model, components, props }`. `nil` only when the player has no ped.
 
 **Example**
 
 ```lua
 local appearance = Bridge.GetAppearance(source)
 
-if not appearance then
-    return
+if appearance then
+    print(appearance.model)
 end
-
-print(appearance.model)
 ```
 
 ### GetOutfits
@@ -34,20 +30,16 @@ print(appearance.model)
 
 **Returns**
 
-`table|nil` — saved outfits, or `nil` when that script does not store them.
+`table` — saved outfits. Empty when the player has none.
 
-illenium-appearance rows are `{ id, name, model, components, props }`. qb-clothing rows are `{ id, name, model, skin }`. op-clothing returns that script's outfit list.
+illenium-appearance and fivem-appearance rows are `{ id, name, model, components, props }`. qb-clothing rows are `{ id, name, model, skin }`. op-clothing and rcore_clothing return the rows those scripts store.
 
 **Example**
 
 ```lua
 local outfits = Bridge.GetOutfits(source)
 
-if not outfits then
-    return
-end
-
 for i = 1, #outfits do
-    print(outfits[i].name or outfits[i].outfitname)
+    print(outfits[i].name)
 end
 ```

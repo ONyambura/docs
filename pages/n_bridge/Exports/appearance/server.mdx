@@ -10,7 +10,7 @@ Reads the skin and outfits the selected clothing script stores. illenium-appeara
 
 **Returns**
 
-`table|nil` — the saved skin. When the player has no saved skin, the bridge returns what their ped is wearing as `{ model, components, props }`. `nil` only when the player has no ped.
+`table|nil` — the saved skin. When the player has no saved skin, the bridge asks that player's client what the ped is wearing and returns `{ model, components, props, hair, eyeColor, faceFeatures, headOverlays }`. This yields for up to 5 seconds. `nil` when the client does not answer in time.
 
 **Example**
 

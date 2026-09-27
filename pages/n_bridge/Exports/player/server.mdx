@@ -553,6 +553,54 @@ Bridge.RegisterCallback('garage:price', function(source, reply, plate)
 end)
 ```
 
+### TriggerClientCallback
+
+Asks one player's client for a callback registered there with `RegisterClientCallback`. The result arrives in `handler`. If the player drops first, `handler` runs with no values.
+
+**Parameters**
+
+- `name` `string`
+- `target` `number` — server id
+- `handler` `function` — receives the values the client passed to `reply`
+- `...` — extra arguments forwarded to the client handler
+
+**Returns**
+
+`boolean` — `true` when the request was sent.
+
+**Example**
+
+```lua
+Bridge.TriggerClientCallback('garage:nearest', source, function(plate)
+    print(plate)
+end, 10.0)
+```
+
+### AwaitClientCallback
+
+Same request as `TriggerClientCallback`, but it yields and returns the client's values.
+
+**Parameters**
+
+- `name` `string`
+- `target` `number` — server id
+- `timeout` `number` — ms, optional. Defaults to `5000`.
+- `...` — extra arguments forwarded to the client handler
+
+**Returns**
+
+`...` — the values the client passed to `reply`, or nothing on timeout.
+
+**Example**
+
+```lua
+local plate = Bridge.AwaitClientCallback('garage:nearest', source, 3000, 10.0)
+
+if plate then
+    print(plate)
+end
+```
+
 ### OnPlayerReady
 
 Runs for characters who are already loaded, and for each character that loads later.

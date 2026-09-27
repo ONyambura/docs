@@ -212,6 +212,48 @@ Bridge.TriggerCallback('garage:price', function(price)
 end, plate)
 ```
 
+### AwaitCallback
+
+Same request as `TriggerCallback`, but it yields and returns the server's values.
+
+**Parameters**
+
+- `name` `string`
+- `timeout` `number` — ms, optional. Defaults to `5000`.
+- `...` — extra arguments forwarded to the server handler
+
+**Returns**
+
+`...` — the values the server passed to `reply`, or nothing on timeout.
+
+**Example**
+
+```lua
+local price = Bridge.AwaitCallback('garage:price', 3000, plate)
+```
+
+### RegisterClientCallback
+
+The handler runs on this client when the server calls `TriggerClientCallback` or `AwaitClientCallback`. Call `reply` once with the values the server should receive.
+
+**Parameters**
+
+- `name` `string`
+- `handler` `function` — `handler(reply, ...)`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.RegisterClientCallback('garage:nearest', function(reply, radius)
+    local vehicle = Bridge.GetClosestVehicle(nil, radius)
+    reply(vehicle ~= 0 and Bridge.GetPlate(vehicle) or nil)
+end)
+```
+
 ### GetClosestPlayer
 
 **Parameters**

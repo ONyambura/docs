@@ -74,12 +74,13 @@ Server `GiveKeys(source, plate)` and client `GiveKeys(plate)` are both published
 
 ## Phone
 
-`sky_phone` and `sd-phone` are ahead of `lb-phone` and `yseries`, because both provide those names.
+`sky_phone` and `sd-phone` are ahead of `17mov_Phone`, `lb-phone` and `yseries`, because both provide those names.
 
-- `sky_phone` — notification through the `17mov_Phone` alias. `SendPhoneMail` returns `false`.
-- `sd-phone` — `notify` and `sendMail`. Mail uses `data.address`, or `getMailAddresses` for the player identifier.
-- `lb-phone` — `SendNotification` and `SendMail`. Without an address, the equipped phone email is used.
-- `yseries` — TeamsGG `SendNotification` and `SendMail` by server id
+- `sky_phone` — number, call, and open state through sky's own exports. Mail, messages, and disable return `false`.
+- `17mov_Phone` — mail, messages, notifications, and calls. The disabled state is tracked by n_bridge.
+- `sd-phone` — `notify`, `sendMail`, `sendSystemMessage`, and calls. Mail uses `data.address`, or `getMailAddresses` for the player identifier.
+- `lb-phone` — notifications, mail, messages, and calls. Without an address, the equipped phone email is used.
+- `yseries` — TeamsGG notifications, mail, messages, and calls by server id. No client notification.
 - `custom`
 
 ## Dispatch

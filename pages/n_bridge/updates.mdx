@@ -10,6 +10,8 @@
 
 Server `GetAppearance` and `GetOutfits` read the saved skin and outfit list from each clothing script's own tables or exports. With no saved skin, `GetAppearance` returns what the ped is wearing. qb-clothing's client `GetAppearance` now reads the ped instead of returning nothing.
 
+Phone calls on the server look up a player's number or the player behind a number, send a text, and check or end a call. The client can open, close, and disable the phone and show a notification. 17mov_Phone is a phone provider.
+
 ## 0.7.0
 
 Cash and bank add, remove, and set take an optional reason. When the caller omits it, the bridge sends `n_bridge`. vRP accepts the argument and ignores it. Society add and remove take the same reason, and only qb-banking stores it.

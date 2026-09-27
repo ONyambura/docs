@@ -1,6 +1,6 @@
 # Server
 
-`data` is `{ sender, subject, message, address, title, description, app }`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail returns `false`.
+`data` is `{ sender, subject, message, address, from, title, description, app }`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail and messages return `false`.
 
 ### SendPhoneMail
 
@@ -47,4 +47,101 @@ Bridge.SendPhoneNotification(source, {
     description = 'Approved.',
     app = 'Mail',
 })
+```
+
+### SendPhoneMessage
+
+**Parameters**
+
+- `source` `number` — the player who receives the message
+- `data` `table` — `{ from, sender, message }`. `from` is the sender number and defaults to `sender`.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SendPhoneMessage(source, {
+    from = '8294',
+    sender = 'Downtown Cab Co.',
+    message = 'Your taxi has arrived.',
+})
+```
+
+### GetPhoneNumber
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+`string|nil` — `nil` when the player has no number
+
+**Example**
+
+```lua
+local number = Bridge.GetPhoneNumber(source)
+
+if number then
+    print(('Player %d uses %s'):format(source, number))
+end
+```
+
+### GetSourceByPhone
+
+**Parameters**
+
+- `number` `string`
+
+**Returns**
+
+`number|nil` — `nil` when the owner is offline
+
+**Example**
+
+```lua
+local target = Bridge.GetSourceByPhone('5550142')
+
+if target then
+    Bridge.Notify(target, { description = 'Your order is ready' })
+end
+```
+
+### IsInPhoneCall
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.IsInPhoneCall(source) then
+    Bridge.Notify(source, { description = 'Finish your call first', kind = 'error' })
+end
+```
+
+### EndPhoneCall
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+`boolean` — `false` when the player was not in a call
+
+**Example**
+
+```lua
+AddEventHandler('myjail:jailed', function(source)
+    Bridge.EndPhoneCall(source)
+end)
 ```

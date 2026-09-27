@@ -1,0 +1,105 @@
+# Client
+
+### OpenPhone
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.OpenPhone()
+```
+
+### ClosePhone
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.IsPhoneOpen() then
+    Bridge.ClosePhone()
+end
+```
+
+### IsPhoneOpen
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local open = Bridge.IsPhoneOpen()
+```
+
+### SetPhoneDisabled
+
+**Parameters**
+
+- `state` `boolean` — `true` blocks the phone
+
+**Returns**
+
+`boolean` — sky_phone has no disable switch and returns `false`
+
+**Example**
+
+```lua
+Bridge.SetPhoneDisabled(true)
+```
+
+### IsPhoneDisabled
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean` — on 17mov_Phone this is the state last set through n_bridge
+
+**Example**
+
+```lua
+if Bridge.IsPhoneDisabled() then
+    Bridge.Notify({ description = 'Your phone is blocked', kind = 'error' })
+end
+```
+
+### SendPhoneNotification
+
+**Parameters**
+
+- `data` `table` — `{ title, description, app }`
+
+**Returns**
+
+`boolean` — yseries has no client notification and returns `false`
+
+**Example**
+
+```lua
+Bridge.SendPhoneNotification({
+    title = 'Garage',
+    description = 'Car stored.',
+    app = 'Settings',
+})
+```

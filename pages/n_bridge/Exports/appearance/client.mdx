@@ -56,3 +56,52 @@ end
 Bridge.OpenAppearance()
 Bridge.OpenAppearance('binco')
 ```
+
+### SetSkin
+
+Sets clothing components and props in one format for every clothing script. Without `ped` it dresses the local player. A ped this client does not own is dressed by the client that owns it. Other players' peds are refused; dress those from server code.
+
+**Parameters**
+
+- `data` `table` — list of `{ componentId, drawableId, texture }` and `{ propId, drawableId, texture }`. A `drawableId` of `-1` removes that prop. The table returned by `GetSkin` is accepted as is.
+- `ped` `number` — optional ped entity
+
+**Returns**
+
+`boolean` — yields while a ped owned by another client is dressed.
+
+**Example**
+
+```lua
+Bridge.SetSkin({
+    { componentId = 11, drawableId = 55, texture = 0 },
+    { componentId = 4, drawableId = 35, texture = 0 },
+    { propId = 0, drawableId = -1, texture = 0 },
+})
+
+local ped = Bridge.GetClosestPed(nil, 3.0)
+
+if ped ~= 0 then
+    Bridge.SetSkin({ { componentId = 8, drawableId = 15, texture = 0 } }, ped)
+end
+```
+
+### GetSkin
+
+**Parameters**
+
+- `ped` `number` — optional ped entity. Defaults to the local player.
+
+**Returns**
+
+`table|nil` — components 0–11 and props 0, 1, 2, 6 and 7 in the `SetSkin` format. `nil` when the ped does not exist.
+
+**Example**
+
+```lua
+local saved = Bridge.GetSkin()
+
+Bridge.SetSkin({ { componentId = 11, drawableId = 15, texture = 0 } })
+Wait(5000)
+Bridge.SetSkin(saved)
+```

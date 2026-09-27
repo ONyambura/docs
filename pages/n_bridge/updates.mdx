@@ -8,7 +8,7 @@
 
 `GetSlotWithItem` works on the server as well as the client.
 
-Server `GetAppearance` and `GetOutfits` read the saved skin and outfit list from each clothing script's own tables or exports. With no saved skin, `GetAppearance` asks that player's client what the ped is wearing. qb-clothing's client `GetAppearance` now reads the ped instead of returning nothing.
+Server `GetAppearance` and `GetOutfits` read the saved skin and outfit list from each clothing script's own tables or exports. With no saved skin, `GetAppearance` asks that player's client what the ped is wearing. Client `SetSkin` and `GetSkin` use one component and prop format for every clothing script, and can dress a ped another client owns. qb-clothing's client `GetAppearance` now reads the ped instead of returning nothing.
 
 Phone calls on the server look up a player's number or the player behind a number, send a text, and check or end a call. The client can open, close, and disable the phone and show a notification. 17mov_Phone is a phone provider.
 

@@ -28,6 +28,8 @@ New backends for existing topics:
 
 Dedicated notify, progress, and text UI resources now win over ox_lib under `auto`, because most servers run ox_lib alongside them. Set `Config.Use` to keep ox_lib. `lb-tablet` is now the last dispatch backend, because sd-phone provides it.
 
+`PrintProviders` turns the startup provider line on or off. `Log` writes one file per capability under `logs/` so a failing call can be traced. Leave `Log` false unless you are collecting that trace.
+
 ## 0.8.0
 
 `GetCharacter` returns first name, last name, phone, gender, and date of birth. Phone is missing on ox and ND. `IsBoss` is false on ND and vRP. `HasGroup` accepts a name, a list, or a minimum grade. `GetJobs` and `GetGangs` list what that framework has registered. ESX, ND, and vRP have no gang list.

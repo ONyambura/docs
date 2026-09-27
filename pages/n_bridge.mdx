@@ -74,7 +74,9 @@ Config.Use = {
 
 The comment on each line in `config.lua` lists the provider ids. `auto` never selects `custom`. Dedicated notify, progress, text UI, input, and menu resources are ahead of ox_lib, because most servers run ox_lib as well.
 
-The server console prints the choice on start: `framework=esx inventory=ox notify=ox_lib ...`.
+`PrintProviders` prints the choice on start: `framework=esx inventory=ox notify=ox_lib ...`. Set it to `false` to skip that line.
+
+`Log` writes `logs/<capability>.log`. `false` writes nothing. `true` logs every capability. A table such as `{ framework = true }` logs only those. Zones, callbacks, health and armor, and the version check use `zones`, `callbacks`, `vitals`, and `version`. `Config.Debug` stays a console switch.
 </Steps>
 
 ## Call it from another resource

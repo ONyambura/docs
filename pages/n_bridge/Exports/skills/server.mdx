@@ -1,0 +1,95 @@
+# Server
+
+`skill` is a skill name registered in the skills script.
+
+### GetSkillLevel
+
+**Parameters**
+
+- `source` `number`
+- `skill` `string`
+
+**Returns**
+
+`number|nil`
+
+**Example**
+
+```lua
+if (Bridge.GetSkillLevel(source, 'mining') or 0) >= 5 then
+    print('can mine gold')
+end
+```
+
+### GetSkillXp
+
+**Parameters**
+
+- `source` `number`
+- `skill` `string`
+
+**Returns**
+
+`number|nil` — pickle_xp yields for up to 5 seconds while that player's client answers.
+
+**Example**
+
+```lua
+print(Bridge.GetSkillXp(source, 'mining'))
+```
+
+### AddSkillXp
+
+**Parameters**
+
+- `source` `number`
+- `skill` `string`
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.AddSkillXp(source, 'mining', 25)
+```
+
+### RemoveSkillXp
+
+**Parameters**
+
+- `source` `number`
+- `skill` `string`
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.RemoveSkillXp(source, 'mining', 10)
+```
+
+### SetSkillLevel
+
+XP is set to the start of that level.
+
+**Parameters**
+
+- `source` `number`
+- `skill` `string`
+- `level` `number`
+
+**Returns**
+
+`boolean` — `false` on OT_skills, which has no set level.
+
+**Example**
+
+```lua
+Bridge.SetSkillLevel(source, 'mining', 1)
+```

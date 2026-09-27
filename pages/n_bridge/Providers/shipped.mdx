@@ -1,6 +1,6 @@
 # Shipped backends
 
-`auto` walks the open `core/catalog.lua` and keeps the first started resource. `qbx_core` is ahead of `qb-core`. Dedicated inventories are ahead of a resource named `inventory` and ahead of `es_extended`.
+`auto` walks the open `core/catalog.lua` and keeps the first started resource. `qbx_core` is ahead of `qb-core`. Dedicated inventories are ahead of a resource named `inventory` and ahead of `es_extended`. Dedicated notify, progress, text UI, input, and menu resources are ahead of `ox_lib`, because most servers run ox_lib as well.
 
 ## Framework
 
@@ -22,6 +22,8 @@
 - `codem` — `codem-inventory`
 - `core` — `core_inventory`
 - `jaksam` — `jaksam_inventory`
+- `one_inventory` — `one_inventory`. Stashes are created on open, so `RegisterStash` does nothing.
+- `jpr` — `jpr-inventory`
 - `ps` — `ps-inventory`
 - `lj` — `lj-inventory`, through the player item API
 - `qb` — `qb-inventory`
@@ -31,15 +33,20 @@
 
 ## Notify
 
-- `ox_lib`, `okok` (`okokNotify`), `core_notify`, `qb` (`qbx_core` then `qb-core`), `esx`, `custom`
+- `okok` (`okokNotify`), `core_notify`, `brutal_notify`, `wasabi_notify`, `r_notify`, `solaire_notify`, `t-notify`, `fl-notify` (`FL-Notify`), `mythic_notify`, `pNotify`, `lation_ui`, `zsxui` (`ZSX_UIV2`), `msk_core`, `ox_lib`, `qb` (`qbx_core` then `qb-core`), `esx`, `custom`
+- mythic_notify and pNotify show no title. mythic_notify and FL-Notify have no warning style. ZSX_UIV2 has no type, so the icon shows it instead.
 
 ## Target
 
-- `ox_target`, `qb-target`, `custom`
+`sleepless_interact` provides `ox_target`, so it is first.
+
+- `sleepless_interact`, `ox_target`, `qb-target`, `custom`
+- On sleepless_interact, a box target is a point at the box centre.
 
 ## Progress
 
-- `ox_lib`, `qb` (`qb-core`), `esx` (`esx_progressbar`), `custom`
+- `lation_ui`, `zsxui` (`ZSX_UIV2`), `wasabi_uikit`, `msk_core`, `keep-progressbar`, `ox_lib`, `qb` (`qb-core`), `progressbar`, `esx` (`esx_progressbar`), `custom`
+- wasabi_uikit cannot be cancelled.
 
 ## Appearance
 
@@ -50,12 +57,15 @@
 - `fivem-appearance` — reads `users.skin` or `playerskins`, and `player_outfits` in either column layout, when those tables exist.
 - `rcore_clothing` — saved skin by identifier. Outfits from `rcore_clothing_outfits`.
 - `qb-clothing` — saved skin from the active `playerskins` row. Outfits from `player_outfits`. The client reads the ped into qb-clothing's skin format.
+- `esx_skin` — saved skin from `users.skin`. The client uses skinchanger. No outfit list.
 - `custom`
 
 ## Fuel
 
+`qb-fuel` provides `LegacyFuel`, so it is ahead of it.
+
 - `ox_fuel` — `fuel` state bag plus the native fuel level
-- `lc_fuel`, `cdn-fuel`, `qs-fuelstations`, `Renewed-Fuel`, `okokGasStation`, `x-fuel`, `ps-fuel`, `LegacyFuel` — client `GetFuel` / `SetFuel`
+- `lc_fuel`, `cdn-fuel`, `qs-fuelstations`, `Renewed-Fuel`, `okokGasStation`, `x-fuel`, `ps-fuel`, `BigDaddy-Fuel`, `ti_fuel`, `esx-sna-fuel`, `qb-fuel`, `LegacyFuel` — client `GetFuel` / `SetFuel`
 - `custom`
 
 ## Keys
@@ -70,6 +80,13 @@ Server `GiveKeys(source, plate)` and client `GiveKeys(plate)` are both published
 - `Renewed-Vehiclekeys` — server `addKey` / `removeKey`
 - `MrNewbVehicleKeys` — server `GiveKeysByPlate` / `RemoveKeysByPlate`
 - `p_vehiclekeys` — client `createKey` / `removeKey`. The vehicle must be networked.
+- `vehicles_keys` — jaksam's key script, by plate
+- `mk_vehiclekeys` — by vehicle entity. The vehicle must be spawned.
+- `t1ger_keys` — temporary keys only. Remove and has-keys return `false`.
+- `F_RealCarKeysSystem` — sent through the player's client
+- `mVehicle` — key items for a spawned vehicle
+- `cd_garage` — sent through the player's client
+- `okokGarage` — has-keys returns `false`
 - `custom`
 
 ## Phone
@@ -81,16 +98,26 @@ Server `GiveKeys(source, plate)` and client `GiveKeys(plate)` are both published
 - `sd-phone` — `notify`, `sendMail`, `sendSystemMessage`, and calls. Mail uses `data.address`, or `getMailAddresses` for the player identifier.
 - `lb-phone` — notifications, mail, messages, and calls. Without an address, the equipped phone email is used.
 - `yseries` — TeamsGG notifications, mail, messages, and calls by server id. No client notification.
+- `gksphone` — mail, messages, notifications, and calls. The phone cannot be disabled.
+- `okokPhone` — the phone cannot be opened or disabled from a script. Call checks ask the player's client.
+- `qs-smartphone-pro` — no lookup from a number to a player, no call checks, and the phone cannot be opened from a script.
+- `qs-smartphone` — no lookup from a number to a player. The client can only check whether the phone is open.
+- `qb-phone` — mail, notifications, and ending calls. No texts, no call check, and no client open, close, or disable.
 - `custom`
 
 ## Dispatch
 
-`cd_dispatch`, `cd_dispatch3d`, and `ps-dispatch` need `data.source`. The alert is filed from that player's client. `sd-phone` provides `lb-tablet`, so set `Config.Use.dispatch` when the phone is running and you want a different dispatch script.
+`cd_dispatch`, `cd_dispatch3d`, `ps-dispatch`, `bub-mdt`, and `piotreq_gpt` need `data.source`. The alert is filed from or for that player. `sd-phone` provides `lb-tablet`, so `lb-tablet` is last.
 
 - `core_dispatch` — server `sendAlert`
 - `cd_dispatch3d` — `cd_dispatch3d:AddNotification`
 - `cd_dispatch` — `cd_dispatch:AddNotification`
 - `ps-dispatch` — client `CustomAlert`
+- `fd_dispatch`, `tk_dispatch`, `qs-dispatch`, `kartik-mdt`, `origen_police` — server alerts with jobs and a blip
+- `wasabi_mdt` — no job filter and no blip
+- `redutzu-mdt` — no job filter
+- `bub-mdt` — client `CustomAlert`. No job filter.
+- `linden_outlawalert`, `emergencydispatch` — message and coords only
 - `lb-tablet` — server `AddDispatch`
 - `custom`
 
@@ -98,6 +125,8 @@ Server `GiveKeys(source, plate)` and client `GiveKeys(plate)` are both published
 
 - `Renewed-Banking` — `getAccountMoney`, `addAccountMoney`, `removeAccountMoney`
 - `okokBanking` — `GetAccount`, `AddMoney`, `RemoveMoney`
+- `fd_banking`, `kartik-banking`, `tgiann-bank`, `wasabi_banking` — balance, add, and remove with a reason
+- `tgg-banking` — no reason
 - `qb-banking` — `GetAccount`, `AddMoney`, `RemoveMoney`
 - `qb-management` — `GetAccount`, `AddMoney`, `RemoveMoney`
 - `esx_addonaccount` — shared account `society_<job>`
@@ -113,13 +142,56 @@ Needs `oxmysql`.
 
 ## Text UI
 
-- `ox_lib`, `okok` (`okokTextUI`), `qb` (`qb-core` DrawText), `custom`
+- `okok` (`okokTextUI`), `jg-textui`, `cd_drawtextui`, `lab-HintUI`, `lation_ui`, `zsxui` (`ZSX_UIV2`), `ox_lib`, `qb` (`qb-core` DrawText), `custom`
 
 ## Boss menu
 
+- `tk_bossmenu`, `tk_bosstablet`, `zat-bossmenu`
 - `qbx_management` — `qb-bossmenu:client:OpenMenu`
 - `qb-management` — `qb-bossmenu:client:OpenMenu`
 - `esx_society` — `esx_society:openBossMenu` for the local job
+- `custom`
+
+## Input
+
+- `lation_ui`, `ox_lib`, `qb-input`, `custom`
+- qb-input has no slider, text area, or date field. Those show as text fields.
+
+## Menu
+
+- `lation_ui`, `wasabi_uikit`, `ox_lib`, `qb-menu`, `custom`
+- wasabi_uikit cannot close a menu from a script.
+
+## Door lock
+
+- `ox_doorlock`
+- `rcore_doorlock` — no closest-door lookup
+- `doors_creator` — no door state lookup, and the closest door has no locked state
+- `qb-doorlock` — needs at least one player online. The state is read from a player's client.
+- `custom`
+
+## Housing
+
+- `bcs_housing`
+- `ps-housing` — the current property is only known for players with access to it.
+- `esx_property`
+- `qb` — `qb-houses` and `qb-apartments`. Owned properties need `oxmysql`.
+- `custom`
+
+## Skills
+
+- `evolent_skills`
+- `OT_skills` — no set level
+- `pickle_xp` — server XP is read from the player's client.
+- `custom`
+
+## Weather
+
+`Renewed-Weathersync` and `cd_easytime` provide `qb-weathersync`, so they are ahead of it.
+
+- `Renewed-Weathersync` — a weather you set lasts until its forecast moves on.
+- `cd_easytime` — no freeze
+- `qb-weathersync`
 - `custom`
 
 ## Status

@@ -1,0 +1,43 @@
+# Client
+
+### OpenMenu
+
+**Parameters**
+
+- `data` `table`
+    - `id` `string` — optional. Reuse it to replace the same menu.
+    - `title` `string`
+    - `options` `table[]` — each option is `{ title, description, icon, disabled, arrow, onSelect, args }`. `onSelect(args)` runs when the option is picked.
+
+**Returns**
+
+`string` — the menu id
+
+**Example**
+
+```lua
+Bridge.OpenMenu({
+    id = 'garage',
+    title = 'Garage',
+    options = {
+        { title = 'Take out', icon = 'car', onSelect = function(args) print('take', args.plate) end, args = { plate = 'ABC123' } },
+        { title = 'Store', icon = 'warehouse', onSelect = function() print('store') end },
+    },
+})
+```
+
+### CloseMenu
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`boolean` — `false` on wasabi_uikit, which cannot close a menu from a script.
+
+**Example**
+
+```lua
+Bridge.CloseMenu()
+```

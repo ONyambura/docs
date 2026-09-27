@@ -1,0 +1,20 @@
+# Server
+
+### CheckVersion
+
+Compares the resource's `version` in `fxmanifest.lua` with the latest GitHub release and prints a line when it is outdated. It checks each resource once.
+
+**Parameters**
+
+- `resource` `string` — optional. Defaults to the calling resource.
+- `repo` `string` — optional. `owner/name` or a GitHub URL. Defaults to the resource's `repository` entry in `fxmanifest.lua`.
+
+**Returns**
+
+`boolean` — `true` when the check was sent. The result prints later.
+
+**Example**
+
+```lua
+Bridge.CheckVersion(GetCurrentResourceName(), 'my-org/my_resource')
+```

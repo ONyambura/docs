@@ -1,0 +1,19 @@
+# Client
+
+### GetCurrentProperty
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`string|number|nil` — the property the local player is inside. esx_property yields while the server answers.
+
+**Example**
+
+```lua
+local property = Bridge.GetCurrentProperty()
+if not property then return end
+print(property)
+```

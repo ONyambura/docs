@@ -13,5 +13,13 @@
   "vehicles": "Vehicles",
   "textui": "Text UI",
   "bossmenu": "Boss Menu",
-  "status": "Status"
+  "status": "Status",
+  "input": "Input",
+  "menu": "Menu",
+  "zones": "Zones",
+  "doorlock": "Door Lock",
+  "housing": "Housing",
+  "skills": "Skills",
+  "weather": "Weather",
+  "version": "Version"
 }

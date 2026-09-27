@@ -1,0 +1,21 @@
+# Client
+
+### GetClosestDoor
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table|nil` — `{ id, name, locked, distance }`. `nil` when no door is near, and always on rcore_doorlock. doors_creator leaves `locked` and `name` empty.
+
+**Example**
+
+```lua
+local door = Bridge.GetClosestDoor()
+
+if door and door.distance < 2.0 then
+    print(door.id, door.locked)
+end
+```

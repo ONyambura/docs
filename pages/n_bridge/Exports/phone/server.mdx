@@ -1,6 +1,6 @@
 # Server
 
-`data` is `{ sender, subject, message, address, from, title, description, app }`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail and messages return `false`.
+`data` is `{ sender, subject, message, address, from, title, description, app }`. lb-phone looks up the equipped phone email when `address` is omitted. sky_phone mail and messages return `false`, and so do qb-phone messages. qs-smartphone and qs-smartphone-pro cannot look up a player by number. qs-smartphone-pro has no call checks, and qb-phone can end a call but not check one. okokPhone call checks yield for up to 5 seconds while that player's client answers.
 
 ### SendPhoneMail
 

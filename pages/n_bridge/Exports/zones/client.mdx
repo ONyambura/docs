@@ -1,0 +1,72 @@
+# Client
+
+Zones need no zone resource. The player's position is checked every 250 ms, and `inside` runs every frame while the player is in the zone. Zones are removed when the resource that added them stops.
+
+### AddZone
+
+**Parameters**
+
+- `data` `table`
+    - `type` — `box`, `sphere`, or `poly`
+    - `coords` `vector3` — centre, for `box` and `sphere`
+    - `size` `vector3` — for `box`. Defaults to `vec3(2, 2, 2)`.
+    - `rotation` `number` — heading in degrees, for `box`
+    - `radius` `number` — for `sphere`. Defaults to `2.0`.
+    - `points` `vector3[]` — at least three, for `poly`
+    - `thickness` `number` — height of a `poly`, centred on the points' average height. Defaults to `4.0`. `minZ` and `maxZ` override it.
+    - `id` `string` — optional. Reusing an id replaces that zone.
+    - `onEnter`, `onExit`, `inside` `function(zone)` — `zone` is `{ id, name, type }`
+
+**Returns**
+
+`string|nil` — the zone id, or `nil` when the data is incomplete
+
+**Example**
+
+```lua
+local zone = Bridge.AddZone({
+    type = 'box',
+    coords = vec3(441.0, -981.0, 30.7),
+    size = vec3(4.0, 4.0, 3.0),
+    rotation = 90.0,
+    onEnter = function() Bridge.ShowText('[E] Duty') end,
+    onExit = function() Bridge.HideText() end,
+})
+```
+
+### RemoveZone
+
+Runs `onExit` first when the player is inside.
+
+**Parameters**
+
+- `id` `string`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.RemoveZone(zone)
+```
+
+### IsInZone
+
+**Parameters**
+
+- `id` `string`
+- `coords` `vector3` — optional. Defaults to the local player.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+if Bridge.IsInZone(zone) then
+    print('inside')
+end
+```

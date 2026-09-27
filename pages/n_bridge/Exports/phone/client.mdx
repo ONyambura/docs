@@ -1,5 +1,7 @@
 # Client
 
+okokPhone, qs-smartphone, qs-smartphone-pro, and qb-phone cannot open the phone from a script. qs-smartphone and qb-phone cannot close it either, and qb-phone cannot tell whether it is open.
+
 ### OpenPhone
 
 **Parameters**
@@ -58,7 +60,7 @@ local open = Bridge.IsPhoneOpen()
 
 **Returns**
 
-`boolean` — sky_phone has no disable switch and returns `false`
+`boolean` — sky_phone, gksphone, okokPhone, qs-smartphone, and qb-phone have no disable switch and return `false`
 
 **Example**
 
@@ -92,7 +94,7 @@ end
 
 **Returns**
 
-`boolean` — yseries has no client notification and returns `false`
+`boolean` — yseries and qs-smartphone have no client notification and return `false`
 
 **Example**
 

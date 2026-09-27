@@ -1,0 +1,37 @@
+# Server
+
+### SetDoorState
+
+**Parameters**
+
+- `id` `number|string` — door id. ox_doorlock also accepts the door name.
+- `locked` `boolean`
+- `source` `number` — optional. qb-doorlock needs a player online and uses this one, or any online player.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetDoorState('mrpd_front', false)
+```
+
+### GetDoorState
+
+**Parameters**
+
+- `id` `number|string`
+
+**Returns**
+
+`boolean|nil` — `true` when locked. Always `nil` on doors_creator. qb-doorlock yields for up to 5 seconds while a player's client answers.
+
+**Example**
+
+```lua
+if Bridge.GetDoorState('mrpd_front') then
+    print('locked')
+end
+```

@@ -1,5 +1,33 @@
 # Updates
 
+## 0.9.0
+
+New topics: input dialogs, context menus, zones, door locks, housing, skills, weather and time, and a version check. Zones are built into the bridge and need no zone resource. `CheckVersion` compares a resource's version with its latest GitHub release.
+
+- Input: lation_ui, ox_lib, qb-input
+- Menu: lation_ui, wasabi_uikit, ox_lib, qb-menu
+- Door lock: ox_doorlock, rcore_doorlock, doors_creator, qb-doorlock
+- Housing: bcs_housing, ps-housing, esx_property, qb-houses with qb-apartments
+- Skills: evolent_skills, OT_skills, pickle_xp
+- Weather: Renewed-Weathersync, cd_easytime, qb-weathersync
+
+New backends for existing topics:
+
+- Notify: brutal_notify, wasabi_notify, r_notify, solaire_notify, t-notify, FL-Notify, mythic_notify, pNotify, lation_ui, ZSX_UIV2, msk_core
+- Progress: lation_ui, ZSX_UIV2, wasabi_uikit, msk_core, keep-progressbar, progressbar
+- Text UI: jg-textui, cd_drawtextui, lab-HintUI, lation_ui, ZSX_UIV2
+- Dispatch: fd_dispatch, tk_dispatch, qs-dispatch, piotreq_gpt, kartik-mdt, wasabi_mdt, origen_police, redutzu-mdt, bub-mdt, linden_outlawalert, emergencydispatch
+- Keys: vehicles_keys, mk_vehiclekeys, t1ger_keys, F_RealCarKeysSystem, mVehicle, cd_garage, okokGarage
+- Fuel: BigDaddy-Fuel, ti_fuel, esx-sna-fuel, qb-fuel
+- Society: fd_banking, kartik-banking, tgg-banking, tgiann-bank, wasabi_banking
+- Phone: gksphone, okokPhone, qs-smartphone-pro, qs-smartphone, qb-phone
+- Inventory: one_inventory, jpr-inventory
+- Appearance: esx_skin
+- Target: sleepless_interact
+- Boss menu: tk_bossmenu, tk_bosstablet, zat-bossmenu
+
+Dedicated notify, progress, and text UI resources now win over ox_lib under `auto`, because most servers run ox_lib alongside them. Set `Config.Use` to keep ox_lib. `lb-tablet` is now the last dispatch backend, because sd-phone provides it.
+
 ## 0.8.0
 
 `GetCharacter` returns first name, last name, phone, gender, and date of birth. Phone is missing on ox and ND. `IsBoss` is false on ND and vRP. `HasGroup` accepts a name, a list, or a minimum grade. `GetJobs` and `GetGangs` list what that framework has registered. ESX, ND, and vRP have no gang list.

@@ -54,4 +54,16 @@ Phone: `sendMail(source, data)`, `sendNotification(source, data)`.
 
 Dispatch: `send(data)`.
 
+Input: `open(title, fields)`. Normalize with `Bridge.InputFields(fields)` and return `Bridge.InputResult(fields, values)`, or `nil` when cancelled.
+
+Menu: `open(data)` and `close()`. `Bridge.MenuData(data)` returns `{ id, title, options }`, each option `{ title, description, icon, disabled, arrow, onSelect, args }`.
+
+Door lock server: `setState(id, locked, source)`, `getState(id)`. Door lock client: `closest()` returns `{ id, name, locked, distance }`.
+
+Housing server: `currentProperty(source)`, `ownedProperties(source)`, `hasAccess(source, id)`. Housing client: `currentProperty()`.
+
+Skills server: `getLevel(source, skill)`, `getXp`, `addXp(source, skill, amount)`, `removeXp`, `setLevel(source, skill, level)`. Skills client: `getLevel(skill)`, `getXp(skill)`.
+
+Weather server: `setWeather(kind)`, `setTime(hour, minute)`, `freezeTime(state)`, `getWeather()`, `getTime()` returning `{ hour, minute }`. Weather client: `setSync(enabled)`.
+
 Status server: `get(source, name)`, `set(source, name, value)`, and optionally `add(source, name, amount)`, where `amount` is negative for remove. Without `add`, the bridge reads the value and sets it again. Status client: `get(name)`. Values are `0` to `100`.

@@ -1,0 +1,29 @@
+# Client
+
+### InputDialog
+
+Yields until the player submits or cancels.
+
+**Parameters**
+
+- `title` `string`
+- `fields` `table[]` — each field is `{ type, label, name, default, required, options, min, max, placeholder }`
+    - `type` — `text`, `password`, `number`, `checkbox`, `select`, `textarea`, `slider`, `color`, or `date`. Defaults to `text`. qb-input shows `slider`, `textarea`, and `date` as text.
+    - `name` — key for the value in the result. Defaults to `field1`, `field2`, and so on.
+    - `options` — for `select`: `{ { value, label } }` or a list of strings
+
+**Returns**
+
+`table|nil` — each value by position and by `name`. `nil` when cancelled.
+
+**Example**
+
+```lua
+local input = Bridge.InputDialog('Transfer', {
+    { type = 'number', label = 'Amount', name = 'amount', required = true, min = 1 },
+    { type = 'select', label = 'Account', name = 'account', options = { 'cash', 'bank' } },
+})
+
+if not input then return end
+print(input.amount, input.account)
+```

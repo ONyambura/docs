@@ -1,0 +1,61 @@
+# Server
+
+Property ids are whatever the housing script uses: a home id, a house name, or an apartment name. esx_property ids are positions in its property list.
+
+### GetCurrentProperty
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+`string|number|nil` — `nil` when outside. ps-housing only knows it for players with access. bcs_housing yields for up to 5 seconds while that player's client answers.
+
+**Example**
+
+```lua
+local property = Bridge.GetCurrentProperty(source)
+if property then print(('%s is inside %s'):format(source, property)) end
+```
+
+### GetOwnedProperties
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+`table` — list of property ids
+
+**Example**
+
+```lua
+for _, id in ipairs(Bridge.GetOwnedProperties(source)) do
+    print(id)
+end
+```
+
+### HasPropertyAccess
+
+True for the owner and for key holders.
+
+**Parameters**
+
+- `source` `number`
+- `id` `string|number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+local property = Bridge.GetCurrentProperty(source)
+
+if property and Bridge.HasPropertyAccess(source, property) then
+    Bridge.Notify(source, { description = 'Stash unlocked.', type = 'success' })
+end
+```

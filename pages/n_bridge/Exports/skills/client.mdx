@@ -1,0 +1,34 @@
+# Client
+
+### GetSkillLevel
+
+**Parameters**
+
+- `skill` `string`
+
+**Returns**
+
+`number|nil`
+
+**Example**
+
+```lua
+local level = Bridge.GetSkillLevel('mining') or 0
+print(level)
+```
+
+### GetSkillXp
+
+**Parameters**
+
+- `skill` `string`
+
+**Returns**
+
+`number|nil`
+
+**Example**
+
+```lua
+print(Bridge.GetSkillXp('mining'))
+```

@@ -1,0 +1,85 @@
+# Server
+
+### SetWeather
+
+On Renewed-Weathersync the weather lasts until its forecast moves on.
+
+**Parameters**
+
+- `kind` `string` — a GTA weather type, such as `CLEAR`, `RAIN`, or `THUNDER`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetWeather('RAIN')
+```
+
+### SetTime
+
+**Parameters**
+
+- `hour` `number` — `0` to `23`
+- `minute` `number` — optional. Defaults to `0`.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetTime(12, 30)
+```
+
+### FreezeTime
+
+**Parameters**
+
+- `state` `boolean` — optional. Defaults to `true`.
+
+**Returns**
+
+`boolean` — `false` on cd_easytime, which cannot freeze time from a script.
+
+**Example**
+
+```lua
+Bridge.FreezeTime(true)
+```
+
+### GetWeather
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`string|nil`
+
+**Example**
+
+```lua
+print(Bridge.GetWeather())
+```
+
+### GetTime
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`table|nil` — `{ hour, minute }`
+
+**Example**
+
+```lua
+local time = Bridge.GetTime()
+if time and time.hour >= 22 then print('night shift') end
+```

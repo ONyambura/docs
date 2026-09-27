@@ -53,3 +53,5 @@ Boss menu: `open()`.
 Phone: `sendMail(source, data)`, `sendNotification(source, data)`.
 
 Dispatch: `send(data)`.
+
+Status server: `get(source, name)`, `set(source, name, value)`, and optionally `add(source, name, amount)`, where `amount` is negative for remove. Without `add`, the bridge reads the value and sets it again. Status client: `get(name)`. Values are `0` to `100`.

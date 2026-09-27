@@ -121,3 +121,13 @@ Needs `oxmysql`.
 - `qb-management` — `qb-bossmenu:client:OpenMenu`
 - `esx_society` — `esx_society:openBossMenu` for the local job
 - `custom`
+
+## Status
+
+Health and armor use natives and work with any framework. The providers below cover needs such as hunger, thirst, and stress.
+
+- `esx_status` — its `set`, `add`, and `remove` events. The server reads the live value from the player's client.
+- `qbox` — `qbx_core` metadata and the player state bag
+- `qb` — `qb-core` metadata. Hunger, thirst, and stress changes also refresh qb-hud.
+- `ox` — `ox_core` statuses. Only statuses registered in ox_core exist.
+- `custom`

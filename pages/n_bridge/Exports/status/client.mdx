@@ -1,0 +1,88 @@
+# Client
+
+Every value is `0` to `100` for the local player. Needs are set from the server only.
+
+### GetPlayerStatus
+
+**Parameters**
+
+- `name` `string` — such as `hunger`, `thirst`, or `stress`
+
+**Returns**
+
+`number|nil` — `nil` when the needs script has no status with that name.
+
+**Example**
+
+```lua
+local thirst = Bridge.GetPlayerStatus('thirst')
+if thirst and thirst < 10 then
+    print('drink something')
+end
+```
+
+### GetPlayerHealth
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`number` — `0` means dead or dying.
+
+**Example**
+
+```lua
+print(Bridge.GetPlayerHealth())
+```
+
+### SetPlayerHealth
+
+This does not revive a dead player.
+
+**Parameters**
+
+- `value` `number` — `0` to `100`. `0` kills the player.
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetPlayerHealth(50)
+```
+
+### GetPlayerArmor
+
+**Parameters**
+
+None.
+
+**Returns**
+
+`number`
+
+**Example**
+
+```lua
+print(Bridge.GetPlayerArmor())
+```
+
+### SetPlayerArmor
+
+**Parameters**
+
+- `value` `number` — `0` to `100`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetPlayerArmor(100)
+```

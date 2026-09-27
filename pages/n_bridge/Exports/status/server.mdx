@@ -1,0 +1,149 @@
+# Server
+
+Every value is `0` to `100`, whatever scale the needs script uses. `name` is the status name, such as `hunger`, `thirst`, or `stress`. A status the script has not registered returns `nil` or `false`. ESX calls ask that player's client, because esx_status keeps the live value there, so they yield for up to 5 seconds.
+
+### GetPlayerStatus
+
+**Parameters**
+
+- `source` `number`
+- `name` `string`
+
+**Returns**
+
+`number|nil`
+
+**Example**
+
+```lua
+local hunger = Bridge.GetPlayerStatus(source, 'hunger')
+if hunger and hunger < 20 then
+    Bridge.Notify(source, { description = 'You are starving.', type = 'error' })
+end
+```
+
+### SetPlayerStatus
+
+**Parameters**
+
+- `source` `number`
+- `name` `string`
+- `value` `number` — clamped to `0`–`100`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetPlayerStatus(source, 'hunger', 100)
+Bridge.SetPlayerStatus(source, 'thirst', 100)
+```
+
+### AddPlayerStatus
+
+**Parameters**
+
+- `source` `number`
+- `name` `string`
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.AddPlayerStatus(source, 'thirst', 25)
+```
+
+### RemovePlayerStatus
+
+**Parameters**
+
+- `source` `number`
+- `name` `string`
+- `amount` `number`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.RemovePlayerStatus(source, 'stress', 10)
+```
+
+### GetPlayerHealth
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+`number|nil` — `0` to `100`. `0` means dead or dying.
+
+**Example**
+
+```lua
+local health = Bridge.GetPlayerHealth(source)
+print(health)
+```
+
+### SetPlayerHealth
+
+This does not revive a dead player. Use your ambulance script for that.
+
+**Parameters**
+
+- `source` `number`
+- `value` `number` — `0` to `100`. `0` kills the player.
+
+**Returns**
+
+`boolean` — yields for up to 5 seconds while that player's client applies it.
+
+**Example**
+
+```lua
+Bridge.SetPlayerHealth(source, 100)
+```
+
+### GetPlayerArmor
+
+**Parameters**
+
+- `source` `number`
+
+**Returns**
+
+`number|nil` — `0` to `100`
+
+**Example**
+
+```lua
+if (Bridge.GetPlayerArmor(source) or 0) < 50 then
+    Bridge.SetPlayerArmor(source, 50)
+end
+```
+
+### SetPlayerArmor
+
+**Parameters**
+
+- `source` `number`
+- `value` `number` — `0` to `100`
+
+**Returns**
+
+`boolean`
+
+**Example**
+
+```lua
+Bridge.SetPlayerArmor(source, 100)
+```

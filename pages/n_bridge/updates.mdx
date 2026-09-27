@@ -12,6 +12,8 @@ Server `GetAppearance` and `GetOutfits` read the saved skin and outfit list from
 
 Phone calls on the server look up a player's number or the player behind a number, send a text, and check or end a call. The client can open, close, and disable the phone and show a notification. 17mov_Phone is a phone provider.
 
+Status covers needs such as hunger, thirst, and stress through esx_status, Qbox, QBCore, and ox_core, on a `0` to `100` scale. The server can get, set, add, and remove them. The client can read them. Health and armor can be read and set on either side.
+
 ## 0.7.0
 
 Cash and bank add, remove, and set take an optional reason. When the caller omits it, the bridge sends `n_bridge`. vRP accepts the argument and ignores it. Society add and remove take the same reason, and only qb-banking stores it.

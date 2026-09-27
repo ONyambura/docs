@@ -1,69 +1,280 @@
 # Custom provider
 
-`providers/<capability>/custom` stays readable after escrow. Set the matching `Config.Use` key to `custom`.
+`providers/<capability>/custom` stays readable after escrow. `auto` never selects `custom`. Set `Config.Use.<capability> = 'custom'`. An id that is not in the catalog falls through to `custom` as well.
+
+Each capability has `client.lua`, `server.lua`, or both. The file returns unless that id is selected, then hands its methods to `Bridge.Provide`. `core/bind.lua` publishes the public names, so the provider leaves `exports()` out.
 
 ```lua
 if Bridge.Selected('framework') ~= 'custom' then return end
 
 Bridge.Provide('framework', 'custom', {
     getMoney = function(source, account)
-        return 0
+        return MyFramework.GetMoney(source, account or 'cash')
+    end,
+
+    addMoney = function(source, account, amount, reason)
+        account, amount, reason = Bridge.MoneyArgs(account, amount, reason)
+        return MyFramework.AddMoney(source, account, amount, Bridge.MoneyReason(reason)) == true
     end,
 })
 ```
 
-The public export is registered by `core/bind.lua`. Do not call `exports()` inside the provider.
+Keep every method that is already in the file. A missing method logs once and the call returns `nil`. The stubs already return the empty value for each signature (`0`, `false`, `{}`, or `nil`), so fill the ones your script can do and leave the rest.
 
-When the character is ready:
+Client methods describe the local player and take no server id. Where the same call exists on the server, `source` is the first argument.
+
+Call this when the character finishes loading. Listeners that were registered earlier run immediately if the character is already loaded.
 
 ```lua
--- server
-Bridge.RaisePlayerReady(source)
-
--- client
-Bridge.RaisePlayerReady()
+Bridge.RaisePlayerReady(source) -- server
+Bridge.RaisePlayerReady()       -- client
 ```
 
-Build return values with `Bridge.Player`, `Bridge.Job`, `Bridge.MoneyArgs`, and `Bridge.ItemContext` so they match the shipped backends.
+Zones, health, armor, callbacks, and `CheckVersion` live in the core. They have no custom folder.
 
-Framework server: `getPlayer`, `getPlayers`, `getIdentifier`, `getJob`, `setJob`, `getGang`, `setGang`, `setDuty`, `getMoney`, `addMoney(source, account, amount, reason)`, `removeMoney`, `setMoney`, `getMetadata`, `setMetadata`, `getByIdentifier`, `getByPhone`, `getPlayersByJob`, `getDutyCount`, `getCharacter`, `isBoss`, `hasGroup`, `getJobs`, `getGangs`, `hasPermission`, `registerUsable`. `Bridge.MoneyReason(reason)` fills a missing reason with `n_bridge`.
+## Helpers
 
-Framework client also implements `getCharacter`, `isBoss`, `getVehicleProperties(vehicle)`, and `setVehicleProperties(vehicle, props)`.
+Build return values with these so they match the shipped backends.
 
-Framework client: `getPlayerData`, `isLoaded`, `getIdentifier`, `getJob`, `getGang`, `getMoney`, `getMetadata`. Public names are `GetPlayerData`, `IsPlayerLoaded`, `GetIdentifier`, `GetPlayerJob`, `GetPlayerGang`, `GetPlayerMoney`, and `GetPlayerMetadata`. Client methods take no server id.
+| Helper | Result |
+| --- | --- |
+| `Bridge.Player(source, identifier, name, job, gang)` | `{ source, identifier, name, job, gang }` |
+| `Bridge.Job(name, grade, label, onDuty, gradeLabel)` | `{ name, grade, label, gradeLabel, onDuty }`. Empty args are unemployed and on duty. A gang with no membership is `Bridge.Job('none', 0, 'none', false)`. |
+| `Bridge.Character(firstName, lastName, phone, gender, dateOfBirth)` | `{ firstName, lastName, phone, gender, dateOfBirth }` |
+| `Bridge.MoneyArgs(account, amount, reason)` | Account name, amount, reason. A bare number is treated as a cash amount. |
+| `Bridge.MoneyReason(reason)` | The reason, or `n_bridge` when it was omitted. |
+| `Bridge.MatchesGroup(groups, identifier, filter)` | `groups` is `{ [name] = grade }`. `filter` is a name, a list of names, or `{ name = minGrade }`. |
+| `Bridge.JobCatalog(raw)` | `{ { name, label, grades = { { grade, name, label, isBoss } } } }` |
+| `Bridge.ItemContext(name, count, metadata, slot)` | `{ name, count, metadata, slot }` |
+| `Bridge.ItemRows(entries)` | Item rows from a slot table. Reads `count` or `amount`, and `metadata` or `info`. |
+| `Bridge.CountNamedItems(entries, item, metadata)` | Combined count. Metadata is matched with `Bridge.MetadataMatches`. |
+| `Bridge.SlotWithItem(entries, item, metadata)` | One `ItemContext`, or `nil`. |
+| `Bridge.NotifyParts(data)` | `title, message, kind, duration, text`. `kind` is `info`, `success`, `warning`, or `error`. |
+| `Bridge.ProgressData(data)` | `{ duration, label, canCancel, anim, disable }` |
+| `Bridge.DispatchData(data)` | Normalized alert, including `jobs` and `blip`. On the server, `Bridge.FillDispatchCoords(data)` fills coords from `data.source`. |
+| `Bridge.PhoneNote(data)` | `{ sender, from, subject, message, address, title, description, app }` |
+| `Bridge.InputFields(fields)` | One field shape: `{ type, label, name, default, required, options, min, max, placeholder }` |
+| `Bridge.InputResult(fields, values)` | Values by position and by `name`, or `nil` when `values` is not a table. |
+| `Bridge.MenuData(data)` | `{ id, title, options }`. Each option is `{ title, description, icon, disabled, arrow, onSelect, args }`. |
+| `Bridge.Percent(value)` | The value clamped to `0`–`100`, or `nil` when it is not a number. |
 
-Inventory server: `getCount(source, item, metadata)`, `hasItem`, `addItem`, `removeItem`, `canCarry`, `getLabel`, `registerUsable`.
+`RegisterUsableItem` calls the inventory method `registerUsable`. That method may call `Bridge.Call('framework', 'registerUsable', item, handler)` when the framework owns usable items. The framework method must not call the inventory method back. `handler(source, item)` receives an `ItemContext`.
 
-Inventory client: `getCount(item, metadata)`, `hasItem`, `getLabel`, `getItems`, `getWeapon`, `openInventory`.
+## Framework
 
-`registerUsable` may call `Bridge.Call('framework', 'registerUsable', item, handler)`. The framework method must not call the inventory method back.
+Server file `providers/framework/custom/server.lua`. Client file `providers/framework/custom/client.lua`.
 
-Notify: `push(data)`. Target: `addEntity`, `addModel`, `addBox`, `remove`. Progress: `start(data)` returns `true` or `false`.
+| Call | Method | Returns |
+| --- | --- | --- |
+| `GetPlayer(source)` | `getPlayer` | `Bridge.Player`, or `nil` |
+| `GetPlayers()` | `getPlayers` | list of server ids |
+| `GetIdentifier(source)` | `getIdentifier` | `string`, or `nil` |
+| `GetPlayerJob(source)` | `getJob` | `Bridge.Job` |
+| `GetPlayerGang(source)` | `getGang` | `Bridge.Job` |
+| `SetPlayerJob(source, name, grade)` | `setJob` | `boolean` |
+| `SetPlayerGang(source, name, grade)` | `setGang` | `boolean` |
+| `SetJobDuty(source, onDuty)` | `setDuty` | `boolean` |
+| `GetPlayerMoney(source, account)` | `getMoney` | `number`. `account` is `cash` or `bank`. |
+| `AddPlayerMoney(source, account, amount, reason)` | `addMoney` | `boolean` |
+| `RemovePlayerMoney(source, account, amount, reason)` | `removeMoney` | `boolean` |
+| `SetPlayerMoney(source, account, amount, reason)` | `setMoney` | `boolean` |
+| `GetPlayerMetadata(source, key)` | `getMetadata` | the stored value, or `nil` |
+| `SetPlayerMetadata(source, key, value)` | `setMetadata` | `boolean` |
+| `GetPlayerByIdentifier(identifier)` | `getByIdentifier` | server id, or `nil` |
+| `GetPlayerByPhone(number)` | `getByPhone` | server id, or `nil` |
+| `GetPlayersByJob(job, onDuty)` | `getPlayersByJob` | list of server ids. `onDuty` limits the list to players on duty. |
+| `GetDutyCount(job)` | `getDutyCount` | `number` |
+| `GetCharacter(source)` | `getCharacter` | `Bridge.Character`, or `nil` |
+| `IsBoss(source)` | `isBoss` | `boolean` |
+| `HasGroup(source, filter)` | `hasGroup` | `boolean`. `Bridge.MatchesGroup` covers the filter shapes. |
+| `GetJobs()` | `getJobs` | `Bridge.JobCatalog` |
+| `GetGangs()` | `getGangs` | `Bridge.JobCatalog` |
+| `HasPermission(source, permission)` | `hasPermission` | `boolean` |
+| `RegisterUsableItem` | `registerUsable(item, handler)` | `boolean` |
 
-Appearance client: `getAppearance`, `setAppearance(appearance)`, `openAppearance(shopId)`. Appearance server: `getAppearance(source)`, `getOutfits(source)`.
+Client methods take no server id.
 
-Fuel: `getFuel(vehicle)`, `setFuel(vehicle, amount)`.
+| Call | Method | Returns |
+| --- | --- | --- |
+| `GetPlayerData()` | `getPlayerData` | `Bridge.Player`, or `nil` |
+| `IsPlayerLoaded()` | `isLoaded` | `boolean` |
+| `GetIdentifier()` | `getIdentifier` | `string`, or `nil` |
+| `GetPlayerJob()` | `getJob` | `Bridge.Job` |
+| `GetPlayerGang()` | `getGang` | `Bridge.Job` |
+| `GetPlayerMoney(account)` | `getMoney` | `number` |
+| `GetPlayerMetadata(key)` | `getMetadata` | the stored value, or `nil` |
+| `GetCharacter()` | `getCharacter` | `Bridge.Character`, or `nil` |
+| `IsBoss()` | `isBoss` | `boolean` |
+| `GetVehicleProperties(vehicle)` | `getVehicleProperties` | the framework's property table, or `nil` |
+| `SetVehicleProperties(vehicle, props)` | `setVehicleProperties` | `boolean` |
 
-Keys server: `giveKeys(source, plate, model)`, `removeKeys(source, plate, model)`, `hasKeys(source, plate)`.
+## Inventory
 
-Keys client: `giveKeys(plate, extra)`, `removeKeys(plate, extra)`, `hasKeys(plate)`, `toggleLock()`.
+Server file `providers/inventory/custom/server.lua`. Client file `providers/inventory/custom/client.lua`.
 
-Boss menu: `open()`.
+Rows are `{ name, count, metadata, slot, label }`. `Bridge.ItemRows`, `Bridge.CountNamedItems`, and `Bridge.SlotWithItem` build them from a slot table that uses `amount` or `info`.
 
-Phone: `sendMail(source, data)`, `sendNotification(source, data)`.
+| Call | Method | Returns |
+| --- | --- | --- |
+| `GetItemCount(source, item, metadata)` | `getCount` | `number` |
+| `HasItem(source, item, count, metadata)` | `hasItem` | `boolean` |
+| `AddItem(source, item, count, metadata)` | `addItem` | `boolean` |
+| `RemoveItem(source, item, count, metadata)` | `removeItem` | `boolean` |
+| `CanCarry(source, item, count, metadata)` | `canCarry` | `boolean` |
+| `GetItemLabel(item)` | `getLabel` | `string` |
+| `GetInventoryItems(source)` | `getInventoryItems` | list of rows |
+| `GetSlot(source, slot)` | `getSlot` | one row, or `nil` |
+| `GetSlotWithItem(source, item, metadata)` | `getSlotWithItem` | one row, or `nil` |
+| `SetItemMetadata(source, slot, metadata)` | `setMetadata` | `boolean` |
+| `SetDurability(source, slot, value)` | `setDurability` | `boolean` |
+| `ClearInventory(inventory, keep)` | `clear` | `boolean`. `inventory` is a player id or a stash id. `keep` is an optional item name, or a list of names, to leave. |
+| `RegisterStash(id, label, slots, maxWeight, owner, groups, coords)` | `registerStash` | `boolean` |
+| `ForceOpenInventory(playerId, kind, data)` | `forceOpen` | `boolean` |
+| `CanCarryWeight(source, weight)` | `canCarryWeight` | `boolean` |
+| `SetMaxWeight(source, weight)` | `setMaxWeight` | `boolean` |
+| `GetPlayerWeight(source)` | `getWeight` | `number` |
+| `GetPlayerMaxWeight(source)` | `getMaxWeight` | `number` |
+| `CloseInventory(source)` | `closeInventory` | `boolean` |
+| `RegisterUsableItem(item, handler)` | `registerUsable` | `boolean` |
 
-Dispatch: `send(data)`.
+Client reads take no server id: `getCount`, `hasItem`, `getLabel`, `getSlotWithItem`, `getWeight`, `getMaxWeight`.
 
-Input: `open(title, fields)`. Normalize with `Bridge.InputFields(fields)` and return `Bridge.InputResult(fields, values)`, or `nil` when cancelled.
+| Call | Method | Returns |
+| --- | --- | --- |
+| `GetPlayerItems()` | `getItems` | list of rows |
+| `GetCurrentWeapon()` | `getWeapon` | one row, or `nil` |
+| `OpenInventory(kind, data)` | `openInventory` | `boolean` |
+| `CloseInventory()` | `closeInventory` | `boolean` |
+| `UseSlot(slot)` | `useSlot` | `boolean` |
+| `SetStashTarget(id, owner)` | `setStashTarget` | `boolean` |
+| `DisplayMetadata(metadata, value)` | `displayMetadata` | `boolean` |
+| `GiveItemToTarget(serverId, slot, count)` | `giveItem` | `boolean` |
 
-Menu: `open(data)` and `close()`. `Bridge.MenuData(data)` returns `{ id, title, options }`, each option `{ title, description, icon, disabled, arrow, onSelect, args }`.
+`OpenInventory` kinds are `player`, `shop`, `stash`, `crafting`, `container`, `drop`, `glovebox`, `trunk`, and `dumpster`.
 
-Door lock server: `setState(id, locked, source)`, `getState(id)`. Door lock client: `closest()` returns `{ id, name, locked, distance }`.
+## Notify, progress, text UI, target
 
-Housing server: `currentProperty(source)`, `ownedProperties(source)`, `hasAccess(source, id)`. Housing client: `currentProperty()`.
+These are client files. Server `Notify(target, data)` relays to that player's client, so a custom notify only implements `push`.
 
-Skills server: `getLevel(source, skill)`, `getXp`, `addXp(source, skill, amount)`, `removeXp`, `setLevel(source, skill, level)`. Skills client: `getLevel(skill)`, `getXp(skill)`.
+```lua
+push = function(data)
+    local title, message, kind, duration = Bridge.NotifyParts(data)
+end
+```
 
-Weather server: `setWeather(kind)`, `setTime(hour, minute)`, `freezeTime(state)`, `getWeather()`, `getTime()` returning `{ hour, minute }`. Weather client: `setSync(enabled)`.
+| Call | Method | Returns |
+| --- | --- | --- |
+| `Notify(data)` | `push` | nothing. `data` is `{ title, description, kind, duration }` or a string. The shipped stub prints it with the feed ticker. |
+| `Progress(data)` | `start` | `true` when the bar finishes, `false` when it is cancelled. Use `Bridge.ProgressData`. `disable` keys are `move`, `car`, `mouse`, `combat`. |
+| `ShowText(text)` | `show` | nothing |
+| `HideText()` | `hide` | nothing |
+| `AddEntityTarget(entity, options)` | `addEntity` | an id the matching `remove` understands |
+| `AddModelTarget(models, options)` | `addModel` | an id |
+| `AddBoxZone(data)` | `addBox` | an id. `data` is `{ id, coords, size, rotation, options }`. |
+| `RemoveTarget(id)` | `remove` | `boolean` |
 
-Status server: `get(source, name)`, `set(source, name, value)`, and optionally `add(source, name, amount)`, where `amount` is negative for remove. Without `add`, the bridge reads the value and sets it again. Status client: `get(name)`. Values are `0` to `100`.
+Each target option is `{ name, label, icon, distance, onSelect, canInteract }`.
+
+## Appearance
+
+| Call | Method | Returns |
+| --- | --- | --- |
+| `GetAppearance()` / `GetAppearance(source)` | `getAppearance` | the clothing script's own appearance table. The client stub reads the local ped with `Bridge.ReadPed`. |
+| `SetAppearance(appearance)` | `setAppearance` | `boolean` |
+| `OpenAppearance(shopId)` | `openAppearance` | `boolean`. `shopId` is optional. |
+| `GetOutfits(source)` | `getOutfits` | a list, or `{}` |
+| `SetSkin` / `GetSkin` | `setSkin(ped, parts)` | `boolean`. The client stub is `Bridge.ApplySkin`, which dresses `ped` from `{ components, props }`. Replace it only when the clothing script applies the skin itself. |
+
+## Keys, fuel, boss menu
+
+| Call | Method | Returns |
+| --- | --- | --- |
+| `GiveKeys(source, plate, model)` | `giveKeys` | `boolean`. `model` is optional. |
+| `RemoveKeys(source, plate, model)` | `removeKeys` | `boolean` |
+| `HasKeys(source, plate)` | `hasKeys` | `boolean` |
+| `GiveKeys(plate, extra)` | `giveKeys` | `boolean`. Client. `extra` is a server id for some key scripts and a vehicle entity for others. |
+| `RemoveKeys(plate, extra)` | `removeKeys` | `boolean` |
+| `HasKeys(plate)` | `hasKeys` | `boolean` |
+| `ToggleLock()` | `toggleLock` | `boolean` |
+| `GetFuel(vehicle)` | `getFuel` | `number` |
+| `SetFuel(vehicle, amount)` | `setFuel` | `boolean` |
+| `OpenBossMenu()` | `open` | `boolean`. The menu uses the local player's job from `Bridge.Call('framework', 'getJob')`. |
+
+## Phone
+
+Normalize with `Bridge.PhoneNote(data)`.
+
+| Call | Method | Returns |
+| --- | --- | --- |
+| `SendPhoneMail(source, data)` | `sendMail` | `boolean`. Uses `sender`, `subject`, `message`, `address`. |
+| `SendPhoneNotification(source, data)` | `sendNotification` | `boolean`. Uses `title`, `description`, `app`. Also implemented on the client, with no `source`. |
+| `SendPhoneMessage(source, data)` | `sendMessage` | `boolean`. Uses `from`, `sender`, `message`. |
+| `GetPhoneNumber(source)` | `getNumber` | `string`, or `nil` |
+| `GetSourceByPhone(number)` | `getSource` | server id, or `nil` |
+| `IsInPhoneCall(source)` | `isInCall` | `boolean` |
+| `EndPhoneCall(source)` | `endCall` | `boolean` |
+| `OpenPhone()` | `open` | `boolean` |
+| `ClosePhone()` | `close` | `boolean` |
+| `IsPhoneOpen()` | `isOpen` | `boolean` |
+| `SetPhoneDisabled(state)` | `setDisabled` | `boolean` |
+| `IsPhoneDisabled()` | `isDisabled` | `boolean` |
+
+## Dispatch, society, vehicles
+
+| Call | Method | Returns |
+| --- | --- | --- |
+| `SendDispatch(data)` | `send` | `boolean`. Read the payload from `Bridge.DispatchData(data)`. |
+| `GetSocietyMoney(job)` | `getMoney` | `number` |
+| `AddSocietyMoney(job, amount, reason)` | `addMoney` | `boolean` |
+| `RemoveSocietyMoney(job, amount, reason)` | `removeMoney` | `boolean` |
+| `GetOwnedVehicles(source)` | `getOwned` | `{ { plate, model, garage, state } }`. `state` is `garaged`, `out`, or `impounded`. |
+
+## Input and menu
+
+```lua
+open = function(title, fields)
+    fields = Bridge.InputFields(fields)
+    local values = MyUi.Ask(title, fields) -- nil when the player cancels
+    return Bridge.InputResult(fields, values)
+end
+```
+
+`type` is `text`, `password`, `number`, `checkbox`, `select`, `textarea`, `slider`, `color`, or `date`. `options` is `{ { value, label } }`.
+
+| Call | Method | Returns |
+| --- | --- | --- |
+| `InputDialog(title, fields)` | `open` | `Bridge.InputResult`, or `nil` |
+| `OpenMenu(data)` | `open` | menu id. Read the menu from `Bridge.MenuData(data)` and call each option's `onSelect(args)`. |
+| `CloseMenu()` | `close` | `boolean` |
+
+## Door lock, housing, skills, weather
+
+| Call | Method | Returns |
+| --- | --- | --- |
+| `SetDoorState(id, locked, source)` | `setState` | `boolean`. `source` is optional. |
+| `GetDoorState(id)` | `getState` | `true` when locked, `false` when open, `nil` when unknown |
+| `GetClosestDoor()` | `closest` | `{ id, name, locked, distance }`, or `nil` |
+| `GetCurrentProperty(source)` | `currentProperty` | property id, or `nil` when outside. The client method takes no `source`. |
+| `GetOwnedProperties(source)` | `ownedProperties` | list of property ids |
+| `HasPropertyAccess(source, id)` | `hasAccess` | `boolean`. True for the owner and for key holders. |
+| `GetSkillLevel(source, skill)` | `getLevel` | `number`, or `nil`. The client method is `getLevel(skill)`. |
+| `GetSkillXp(source, skill)` | `getXp` | `number`, or `nil` |
+| `AddSkillXp(source, skill, amount)` | `addXp` | `boolean` |
+| `RemoveSkillXp(source, skill, amount)` | `removeXp` | `boolean` |
+| `SetSkillLevel(source, skill, level)` | `setLevel` | `boolean` |
+| `SetWeather(kind)` | `setWeather` | `boolean`. `kind` is a GTA weather name such as `CLEAR` or `RAIN`. |
+| `SetTime(hour, minute)` | `setTime` | `boolean` |
+| `FreezeTime(state)` | `freezeTime` | `boolean` |
+| `GetWeather()` | `getWeather` | `string`, or `nil` |
+| `GetTime()` | `getTime` | `{ hour, minute }`, or `nil` |
+| `SetWeatherSync(enabled)` | `setSync` | `boolean` |
+
+## Status
+
+Values are `0` to `100`. Clamp with `Bridge.Percent`.
+
+| Call | Method | Returns |
+| --- | --- | --- |
+| `GetPlayerStatus(source, name)` | `get` | `number`, or `nil`. The client method is `get(name)`. |
+| `SetPlayerStatus(source, name, value)` | `set` | `boolean` |
+| `AddPlayerStatus` / `RemovePlayerStatus` | `add(source, name, amount)` | `boolean`. Optional. `amount` is negative for a remove. With no `add` method, the bridge reads the value and calls `set`. |

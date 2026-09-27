@@ -62,8 +62,17 @@ Config.Use = {
     vehicles = 'auto',
     textui = 'auto',
     bossmenu = 'auto',
+    status = 'auto',
+    input = 'auto',
+    menu = 'auto',
+    doorlock = 'auto',
+    housing = 'auto',
+    skills = 'auto',
+    weather = 'auto',
 }
 ```
+
+The comment on each line in `config.lua` lists the provider ids. `auto` never selects `custom`. Dedicated notify, progress, text UI, input, and menu resources are ahead of ox_lib, because most servers run ox_lib as well.
 
 The server console prints the choice on start: `framework=esx inventory=ox notify=ox_lib ...`.
 </Steps>
@@ -99,10 +108,12 @@ Keymaster escrow leaves these plain. Everything else under `providers/` is locke
 - `providers/**/custom/**`
 - `docs/**`
 
-## What 0.8.0 ships
+## What 0.9.0 ships
 
-Framework, inventory, notify, target, progress, appearance, fuel, keys, phone, dispatch, society, owned vehicles, text UI, and boss menu.
+Framework, inventory, notify, target, progress, appearance, fuel, keys, phone, dispatch, society, owned vehicles, text UI, boss menu, and status. Status covers hunger, thirst, and stress on a `0` to `100` scale, plus health and armor.
+
+0.9.0 adds input dialogs, context menus, door locks, housing, skills, and weather and time. Zones are built in and need no zone resource. `CheckVersion` compares a resource's manifest version with its latest GitHub release.
 
 Each export page lists one function per section: parameters, the return value, and a full example. A Client or Server page exists only when that side has a real call. Player calls include character info, boss and group checks, job and gang lists, and callbacks. Client calls include closest entities, vehicle spawn, and vehicle properties. Server appearance calls read the saved skin and outfit list.
 
-Client reads do not take a server id: inventory count, items, weapon, and open; keys give, remove, has, and lock; gang and identifier. n_carlock and wasabi_carlock are separate providers.
+Client reads do not take a server id. That includes inventory, keys, gang, identifier, the local property, and skill level and XP. n_carlock and wasabi_carlock are separate providers. The full backend list is on the [Shipped](/n_bridge/Providers/shipped) page.

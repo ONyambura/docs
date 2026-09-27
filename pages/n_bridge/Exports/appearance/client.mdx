@@ -1,6 +1,6 @@
 # Client
 
-`GetAppearance` returns the backend table, or `nil` for qb-clothing. A shop id is optional and only used by op-clothing and rcore_clothing.
+`GetAppearance` reads the ped that is wearing the clothes. qb-clothing has no client read, so that call returns `nil`; the saved skin is `GetAppearance(source)` on the server. A shop id is optional and only used by op-clothing and rcore_clothing.
 
 ### GetAppearance
 

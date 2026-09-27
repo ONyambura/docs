@@ -1,22 +1,53 @@
 # Server
 
-illenium-appearance, fivem-appearance, rcore_clothing, qb-clothing, and op-clothing open on the client. There is no server appearance export.
+Saved skin and outfits. The clothing menu itself stays on the client. Needs `oxmysql` for illenium-appearance and qb-clothing. The query does not alter the table.
 
-### OpenAppearance
+fivem-appearance does not store a skin or an outfit list, so both calls return `nil`. rcore_clothing has no outfit list, so `GetOutfits` returns `nil`.
 
-Call this from a client script.
+### GetAppearance
 
 **Parameters**
 
-- `shop` `string` — optional
+- `source` `number` — server id
 
 **Returns**
 
-Nothing on the server. The client call returns `boolean`.
+`table|nil` — the saved skin. ESX illenium-appearance reads `users.skin`. qb-clothing and the other illenium frameworks read the active `playerskins` row. op-clothing and rcore_clothing return the skin those scripts already store.
 
 **Example**
 
 ```lua
--- client.lua
-Bridge.OpenAppearance('binco')
+local appearance = Bridge.GetAppearance(source)
+
+if not appearance then
+    return
+end
+
+print(appearance.model)
+```
+
+### GetOutfits
+
+**Parameters**
+
+- `source` `number` — server id
+
+**Returns**
+
+`table|nil` — saved outfits, or `nil` when that script does not store them.
+
+illenium-appearance rows are `{ id, name, model, components, props }`. qb-clothing rows are `{ id, name, model, skin }`. op-clothing returns that script's outfit list.
+
+**Example**
+
+```lua
+local outfits = Bridge.GetOutfits(source)
+
+if not outfits then
+    return
+end
+
+for i = 1, #outfits do
+    print(outfits[i].name or outfits[i].outfitname)
+end
 ```

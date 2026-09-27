@@ -8,6 +8,8 @@
 
 `GetSlotWithItem` works on the server as well as the client.
 
+Server `GetAppearance` and `GetOutfits` read the saved skin and outfit list. illenium-appearance on ESX uses `users.skin`; qb-clothing and other illenium frameworks use the active `playerskins` row. fivem-appearance stores neither, so both return `nil`. rcore_clothing has a saved skin and no outfit list.
+
 ## 0.7.0
 
 Cash and bank add, remove, and set take an optional reason. When the caller omits it, the bridge sends `n_bridge`. vRP accepts the argument and ignores it. Society add and remove take the same reason, and only qb-banking stores it.

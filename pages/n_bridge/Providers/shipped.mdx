@@ -45,10 +45,11 @@
 
 `op-clothing` is first. It provides the other clothing resource names, so those look started while it is running.
 
-- `op-clothing` — wardrobe by default. Pass a shop id to `OpenAppearance`.
-- `illenium-appearance` and `fivem-appearance` — same provider. `getPedAppearance`, `setPlayerAppearance`, `startPlayerCustomization`.
-- `rcore_clothing` — `getPlayerSkin` / `setPlayerSkin`. `OpenAppearance()` opens the changing room. A shop type opens that shop.
-- `qb-clothing` — [`qb-clothing`](https://github.com/qbcore-fivem/qb-clothing) events `openMenu` and `loadPlayerClothing`. `GetAppearance` returns `nil`.
+- `op-clothing` — wardrobe by default. Pass a shop id to `OpenAppearance`. Server reads the saved skin and outfits.
+- `illenium-appearance` — client menu. Server reads `users.skin` on ESX, otherwise the active `playerskins` row, plus `player_outfits`.
+- `fivem-appearance` — client menu only. It stores no skin and no outfits.
+- `rcore_clothing` — client menu. Server skin by identifier. No outfit list.
+- `qb-clothing` — client menu. Server reads the active `playerskins` row and `player_outfits`. The client has no appearance read.
 - `custom`
 
 ## Fuel

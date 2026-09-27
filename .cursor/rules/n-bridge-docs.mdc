@@ -1,0 +1,12 @@
+---
+description: N Bridge export pages only exist for the side that actually runs the call
+alwaysApply: true
+---
+
+# Export pages
+
+A topic gets a Client page only when that call runs on the client, and a Server page only when that call runs on the server.
+
+Do not add a page whose only job is to say the call lives on the other side, or to paste the other side's example. Leave that page out.
+
+Each remaining function is a heading, then Parameters, Returns, and one Example. Name a backend only when the call cannot do something the caller must know.
